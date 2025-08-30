@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Disallow: /private/
+Disallow: /tmp/
+Disallow: /drafts/
+
+Sitemap: https://it-teacher2025.github.io/informatica-8class-anime/sitemap.xml
