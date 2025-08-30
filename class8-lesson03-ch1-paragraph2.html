@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: 8 клас</title>
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Тіло документа */
+        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
+
+        /* Стилі для навігації в меню */
+        .logo-main { display: none; }
+        .main-title-text { width: 140px; text-align: center; }
+        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
+        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
+        @media screen and (min-width: 768px) {
+            .main-title-text { width: auto; }
+            .main-navigation { display: inline; width: auto; }
+        }
+
+        /* main стилі */
+        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
+        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
+        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
+        .source-text { padding: 8px; }
+        @media screen and (min-width: 300px) {
+            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
+            .text-2xlooo { font-size: 1.25rem; }
+        }
+        @media screen and (min-width: 480px) {
+            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
+            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
+            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
+        }
+
+        /* Стилі для "Про урок" */
+        /* Групи результатів */
+        .text-group-result { padding-top: 16px; }
+
+        /* Style to hide inactive tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Style to tab content */
+        .tab-btn.active { 
+            color: #a16207;        /* text-yellow-600 */
+            border-bottom-color: #a16207;  /* text-yellow-600 */
+            background-color: #fef9c3;     /* text-yellow-100 */
+        }
+        .tab-btn { 
+            transition: color 0.3s, 
+            border-color 0.3s, 
+            background-color 0.3s; 
+            border-bottom: 2px solid transparent;
+        }
+
+        /* Styles for flip cards */
+        .flip-card {
+            background-color: transparent;
+            width: 100%; /* Make cards responsive to grid column width */
+            height: 200px; /* Fixed height for consistency, adjust as needed */
+            perspective: 1000px; /* 3D effect */
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left; /* Adjust text alignment as needed */
+            overflow-wrap: break-word; /* break-words */
+            /*word-break: break-all;*/ /* break-all */
+        }
+
+        .flip-card-front {
+            color: #4b5563; /* text-gray-700 */
+        }
+
+        .flip-card-back {
+            color: #4b5563; /* text-gray-700 */
+            transform: rotateY(180deg);
+        }
+
+        /* Responsive adjustments for min-height */
+        @media (min-width: 768px) { /* md breakpoint */
+            .flip-card.min-h-md {
+                min-height: 250px; /* Example, adjust as needed for medium screens */
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .flip-card.min-h-lg {
+                min-height: 200px; /* Example, adjust as needed for large screens */
+            }
+        }
+
+        /* Styles for matching game (Вправа 3 - Term Definition Match) */
+        .matching-game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .matching-row {
+            display: flex;
+            width: 100%;
+            justify-content: space-around;
+            gap: 0.5rem;
+        }
+
+        .matching-card {
+            flex: 1;
+            padding: 1rem;
+            background-color: #fef9c3; /* yellow-100 */
+            border: 2px solid #fde047; /* yellow-200 */
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            text-align: center;
+            font-weight: 500;
+            user-select: none;
+            word-wrap: break-word; /* Ensure text wraps within the card */
+            word-break: break-all;
+        }
+
+        .matching-card.selected {
+            background-color: #facc15; /* yellow-300 */
+            transform: scale(1.02);
+        }
+
+        .matching-card.matched {
+            background-color: #d9f991; /* light green */
+            border-color: #84cc16; /* green-500 */
+            cursor: default;
+        }
+
+        .matching-card.incorrect {
+            background-color: #fecaca; /* light red */
+            border-color: #ef4444; /* red-500 */
+        }
+
+        .match-line-container {
+            position: relative;
+            width: 100%;
+            height: 200px; /* Adjust height based on expected line length */
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .match-line {
+            position: absolute;
+            height: 2px;
+            background-color: #6b7280; /* gray-500 */
+            transition: background-color 0.3s;
+        }
+
+        /* Styles for Exercise 4 (Drag & Drop Letter Matching) */
+        .drag-drop-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px dashed #ccc;
+            border-radius: 0.5rem;
+        }
+
+        .drag-items-area, .drop-targets-area {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.5rem;
+            min-height: 50px; /* Ensure visibility */
+        }
+
+        .drag-item, .drop-target {
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: grab;
+            user-select: none;
+            text-align: center;
+            min-width: 60px; /* Fixed width for better alignment */
+        }
+
+        .drag-item {
+            background-color: #fff;
+            border: 2px solid #a78bfa; /* violet-400 */
+            color: #4c1d95; /* violet-900 */
+        }
+
+        .drop-target {
+            background-color: #e0f2fe; /* light-blue-100 */
+            border: 2px dashed #93c5fd; /* blue-300 */
+            color: #1e40af; /* blue-800 */
+            min-height: 48px; /* Match drag item height for alignment */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .drop-target.hover {
+            background-color: #bfdbfe; /* blue-200 */
+            border-style: solid;
+        }
+
+        .drop-target.correct {
+            background-color: #d9f991; /* light green */
+            border-color: #84cc16; /* green-500 */
+            color: #166534; /* green-900 */
+        }
+
+        .drop-target.incorrect {
+            background-color: #fecaca; /* light red */
+            border-color: #ef4444; /* red-500 */
+            color: #991b1b; /* red-900 */
+        }
+
+        .drag-item.dragged {
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="container mx-auto flex justify-between items-center bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10 logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <!-- Секція теми уроку -->
+        <section class="text-center mb-8">
+            <h1 class="text-lg text-slate-600 mt-2 break-words">Тема 1: «Кодування даних та апаратне забезпечення». Урок № 3. (До § 2)</h1>
+            <h1 class="text-3xlooo md:text-4xl font-bold text-slate-900 break-words theme-text">Двійкове кодування</h1>
+            <h2 class="text-lg text-slate-600 mt-2 break-words">Інтерактивний план-конспект уроку для 8 класу НУШ</h2>
+        </section>
+
+
+        <!-- Секція "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання" -->
+        <section>
+            <!-- Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання". -->
+            <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+                <nav id="tabs" class="flex flex-wrap justify-center gap-2 sm:gap-4">
+                    <button data-tab="about" class="tab-btn active text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300 break-words break-all">Про урок</button>
+                    <button data-tab="theory" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300 break-words break-all">Теоретичний блок</button>
+                    <button data-tab="practice" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300 break-words break-all">Практичний блок</button>
+                    <button data-tab="check" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300 break-words break-all">Перевірка знань</button>
+                    <button data-tab="homework" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300 break-words break-all">Домашнє завдання</button>
+                </nav>
+            </div>
+
+            <!-- Про урок -->
+            <div id="about-content" class="tab-content active">
+                <div class="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Lesson Goal -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-yellow-600 break-words break-all">🎯 Мета уроку</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Освітня:</b> сформувати в учнів поняття про двійкове кодування даних, його переваги та застосування; ознайомити з одиницями вимірювання довжини двійкового коду.</li>
+                            <li class="break-words"><b>Розвивальна:</b> розвивати логічне мислення, вміння аналізувати та перетворювати інформацію, обчислювальні навички, увагу та пам'ять.</li>
+                            <li class="break-words"><b>Виховна:</b> виховувати акуратність, точність, відповідальність, інтерес до вивчення інформатики.</li>
+                        </ul>
+                    </div>
+                    <!-- Expected Outcomes -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-yellow-600 break-words break-all">✅ Очікувані результати</h3>
+                        <p class="mb-2 text-gray-600">Після уроку учні зможуть:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">пояснювати принцип двійкового кодування;</li>
+                            <li class="break-words">називати одиниці довжини двійкового коду;</li>
+                            <li class="break-words">розрізняти кілобайт, мегабайт, гігабайт, терабайт;</li>
+                            <li class="break-words">переводити одні одиниці довжини двійкового коду в інші.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-bold mb-3 text-yellow-600 break-words">📊 Групи результатів (НУШ)</h3>
+                        <p class="text-gray-600 mb-4 break-words">Візуалізація важливості груп результатів для цього уроку.</p>
+                        <div class="chart-container relative h-64 w-full max-w-md mx-auto">
+                            <canvas id="resultsChart"></canvas>
+                        </div>
+                        <p class="text-gray-600 mb-4 break-words text-group-result"><i>Учень / учениця:</i></p>
+                        <ul>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР1 – працює з інформацією, даними, моделями;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР2 – створює інформаційні продукти;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР3 – працює в цифровому середовищі;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР4 – безпечно та відповідально працює з інформаційними технологіями.</p></li>
+                        </ul>
+                    </div>
+                    <!-- Lesson Type & Equipment -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-yellow-600 break-words">📚 Тип уроку</h3>
+                        <p class="text-gray-700 break-words">Урок вивчення нового матеріалу.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-yellow-600 break-words">💻 Обладнання та ПЗ</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Комп'ютери, інтерактивна дошка, проектор.</li>
+                            <li class="break-words">Доступ до мережі Інтернет, онлайн-платформа IZZI.Digital.</li>
+                            <li class="break-words">Програмне забезпечення для роботи з текстовими документами (наприклад, Блокнот, MS Word).</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-yellow-600 break-words">🔗 Міжпредметні зв'язки</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Математика:</b> системи числення, степені чисел, логіка.</li>
+                            <li class="break-words"><b>Українська мова:</b> текстові дані, символи.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Теоретичний блок -->
+            <div id="theory-content" class="tab-content mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">
+                <div class="">
+                    <div class="text-center mb-10">
+                        <h2 class="text-4xlooo font-extrabold text-yellow-500 mb-4 heading-underline break-words title-review">ПОВТОРЮЄМО</h2>
+                    </div>
+
+                    <div class="flex items-center space-x-4 mb-6">
+                        <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">Актуалізація опорних знань</h2>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                        <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2">
+                            <li class="break-words">Що таке кодування інформації?</li>
+                            <li class="break-words">Що таке декодування інформації?</li>
+                            <li class="break-words">Які основні способи подання повідомлень ви знаєте?</li>
+                            <li class="break-words">Наведіть приклади, коли кодування відбувається за допомогою символів.</li>
+                            <li class="break-words">Які дії можна виконувати з інформацією?</li>
+                            <li class="break-words">Назвіть пристрої, за допомогою яких комп’ютер приймає повідомлення.</li>
+                        </ol>
+                        <img src="./images/img-tema1-2.webp" alt="Знак питання" class="rounded-lg shadow-md" width="200">=
+                    </div>
+                </div>
+
+                <!-- ВИВЧАЄМО НОВЕ -->
+                <!-- <div class="text-center mb-10">
+                    <h2 class="text-4xl font-extrabold text-yellow-500 mb-4 heading-underline break-words title-review">ВИВЧАЄМО НОВЕ</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="md:w-1/4 flex justify-center md:justify-start mb-6 md:mb-0">
+                        <img src="./images/image_b6a6ed.jpg" alt="Скріншот з підручника з принципом двійкового кодування" class="rounded-lg shadow-md" width="300">
+                    </div>
+                    <div class="md:w-3/4 text-gray-700 text-lg">
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Комп’ютер – універсальний пристрій для опрацювання даних різних типів. Розглянемо, як у ньому кодуються дані.</p>
+                        <h3 class="text-xl font-bold mb-3 text-gray-800 break-words">Принцип двійкового кодування</h3>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Звичні вам числа називають **десятковими**, тому що для їх запису використовують 10 цифр: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9. Дані ж у комп’ютері подаються електричними, світловими або магнітними сигналами, що набувають тільки двох станів: **вимкнено** (немає струму, розмагнічено) або **увімкнено** (є струм, намагнічено). Тому будь-які дані для опрацювання комп’ютером кодують за допомогою двох знаків – 0 і 1. Такий спосіб кодування називають **двійковим**. Двійкове кодування легко реалізувати в електронних пристроях.</p>
+                        <h3 class="text-xl font-bold mb-3 text-gray-800 break-words">Кодування символів</h3>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;За допомогою однознакового двійкового коду можна закодувати лише два різні символи (див. 2-й стовець таблиці). Тому для кодування символів у комп’ютері застосовують багатознакові двійкові коди, в яких кожен симво- лу складається з кількох записаних у рядок нулів або одиниць. У таких кодах цифру 0 або 1 називають **бітом** (скор. від англ. binary digit – двійкова цифра). За кількістю бітів n, відведених для кодування одного символу, легко визначити число символів N, які можна закодувати: N=2ⁿ.</p>
+                        <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm mb-4">
+                            <thead>
+                                <tr class="bg-yellow-100">
+                                    <th class="py-2 px-4 border-b text-center">Буква</th>
+                                    <th class="py-2 px-4 border-b text-center">1 біт</th>
+                                    <th class="py-2 px-4 border-b text-center">2 біти</th>
+                                    <th class="py-2 px-4 border-b text-center">3 біти</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="py-2 px-4 border-b text-center">А</td><td class="py-2 px-4 border-b text-center">0</td><td class="py-2 px-4 border-b text-center">00</td><td class="py-2 px-4 border-b text-center">000</td></tr>
+                                <tr><td class="py-2 px-4 border-b text-center">Б</td><td class="py-2 px-4 border-b text-center">1</td><td class="py-2 px-4 border-b text-center">01</td><td class="py-2 px-4 border-b text-center">001</td></tr>
+                                <tr><td class="py-2 px-4 border-b text-center">В</td><td class="py-2 px-4 border-b text-center"></td><td class="py-2 px-4 border-b text-center">10</td><td class="py-2 px-4 border-b text-center">010</td></tr>
+                                <tr><td class="py-2 px-4 border-b text-center">Г</td><td class="py-2 px-4 border-b text-center"></td><td class="py-2 px-4 border-b text-center">11</td><td class="py-2 px-4 border-b text-center">011</td></tr>
+                                <tr><td class="py-2 px-4 border-b text-center">Ґ</td><td class="py-2 px-4 border-b text-center"></td><td class="py-2 px-4 border-b text-center"></td><td class="py-2 px-4 border-b text-center">100</td></tr>
+                                <tr><td class="py-2 px-4 border-b text-center">Д</td><td class="py-2 px-4 border-b text-center"></td><td class="py-2 px-4 border-b text-center"></td><td class="py-2 px-4 border-b text-center">101</td></tr>
+                                <tr><td class="py-2 px-4 border-b text-center">Е</td><td class="py-2 px-4 border-b text-center"></td><td class="py-2 px-4 border-b text-center"></td><td class="py-2 px-4 border-b text-center">110</td></tr>
+                                <tr><td class="py-2 px-4 border-b text-center">Є</td><td class="py-2 px-4 border-b text-center"></td><td class="py-2 px-4 border-b text-center"></td><td class="py-2 px-4 border-b text-center">111</td></tr>
+                                <tr><td class="py-2 px-4 border-b text-center">Ж</td><td class="py-2 px-4 border-b text-center"></td><td class="py-2 px-4 border-b text-center"></td><td class="py-2 px-4 border-b text-center">...</td></tr>
+                            </tbody>
+                        </table>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;8-бітовий код придатний для кодування до N=2⁸=256 різних символів, а 16-бітовий код – до N=2¹⁶=65536 символів.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Для кодування (декодування) тексту всі символи зводять у кодову таблицю, де поряд із двійковим кодом, а іноді із містять нього, записують десятковий код.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="md:w-3/4 text-gray-700 text-lg">
+                        <h3 class="text-xl font-bold mb-3 text-gray-800 break-words">7-бітовий код ASCII</h3>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;**ASCII** (American Standard Code for Information Interchange – американський стандартний код для обміну інформацією) є однією з найдавніших і найпоширеніших таблиць двійкових кодів символів. Її першу редакцію опубліковано 1963 року. У цій таблиці десяткові числа від 0 до 31 і 127 – є керувальними кодами, а решта – від 32 до 126 – кодують символи: великі і малі літери латинського алфавіту, розділові знаки, знаки математичних операцій тощо. Код 32 відповідає символу пропуску, код 33 – знаку оклику і т. д. Англійські літери в таблиці ASCII розташовані в алфавітному порядку.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Щоб побачити на екрані символи сучасної версії таблиці ASCII, можна скористатися такою програмою мовою Python: `for i in range(33, 127): print(chr(i), end = "")`</p>
+                        <p class="mb-4 break-words">Буде виведено: `!"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~`</p>
+                        <h3 class="text-xl font-bold mb-3 text-gray-800 break-words">8-бітовий код KOI8-U</h3>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Для кодування літер інших алфавітів (зокрема кирилиці) таблицю ASCII доповнюють до 256 символів. Для цього 7-бітові коди ASCII доповнюють зліва 0, а коди для нових символів утворюють додаванням зліва 1. Зокрема, для літер українського алфавіту використовують таблицю кодів **KOI8-U** (Код Обміну Інформацією 8-бітовий Український).</p>
+                    </div>
+                    <div class="md:w-1/4 flex justify-center md:justify-start mb-6 md:mb-0">
+                        <img src="./images/image_b6a727.jpg" alt="Скріншот з підручника з таблицею KOI8-U" class="rounded-lg shadow-md" width="300">
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="md:w-3/4 text-gray-700 text-lg">
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Наприклад, мала літера а українського алфавіту в таблиці кодів KOI8-U має десятковий код 193, що відповідає двійковому коду 11000001.</p>
+                        <h3 class="text-xl font-bold mb-3 text-gray-800 break-words">Стандарт Юнікод</h3>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Із розвитком і поширенням комп’ютерів виникла потреба в кодуванні значно більшої кількості символів, ніж дозволяють 8-бітові коди. Так, у сучасних текстових документах здебільшого використовується сімейство кодів, описаних у стандарті **Юнікод** (від англ. Unicode – уніфіковане кодування), що з’явився 1991 року. Поширений нині варіант Юнікоду – **код UTF-8** – дає змогу закодувати до 1112064 різних символів.</p>
+                        <h3 class="text-xl font-bold mb-3 text-gray-800 break-words">Одиниці довжини двійкового коду</h3>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Двійкове кодування застосовують не лише для текстових, а й для графічних, звукових та інших даних. У всіх випадках обсяг даних вимірюють довжиною двійкового коду.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Як ви знаєте, послідовність із 8 двійкових розрядів (бітів) називають **байтом**.</p>
+                    </div>
+                    <div class="md:w-1/4 flex justify-center md:justify-start mb-6 md:mb-0">
+                        <img src="./images/image_b6a727.jpg" alt="Скріншот з підручника з байтом" class="rounded-lg shadow-md" width="300">
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="md:w-3/4 text-gray-700 text-lg">
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Текст Марійка грає в шахи складається з 20 символів із урахуванням пропусків і розділових знаків. Тому за 8-бітового кодування символів цей текст має обсяг 20 байтів.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Зверніть увагу, що на практиці зручніше користуватися більшими одиницями вимірювання: **кілобайт (Кіб), мегабайт (МіБ), гігабайт (ГіБ), терабайт (ТіБ)**.</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">1 Кіб = 2¹⁰ Б = 1024 Б ≈ 10³ Б</li>
+                            <li class="break-words">1 МіБ = 2²⁰ Кіб = 1024 Кіб ≈ 10⁶ Б</li>
+                            <li class="break-words">1 ГіБ = 2³⁰ МіБ = 1024 МіБ ≈ 10⁹ Б</li>
+                            <li class="break-words">1 ТіБ = 2⁴⁰ ГіБ = 1024 ГіБ ≈ 10¹² Б</li>
+                        </ul>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Наведені в таблиці значення степенів двійки наближено дорівнюють множникам Міжнародної системи одиниць, які відповідають префіксам кіло-, мега-, гіга- тощо. Через те в повсякденному спілкуванні часто помилково використовують назви «кілобайт», «мегабайт», «гігабайт» тощо, навіть коли йдеться про їхні двійкові відповідники.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Нехай сторінка книжки містить 56 рядків по 64 символи в кожному рядку. Обчислимо обсяг даних (довжину двійкового коду) на сторінці за 8-бітового кодування.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Маємо: 56∙64 = 3584 байти ≈ 3,5 Кіб. Щоб обчислити приблизний обсяг текстових даних у книжці, потрібно обсяг даних на сторінці помножити на кількість сторінок.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Розрахуємо обсяг даних у книжці з 256 подібних сторінок: 3584∙256 = 917504 Б ≈ 896 Кіб ≈ 0,875 МіБ.</p>
+                    </div>
+                    <div class="md:w-1/4 flex justify-center md:justify-start mb-6 md:mb-0">
+                        <img src="./images/image_b6a727.jpg" alt="Скріншот з підручника з одиницями вимірювання" class="rounded-lg shadow-md" width="300">
+                    </div>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded-lg shadow-md">
+                    <p class="text-gray-800 text-lg mb-4 break-words">Не слід ототожнювати довжину двійкового коду текстового повідомлення з обсягом інформації, яку воно містить. Двійковий код літери Р має довжину 1 байт. Сама ця літери, намальована на дорожньому знаку, несе інформацію для водія: проїзд знайомить з тим, що це облаштоване місце для стоянки.</p>
+                </div>
+                
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 11-14)</a></i></p>
+                </div> -->
+            </div>
+            
+            <!-- Практичний блок -->
+            <div id="practice-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-6 text-center text-yellow-600 break-words">Практичний блок</h3>
+                <p class="text-gray-700 text-lg mb-4 break-words">&#160;&#160;&#160;&#160;Виконайте наведені нижче вправи, використовуючи отримані знання про двійкове кодування.</p>
+                
+                <div class="space-y-6">
+                    <!-- Вправа 1: Дослідження двійкового кодування -->
+                    <div class="bg-yellow-50 p-6 rounded-lg shadow-md">
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Вправа 1: Дослідити двійкове кодування текстових даних</h4>
+                        <ol class="list-decimal list-inside text-gray-700 space-y-2">
+                            <li class="break-words">Знайдіть в інтернеті таблицю кодів символів KOI8-U.</li>
+                            <li class="break-words">У текстовому процесорі створіть таблицю з кодами малих українських букв, відсутніх у таблиці на с. 13.</li>
+                            <li class="break-words">Користуючись таблицею, розкодуйте повідомлення: `1001000 1100101 1101100 1101100 1101111 0100001`.</li>
+                        </ol>
+                    </div>
+
+                    <!-- Вправа 2: Доповнення програми та скріншот -->
+                    <div class="bg-yellow-50 p-6 rounded-lg shadow-md">
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Вправа 2: Доповніть програму та зробіть скріншот</h4>
+                        <ol class="list-decimal list-inside text-gray-700 space-y-2">
+                            <li class="break-words">Доповніть програму з прикладу 2 (с. 12) так, щоб поряд із символами виводилися їхні числові коди, і збережіть у файл із назвою Вправа 2-1.</li>
+                            <li class="break-words">Зробіть скріншот, на якому видно текст програми й результат її виконання, і збережіть у файл із назвою Вправа 2-2.</li>
+                        </ol>
+                    </div>
+
+                    <!-- Вправа 3: Розрахунок обсягу даних -->
+                    <div class="bg-yellow-50 p-6 rounded-lg shadow-md">
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Вправа 3: Розрахуйте обсяг даних</h4>
+                        <p class="text-gray-600 mb-4 break-words">Розрахуйте кількість книжок (див. приклад 4), вміст яких можна зберегти на флешнакопичувачі обсягом 32 ГіБ. Визначте приблизний обсяг текстових даних на одній зі сторінок підручника з інформатики. Збережіть результати.</p>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="text-gray-700 break-words">Приклад 4 (з підручника): Нехай сторінка книжки містить 56 рядків по 64 символи в кожному рядку. Обчислимо обсяг даних (довжину двійкового коду) на сторінці за 8-бітового кодування. Маємо: 56∙64 = 3584 байти ≈ 3,5 Кіб. Розрахуємо обсяг даних у книжці з 256 подібних сторінок: 3584∙256 = 917504 Б ≈ 896 Кіб ≈ 0,875 МіБ.</p>
+                        </div>
+                        <div class="mt-4">
+                            <label for="flashDriveSize" class="block text-gray-700 text-sm font-bold mb-2">Обсяг флешнакопичувача (ГіБ):</label>
+                            <input type="number" id="flashDriveSize" value="32" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        </div>
+                        <div class="mt-4">
+                            <label for="bookPages" class="block text-gray-700 text-sm font-bold mb-2">Кількість сторінок у книжці:</label>
+                            <input type="number" id="bookPages" value="256" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        </div>
+                        <div class="mt-4">
+                            <label for="rowsPerPage" class="block text-gray-700 text-sm font-bold mb-2">Рядків на сторінці:</label>
+                            <input type="number" id="rowsPerPage" value="56" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        </div>
+                        <div class="mt-4">
+                            <label for="charsPerRow" class="block text-gray-700 text-sm font-bold mb-2">Символів у рядку:</label>
+                            <input type="number" id="charsPerRow" value="64" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        </div>
+                        <button id="calculate-storage" class="mt-4 px-6 py-2 bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600 transition-colors duration-300">Розрахувати</button>
+                        <div id="calculation-result" class="mt-3 text-lg font-semibold text-center break-words"></div>
+                    </div>
+
+                    <!-- Вправа 4: Розшифруй слово "ІНФОРМАТИКА" -->
+                    <div class="bg-yellow-50 p-6 rounded-lg shadow-md">
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Вправа 4: Розшифруй слово</h4>
+                        <p class="text-gray-600 mb-4 break-words">Розшифруйте повідомлення "ІНФОРМАТИКА", з'єднавши кожне число з відповідною літерою української абетки (А=1, Б=2, В=3, і т.д.).</p>
+                        <div class="drag-drop-container">
+                            <div id="number-draggables" class="drag-items-area">
+                                <!-- Numbers will be dynamically inserted here -->
+                            </div>
+                            <div id="letter-droppables" class="drop-targets-area">
+                                <!-- Letters will be dynamically inserted here -->
+                            </div>
+                        </div>
+                        <button id="check-decode-btn" class="mt-4 px-6 py-2 bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600 transition-colors duration-300">Перевірити розшифровку</button>
+                        <div id="decode-result" class="mt-3 text-lg font-semibold text-center break-words"></div>
+                        <div id="decode-feedback" class="mt-3 text-lg font-semibold text-center"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <p class="source-text break-words mt-6"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 15)</a></i></p>
+                </div>
+            </div>
+
+            <!-- Перевірка знань -->
+            <div id="check-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-6 text-center text-yellow-600 break-words">Перевірка знань</h3>
+                <p class="text-center text-gray-600 mb-8 break-words">Натисніть на картку, щоб побачити відповідь.</p>
+                <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-yellow-100 p-6 rounded-xl shadow-md">1. Як кодуються дані в комп’ютері?</div>
+                            <div class="flip-card-back bg-yellow-200 p-6 rounded-xl shadow-md">Дані кодуються за допомогою двійкового коду (двох знаків: 0 і 1), що легко реалізувати в електронних пристроях.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-yellow-100 p-6 rounded-xl shadow-md">2. Чому в комп’ютері використовують двійкове кодування?</div>
+                            <div class="flip-card-back bg-yellow-200 p-6 rounded-xl shadow-md">Двійкове кодування використовується, оскільки електричні, світлові або магнітні сигнали в комп'ютері можуть мати лише два стани: вимкнено (0) або увімкнено (1).</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-yellow-100 p-6 rounded-xl shadow-md">3. Як кодуються символи в комп’ютері?</div>
+                            <div class="flip-card-back bg-yellow-200 p-6 rounded-xl shadow-md">Символи кодуються за допомогою багатознакових двійкових кодів, де кожен символ складається з кількох нулів або одиниць. Використовуються таблиці кодів, такі як ASCII, KOI8-U та Юнікод.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-yellow-100 p-6 rounded-xl shadow-md">4. Що таке біт; байт?</div>
+                            <div class="flip-card-back bg-yellow-200 p-6 rounded-xl shadow-md">**Біт** – це цифра 0 або 1 у двійковому коді. <br>**Байт** – це послідовність із 8 двійкових розрядів (бітів).</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-yellow-100 p-6 rounded-xl shadow-md">5. У яких одиницях вимірюють довжину двійкового коду?</div>
+                            <div class="flip-card-back bg-yellow-200 p-6 rounded-xl shadow-md">Довжину двійкового коду вимірюють у бітах, байтах, кілобайтах (Кіб), мегабайтах (МіБ), гігабайтах (ГіБ), терабайтах (ТіБ).</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-yellow-100 p-6 rounded-xl shadow-md">6. Скільки байтів містить 1 Кіб і 1 МіБ?</div>
+                            <div class="flip-card-back bg-yellow-200 p-6 rounded-xl shadow-md">1 Кіб = 1024 байти, 1 МіБ = 1024 Кіб (тобто 1024 * 1024 = 1048576 байтів).</div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 15)</a></i></p>
+                </div>
+            </div>
+          
+
+            <!-- Домашнє завдання -->
+            <div id="homework-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-yellow-600 break-words">Домашнє завдання</h3>                    
+                <!--  -->
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <div>
+                            <p class="break-words break-all"><b>1. Теоретична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li class="break-words break-all">Опрацювати § 2 (стор. 11-15).</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <p><b>2. Практична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Виконати вправу № 2 (стор. 15).</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p><b>3. Завдання за бажанням (для закріплення):</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Інтерактивна платформа IZZI (8 клас) до § 2: <a href="https://ua.izzi.digital/DOS/1183864/1186362.html" target="_blank" class="text-blue-600 hover:underline break-words break-all block">https://ua.izzi.digital/DOS/1183864/1186362.html</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="./images/img08.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!--  -->
+            </div>
+        </section>
+
+
+        <!-- Додаткові матеріали -->
+        <!-- Additional Materials Section -->
+        <section class="bg-white p-6 rounded-xl shadow-md mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-yellow-600 break-words">Додаткові матеріали</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li class="break-words"><a href="https://sites.google.com/view/lga84-9/tehnika_bezpeky" target="_blank" class="text-blue-600 hover:underline">Техніка безпеки</a></li>
+
+                <li class="break-words"><a href="https://drive.google.com/file/d/1C9_KEF981LvokY0GWNOhUXb7rJKJUUbM/view" target="_blank" class="text-blue-600 hover:underline">Оцінювання учнів та учениць на уроках інформатики</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу</a> (§ 2, стор. 11-15)</li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">Інтерактивна платформа IZZI (8 клас)</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до § 2: <a href="https://ua.izzi.digital/DOS/1183864/1186362.html" target="_blank" class="text-blue-600 hover:underline">https://ua.izzi.digital/DOS/1183864/1186362.html</a></li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>          
+        </ul>
+    </footer>     
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Початок:
+            // Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання".
+            const tabs = document.getElementById('tabs');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            tabs.addEventListener('click', (e) => {
+                // Ensure the click target is a BUTTON (tab button)
+                if (e.target.tagName === 'BUTTON') {
+                    const tab = e.target.dataset.tab;
+
+                    // Remove 'active' class from all buttons and add to the clicked one
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Hide all tab contents and show the corresponding one
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Use === for strict comparison
+                        if (content.id === `${tab}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                }
+            });
+            // Кінець.
+
+
+            // Початок:
+            // ГРУПИ РЕЗУЛЬТАТІВ.
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            // 1. Створення об'єкту-мапи для відповідності значень і кольорів
+            // Тут вручну можна поміняти значення background й border
+            const colorMap = {
+                1: {
+                    background: '#fef9c3', // text-yellow-100
+                    border: '#fde047'      // text-yellow-200
+                },
+                2: {
+                    background: '#fde047', // text-yellow-200
+                    border: '#facc15'      // text-yellow-300
+                },
+                3: {
+                    background: '#facc15',  // text-yellow-300
+                    border: '#eab308'        // text-yellow-400
+                },
+                4: {
+                    background: '#eab308',   // text-yellow-400
+                    border: '#ca8a04'      // text-yellow-500
+                }
+            };
+
+            // Дані, які можна змінювати вручну
+            const chartData = [4, 2, 2, 3];
+
+            // 2. Генерація масивів кольорів на основі даних
+            const backgroundColors = chartData.map(value => colorMap[value].background);
+            const borderColors = chartData.map(value => colorMap[value].border);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ГР1', 'ГР2', 'ГР3', 'ГР4'],
+                    datasets: [{
+                        label: 'Важливість',
+                        data: chartData, // Використовуємо змінну
+                        backgroundColor: backgroundColors, // Використовуємо згенерований масив
+                        borderColor: borderColors, // Використовуємо згенерований масив
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const labels = ['', 'Важлива', 'Дуже важлива', 'Найважливіша'];
+                                    return labels[value] || '';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.parsed.y;
+                                    const importanceLabels = {4: 'Найважливіша', 3: 'Дуже важлива', 2: 'Важлива', 1: 'Найменш важлива'};
+                                    label += importanceLabels[value] || '';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // Кінець. ГРУПИ РЕЗУЛЬТАТІВ.
+
+
+            // Початок.
+            // ПОВОРОТ КАРТОК "Перевірка знань"
+            const flipCards = document.querySelectorAll('.flip-card');
+            flipCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+            // Кінець. ПОВОРОТ КАРТОК.
+
+
+            // Початок: Вправа 3: Розрахунок обсягу даних
+            const flashDriveSizeInput = document.getElementById('flashDriveSize');
+            const bookPagesInput = document.getElementById('bookPages');
+            const rowsPerPageInput = document.getElementById('rowsPerPage');
+            const charsPerRowInput = document.getElementById('charsPerRow');
+            const calculateStorageBtn = document.getElementById('calculate-storage');
+            const calculationResult = document.getElementById('calculation-result');
+
+            calculateStorageBtn.addEventListener('click', () => {
+                const flashDriveSizeGB = parseFloat(flashDriveSizeInput.value);
+                const bookPages = parseInt(bookPagesInput.value);
+                const rowsPerPage = parseInt(rowsPerPageInput.value);
+                const charsPerRow = parseInt(charsPerRowInput.value);
+
+                if (isNaN(flashDriveSizeGB) || isNaN(bookPages) || isNaN(rowsPerPage) || isNaN(charsPerRow) || flashDriveSizeGB <= 0 || bookPages <= 0 || rowsPerPage <= 0 || charsPerRow <= 0) {
+                    calculationResult.textContent = 'Будь ласка, введіть коректні позитивні числові значення.';
+                    calculationResult.classList.add('text-red-600');
+                    calculationResult.classList.remove('text-green-600');
+                    return;
+                }
+
+                // Constants
+                const bytesPerChar = 1; // Assuming 8-bit encoding (1 byte per character)
+                const KB = 1024;
+                const MB = 1024 * KB;
+                const GB = 1024 * MB;
+
+                // Calculate book size
+                const charsPerPage = rowsPerPage * charsPerRow;
+                const bytesPerPage = charsPerPage * bytesPerChar;
+                const bytesPerBook = bytesPerPage * bookPages;
+                const bookSizeMB = bytesPerBook / MB;
+
+                // Calculate how many books can be stored
+                const flashDriveSizeBytes = flashDriveSizeGB * GB;
+                const numberOfBooks = Math.floor(flashDriveSizeBytes / bytesPerBook);
+
+                calculationResult.innerHTML = `
+                    <p>Обсяг даних на одній сторінці: ${bytesPerPage} байт ≈ ${(bytesPerPage / KB).toFixed(2)} Кіб</p>
+                    <p>Приблизний обсяг текстових даних у книжці: ${bytesPerBook} байт ≈ ${(bytesPerBook / KB).toFixed(2)} Кіб ≈ ${bookSizeMB.toFixed(3)} МіБ</p>
+                    <p>На флешнакопичувачі обсягом ${flashDriveSizeGB} ГіБ можна зберегти приблизно **${numberOfBooks}** книжок. 🎉</p>
+                `;
+                calculationResult.classList.remove('text-red-600');
+                calculationResult.classList.add('text-green-600');
+            });
+            // Кінець: Вправа 3.
+
+
+            // Початок: Вправа 4: З'єднай число з літерою (Drag & Drop)
+            const numberDraggablesArea = document.getElementById('number-draggables');
+            const letterDroppablesArea = document.getElementById('letter-droppables');
+            const checkDecodeBtn = document.getElementById('check-decode-btn');
+            const decodeResult = document.getElementById('decode-result');
+            const decodeFeedback = document.getElementById('decode-feedback');
+
+            const ukrAlphabet = 'АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ'.split('');
+            // Updated to decode "ІНФОРМАТИКА"
+            const codeNumbers = [12, 18, 25, 19, 21, 17, 1, 23, 11, 15, 1]; // "ІНФОРМАТИКА"
+            const expectedDecoded = "ІНФОРМАТИКА";
+
+            let currentDraggedElement = null;
+            let dropMap = new Map(); // Maps droppable.id to draggable.id
+
+            function initializeDragAndDrop() {
+                numberDraggablesArea.innerHTML = '';
+                letterDroppablesArea.innerHTML = '';
+                decodeResult.textContent = '';
+                decodeFeedback.textContent = '';
+                dropMap.clear();
+
+                const shuffledNumbers = [...codeNumbers].sort(() => Math.random() - 0.5);
+                const shuffledLetters = [...expectedDecoded.split('')].sort(() => Math.random() - 0.5);
+
+                shuffledNumbers.forEach((num, index) => {
+                    const dragItem = document.createElement('div');
+                    dragItem.classList.add('drag-item');
+                    dragItem.setAttribute('draggable', 'true');
+                    dragItem.setAttribute('data-number', num);
+                    dragItem.textContent = num;
+                    dragItem.id = `drag-num-${index}`; // Unique ID for each draggable
+                    numberDraggablesArea.appendChild(dragItem);
+                });
+
+                shuffledLetters.forEach((letter, index) => {
+                    const dropTarget = document.createElement('div');
+                    dropTarget.classList.add('drop-target');
+                    dropTarget.setAttribute('data-letter', letter);
+                    dropTarget.id = `drop-letter-${index}`; // Unique ID for each droppable
+                    dropTarget.textContent = ''; // Initially empty
+                    letterDroppablesArea.appendChild(dropTarget);
+                });
+
+                addDragEventListeners();
+                addDropEventListeners();
+            }
+
+            function addDragEventListeners() {
+                document.querySelectorAll('.drag-item').forEach(item => {
+                    item.addEventListener('dragstart', (e) => {
+                        currentDraggedElement = item;
+                        e.dataTransfer.setData('text/plain', item.id);
+                        item.classList.add('dragged');
+                    });
+                    item.addEventListener('dragend', () => {
+                        item.classList.remove('dragged');
+                        currentDraggedElement = null;
+                    });
+                });
+            }
+
+            function addDropEventListeners() {
+                document.querySelectorAll('.drop-target').forEach(target => {
+                    target.addEventListener('dragover', (e) => {
+                        e.preventDefault(); // Allow drop
+                        if (!target.hasChildNodes() || target.querySelector('.drag-item') === currentDraggedElement) {
+                           target.classList.add('hover');
+                        }
+                    });
+                    target.addEventListener('dragleave', () => {
+                        target.classList.remove('hover');
+                    });
+                    target.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        target.classList.remove('hover');
+
+                        if (currentDraggedElement && (!target.hasChildNodes() || target.querySelector('.drag-item') === currentDraggedElement)) {
+                            // If target already has an item, return it to its original container
+                            if (target.children.length > 0) {
+                                const oldItem = target.children[0];
+                                numberDraggablesArea.appendChild(oldItem);
+                                // Remove mapping if item is moved from this target
+                                for (let [key, value] of dropMap.entries()) {
+                                    if (value === target.id) {
+                                        dropMap.delete(key);
+                                    }
+                                }
+                            }
+                            target.innerHTML = ''; // Clear target before appending
+                            target.appendChild(currentDraggedElement);
+                            dropMap.set(currentDraggedElement.id, target.id);
+                        }
+                    });
+                });
+            }
+
+            checkDecodeBtn.addEventListener('click', () => {
+                let decodedString = [];
+                let allCorrect = true;
+
+                // Clear previous feedback classes
+                document.querySelectorAll('.drop-target').forEach(target => {
+                    target.classList.remove('correct', 'incorrect');
+                });
+
+                // Get the current order of numbers in the drop targets
+                const currentOrderNumbers = Array.from(letterDroppablesArea.children).map(targetDiv => {
+                    const draggedItem = targetDiv.querySelector('.drag-item');
+                    return draggedItem ? parseInt(draggedItem.dataset.number) : null;
+                });
+
+                // Check if all slots are filled
+                if (currentOrderNumbers.some(num => num === null)) {
+                    decodeFeedback.textContent = 'Будь ласка, розмістіть усі числа.';
+                    decodeFeedback.classList.remove('text-green-600');
+                    decodeFeedback.classList.add('text-red-600');
+                    decodeResult.textContent = '';
+                    return;
+                }
+                
+                // Compare the dropped numbers with the original codeNumbers to reconstruct the word
+                // This assumes the order of letter droppables corresponds to the order of the word.
+                // We need to match the *value* of the number dropped into a specific letter slot.
+                for (let i = 0; i < expectedDecoded.length; i++) {
+                    const expectedLetter = expectedDecoded[i];
+                    const expectedNumber = ukrAlphabet.indexOf(expectedLetter) + 1; // Convert letter back to its number
+
+                    const dropTarget = Array.from(letterDroppablesArea.children).find(target => {
+                        const draggedItem = target.querySelector('.drag-item');
+                        return draggedItem && parseInt(draggedItem.dataset.number) === codeNumbers[i];
+                    });
+
+                    if (dropTarget) {
+                        const actualLetterInTarget = dropTarget.dataset.letter; // The letter label on the drop target
+                        const draggedNumber = parseInt(dropTarget.querySelector('.drag-item').dataset.number);
+
+                        if (draggedNumber === expectedNumber) {
+                            decodedString.push(expectedLetter);
+                            dropTarget.classList.add('correct');
+                        } else {
+                            allCorrect = false;
+                            // Find the letter for the number that was actually dropped
+                            const actualLetterForDroppedNumber = ukrAlphabet[draggedNumber - 1];
+                            decodedString.push(`(${actualLetterForDroppedNumber})`); // Show what was actually dropped
+                            dropTarget.classList.add('incorrect');
+                        }
+                    } else {
+                        // This case should be caught by the "all slots filled" check, but as a fallback:
+                        allCorrect = false;
+                        decodedString.push('?');
+                    }
+                }
+
+                if (allCorrect) {
+                    decodeResult.textContent = `Розшифроване слово: ${decodedString.join('')} �`;
+                    decodeFeedback.textContent = 'Чудово! Ви розшифрували повідомлення правильно!';
+                    decodeFeedback.classList.remove('text-red-600');
+                    decodeFeedback.classList.add('text-green-600');
+                } else {
+                    decodeResult.textContent = `Ваша спроба: ${decodedString.join('')}`;
+                    decodeFeedback.textContent = 'Деякі літери розшифровані невірно. Спробуйте ще раз! 🤔';
+                    decodeFeedback.classList.remove('text-green-600');
+                    decodeFeedback.classList.add('text-red-600');
+                }
+            });
+
+            // Initialize the game when the page loads
+            initializeDragAndDrop();
+            // Кінець: Вправа 4.
+        });
+    </script>
+</body>
+</html>

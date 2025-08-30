@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: 8 клас</title>
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Тіло документа */
+        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
+
+        /* Стилі для навігації в меню */
+        .logo-main { display: none; }
+        .main-title-text { width: 140px; text-align: center; }
+        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
+        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
+        @media screen and (min-width: 768px) {
+            .main-title-text { width: auto; }
+            .main-navigation { display: inline; width: auto; }
+        }
+
+        /* main стилі */
+        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
+        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
+        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
+        .source-text { padding: 8px; }
+        @media screen and (min-width: 300px) {
+            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
+            .text-2xlooo { font-size: 1.25rem; }
+        }
+        @media screen and (min-width: 480px) {
+            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
+            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
+            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
+        }
+
+        /* Стилі для "Про урок" */
+        /* Групи результатів */
+        .text-group-result { padding-top: 16px; }
+
+        /* Style to hide inactive tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Style to tab content */
+        .tab-btn.active { 
+            color: #65a30d;                /* text-lime-600 */
+            border-bottom-color: #65a30d;  /* text-lime-600 */
+            background-color: #f7fee7;     /* text-lime-100 */
+        }
+        .tab-btn { 
+            transition: color 0.3s, 
+            border-color 0.3s, 
+            background-color 0.3s; 
+            border-bottom: 2px solid transparent;
+        }
+
+        /* Styles for flip cards */
+        .flip-card {
+            background-color: transparent;
+            width: 100%; /* Make cards responsive to grid column width */
+            height: 300px; /* Fixed height for consistency, adjust as needed */
+            perspective: 1000px; /* 3D effect */
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left; /* Adjust text alignment as needed */
+            overflow-wrap: break-word; /* break-words */
+            /*word-break: break-all;*/ /* break-all */
+        }
+
+        .flip-card-front {
+            color: #4b5563; /* text-gray-700 */
+        }
+
+        .flip-card-back {
+            color: #4b5563; /* text-gray-700 */
+            transform: rotateY(180deg);
+        }
+
+        /* Responsive adjustments for min-height */
+        @media (min-width: 768px) { /* md breakpoint */
+            .flip-card.min-h-md {
+                min-height: 250px; /* Example, adjust as needed for medium screens */
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .flip-card.min-h-lg {
+                min-height: 200px; /* Example, adjust as needed for large screens */
+            }
+        }
+
+    </style>
+
+    <style>
+        /* Styles for interactive exercises */
+        .code-input-area {
+            background-color: #1f2937; /* bg-gray-800 */
+            color: #e5e7eb; /* text-gray-200 */
+            font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+            min-height: 200px;
+            padding: 15px;
+            border-radius: 8px;
+            resize: vertical;
+            overflow-y: auto;
+        }
+        .code-output-area {
+            background-color: #f3f4f6; /* bg-gray-100 */
+            color: #1f2937; /* text-gray-900 */
+            font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+            min-height: 80px;
+            padding: 15px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        .execute-button {
+            background-color: #65a30d; /* bg-lime-600 */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            margin-top: 10px;
+        }
+        .execute-button:hover {
+            background-color: #4d7c0f; /* bg-lime-700 */
+            transform: translateY(-1px);
+        }
+        .execute-button:active {
+            transform: translateY(0);
+        }
+        .check-button, .reset-button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            margin: 0 5px;
+        }
+        .check-button {
+            background-color: #65a30d; /* bg-lime-600 */
+            color: white;
+            border: none;
+        }
+        .check-button:hover {
+            background-color: #4d7c0f; /* bg-lime-700 */
+            transform: translateY(-1px);
+        }
+        .check-button:active {
+            transform: translateY(0);
+        }
+        .reset-button {
+            background-color: #f7fee7; /* bg-lime-100 */
+            color: #65a30d; /* text-lime-600 */
+            border: 1px solid #65a30d;
+        }
+        .reset-button:hover {
+            background-color: #e5ff8b; /* bg-lime-200 */
+            transform: translateY(-1px);
+        }
+        .reset-button:active {
+            transform: translateY(0);
+        }
+        .feedback {
+            margin-top: 15px;
+            font-weight: 600;
+            color: #343a40; /* text-gray-800 */
+        }
+        .feedback.correct {
+            color: #10b981; /* text-green-500 */
+        }
+        .feedback.incorrect {
+            color: #ef4444; /* text-red-500 */
+        }
+        .mc-container .mc-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f9fafb; /* bg-gray-50 */
+            border: 1px solid #e5e7eb; /* border-gray-200 */
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .mc-container .mc-option:hover {
+            background-color: #f3f4f6; /* bg-gray-100 */
+        }
+        .mc-container .mc-option input[type="radio"],
+        .mc-container .mc-option input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        .mc-container .mc-option label {
+            flex-grow: 1;
+            cursor: pointer;
+        }
+        .mc-container .mc-option.correct {
+            background-color: #d1fae5; /* bg-green-100 */
+            border-color: #34d399; /* border-green-400 */
+        }
+        .mc-container .mc-option.incorrect {
+            background-color: #fee2e2; /* bg-red-100 */
+            border-color: #ef4444; /* border-red-500 */
+        }
+        .code-snippet-box {
+            background-color: #1f2937;
+            color: #e5e7eb;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+            overflow-x: auto;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .color-guess-game-container {
+            padding: 20px;
+            background-color: #f7fee7;
+            border-radius: 8px;
+            border: 1px solid #a3e635;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .color-guess-game-container h5 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #4a5568;
+        }
+        .color-guess-radios {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .color-guess-radios label {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            cursor: pointer;
+            background-color: #fff;
+            transition: background-color 0.2s ease;
+        }
+        .color-guess-radios label:hover {
+            background-color: #f3f4f6;
+        }
+        .color-guess-radios input[type="radio"] {
+            margin-right: 8px;
+        }
+        .color-display-box {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 15px;
+            border: 2px solid #65a30d;
+            border-radius: 8px;
+            background-color: #ffffff; /* Default white */
+            transition: background-color 0.3s ease;
+        }
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .game-feedback {
+            margin-top: 15px;
+            font-weight: 600;
+            color: #343a40;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="container mx-auto flex justify-between items-center   bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10  logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
+            </ul>
+            <!-- <a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a>
+            <a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a> -->
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <!-- Секція теми уроку -->
+        <section class="text-center mb-8">
+            <h1 class="text-lg text-slate-600 mt-2 break-words">Тема 5: «Алгоритми та програми». Урок № 52. (До § 34)</h1>
+            <h1 class="text-3xlooo md:text-4xl font-bold text-slate-900 break-words  theme-text">Розв’язання завдань з елементами вибору</h1>
+            <h2 class="text-lg text-slate-600 mt-2 break-words">Інтерактивний план-конспект уроку для 8 класу НУШ</h2>
+        </section>
+
+
+        <!-- Секція "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання" -->
+        <section>
+            <!-- Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання". -->
+            <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+                <nav id="tabs" class="flex flex-wrap justify-center gap-2 sm:gap-4">
+                    <button data-tab="about" class="tab-btn active text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Про урок</button>
+                    <button data-tab="theory" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Теоретичний блок</button>
+                    <button data-tab="practice" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Практичний блок</button>
+                    <button data-tab="check" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Перевірка знань</button>
+                    <button data-tab="homework" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Домашнє завдання</button>
+                </nav>
+            </div>
+
+            <!-- Про урок -->
+            <div id="about-content" class="tab-content active">
+                <div class="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Lesson Goal -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words break-all">🎯 Мета уроку</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Освітня:</b> закріпити знання про елементи керування `Radiobutton` та `Checkbutton` у `tkinter`, навчити застосовувати їх для розв’язання практичних задач з розробки інтерфейсів користувача.</li>
+                            <li class="break-words"><b>Розвивальна:</b> розвивати навички аналізу вимог до інтерфейсу, вибору відповідних елементів керування, конструювання логіки обробки вибору та налагодження програм, що використовують елементи вибору.</li>
+                            <li class="break-words"><b>Виховна:</b> виховувати уважність до деталей при створенні інтерактивних програм, креативність у дизайні інтерфейсів та старанність у тестуванні застосунків.</li>
+                        </ul>
+                    </div>
+                    <!-- Expected Outcomes -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words break-all">✅ Очікувані результати</h3>
+                        <p class="mb-2 text-gray-600">Після уроку учні зможуть:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Самостійно створювати та налаштовувати `Radiobutton` та `Checkbutton` у `tkinter`.</li>
+                            <li class="break-words">Писати функції-обробники подій для цих елементів керування.</li>
+                            <li class="break-words">Розробляти програми, що динамічно змінюють свою поведінку або вигляд залежно від вибору користувача.</li>
+                            <li class="break-words">Виконувати вправу "Вгадай колір", що передбачає використання радіокнопок та динамічної зміни кольору напису.</li>
+                            <li class="break-words">Тестувати програми з елементами вибору на коректність роботи.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words">📊 Групи результатів (НУШ)</h3>
+                        <p class="text-gray-600 mb-4 break-words">Візуалізація важливості груп результатів для цього уроку.</p>
+                        <div class="chart-container relative h-64 w-full max-w-md mx-auto">
+                            <canvas id="resultsChart"></canvas>
+                        </div>
+                        <p class="text-gray-600 mb-4 break-words text-group-result"><i>Учень / учениця:</i></p>
+                        <ul>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР1 – працює з інформацією, даними, моделями;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР2 – створює інформаційні продукти;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР3 – працює в цифровому середовищі;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР4 – безпечно та відповідально працює з інформаційними технологіями.</p></li>
+                        </ul>
+                    </div>
+                    <!-- Lesson Type & Equipment -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words">📚 Тип уроку</h3>
+                        <p class="text-gray-700 break-words">Урок застосування знань, умінь та навичок.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words">💻 Обладнання та ПЗ</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Персональні комп'ютери з встановленим Python та модулем `tkinter`.</li>
+                            <li class="break-words">Середовище розробки (IDLE, VS Code).</li>
+                            <li class="break-words">Проєктор або інтерактивна дошка.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words">🔗 Міжпредметні зв'язки</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Мистецтво (кольори, дизайн).</li>
+                            <li class="break-words">Логіка.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Теоретичний блок -->
+            <div id="theory-content" class="tab-content   mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">
+                <!-- ВАРІАНТ № 2, початок -->
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-lime-500 mb-4 heading-underline break-words  title-review">ПОВТОРЮЄМО</h2>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">Актуалізація опорних знань</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2">
+                        <li class="break-words">У яких випадках використовують компонент `Radiobutton`?</li>
+                        <li class="break-words">Що забезпечує використання компонента `Checkbutton`?</li>
+                        <li class="break-words">Як створити зв'язок між радіокнопками?</li>
+                        <li class="break-words">Назвіть три відмінності між об'єктами класу `Radiobutton` та `Checkbutton`.</li>
+                        <li class="break-words">Як організувати перевірку стану прапорця в Python?</li>                        
+                    </ol>
+                    <img src="./images/img-tema5-10.webp" alt="Знак питання" class="rounded-lg shadow-md" width="200">
+                </div>
+                
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 217-220)</a></i></p>
+                </div>
+                <!-- ВАРІАНТ № 2, кінець -->
+            </div>
+            
+
+            <!-- Практичний блок -->
+            <div id="practice-content" class="tab-content">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-6 text-center text-lime-600 break-words">Практичний блок уроку</h3>
+
+                    <!-- <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Вправа 34: Вгадай колір</h4>
+                    <p class="text-gray-600 mb-4">Створіть програму Вгадай колір. Гравець потрібно вибрати колір напису, що з'являється у вікні програми. Текст напису й колір символів вибираються випадковим чином.</p>
+                    
+                    <ol class="list-decimal list-inside space-y-2 text-gray-700 mb-4">
+                        <li class="break-words">В IDLE виберіть команду File → New File.</li>
+                        <li class="break-words">Завантажте модулі `tkinter`, `random`.</li>
+                        <li class="break-words">Завершіть програму командою `tk.mainloop()`.</li>
+                        <li class="break-words">Створіть список назв кольорів: `colors = ["black", "red", "blue", "yellow", "green", "pink"]`.</li>
+                        <li class="break-words">Створіть змінну `bal` для збереження кількості правильних відповідей.</li>
+                        <li class="break-words">Змінній `k` надайте випадкове значення зі списку кольорів: `k = choice(colors)`.</li>
+                        <li class="break-words">Створіть шість радіокнопок із підписами, що відповідають назвам кольорів. Розмістіть віджети у вікні за допомогою пакувальника `grid`. Щоб вирівняти віджети за лівим краєм, задайте атрибуту `sticky` значення `W`.</li>
+                        <li class="break-words">Створіть змінну `var = IntVar()`.</li>
+                        <li class="break-words">Радіокнопки: `Radiobutton(text="black", variable=var, value=0, command=change).grid(row=0, column=0, sticky=W)`.</li>
+                        <li class="break-words">Запишіть команди для створення п'яти інших перемикачів.</li>
+                        <li class="break-words">Створіть об'єкт `lab1` класу `Label`. `lab1 = Label(text = "Яким кольором зроблено напис?")`, `lab1.grid(row=0, column=1)`.</li>
+                        <li class="break-words">Створіть об'єкт `lab2` класу `Label`. Властивості тексту об'єкта надайте випадкове значення зі списку кольорів: `lab2 = Label(text = choice(colors), fg = k, font = "Times 30")`, `lab2.grid(row=2, column=1)`.</li>
+                        <li class="break-words">Заповніть пропуски в описі функції `change()`:
+                            <pre class="code-snippet-box"><code>def change():
+    n = "GO" # Ознака продовження гри
+    global bal, k # Дозвіл на змінення значень глобальних змінних
+    if var.get() == 0 and k == 'black': bal = bal+1
+    &lt;додайте решту рядків&gt;
+    if n == "end": lab2['text'] = "GAME OVER"
+    else:
+        tk.title(bal + str(bal)) # Виведення значення лічильника
+        t = choice(colors) # r випадкового значення
+        lab2['text'] = t # Виведення випадкового значення
+        k = choice(colors) # Надання k випадкового значення
+        lab2['fg'] = k # Відображення символів напису кольором k</code></pre>
+                        </li>
+                        <li class="break-words">Збережіть файл з іменем Vprava34.py. Перевірте роботу програми.</li>
+                    </ol>
+
+                    <img src="./images/image_2260f8.jpg" alt="Інтерфейс програми Вгадай колір" class="rounded-lg shadow-md mx-auto mb-6" width="400">
+                    <p class="text-center text-sm text-gray-600 mt-2 mb-4">Рис. 34.5. Програма "Вгадай колір"</p>
+                    <p class="source-text break-words mb-4"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 221)</a></i></p>
+
+                    <hr class="my-8 border-gray-200"> -->
+
+                    <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Інтерактивна вправа: Вгадай колір (симуляція)</h4>
+                    <p class="text-gray-600 mb-4">Спробуйте вгадати колір тексту! Виберіть колір, який, на вашу думку, є кольором наступного тексту. Завдання - вгадати колір, яким написаний текст, а не колір самого тексту.</p>
+
+                    <!-- <p>Одна гра</p> -->
+                    <!-- <div class="color-guess-game-container">
+                        <h5>Яким кольором зроблено напис? (English)</h5>
+                        <div id="display-text" class="text-4xl font-bold mb-4" style="color: black;"></div>
+                        <div class="color-guess-radios" id="guess-color-options"> -->
+                            <!-- Radios will be generated by JS -->
+                        <!-- </div>
+                        <div class="color-display-box" id="current-color-box"></div>
+                        <div class="game-controls">
+                            <button class="check-button" onclick="checkGuess()">Перевірити</button>
+                             <button class="reset-button" onclick="startNewGame(true)">Нова гра</button>
+                        </div>
+                        <div id="game-feedback" class="game-feedback"></div>
+                        <div class="game-feedback mt-2">Правильних відповідей: <span id="correct-guesses-count">0</span></div>
+                    </div> -->
+
+                    <!-- <p>Дві гри</p> -->
+                    <!-- UA -->
+                    <div class="color-guess-game-container">
+                        <h5>Яким кольором зроблено напис? (Українська версія)</h5>
+                        <div id="display-text-ua" class="text-4xl font-bold mb-4"></div>
+                        <div id="guess-color-options-ua" class="color-guess-radios"></div>
+                        <div id="current-color-box-ua" class="color-display-box"></div>
+                        <div class="game-controls">
+                            <button class="check-button" onclick="ua.check()">Перевірити</button>
+                            <button class="reset-button" onclick="ua.start(true)">Нова гра</button>
+                        </div>
+                        <div id="game-feedback-ua" class="game-feedback"></div>
+                        <div class="game-feedback mt-2">Правильних відповідей:
+                            <span id="correct-guesses-count-ua">0</span>
+                        </div>
+                    </div>
+
+                    <!-- EN -->
+                    <div class="color-guess-game-container">
+                        <h5>What color is the word? (English)</h5>
+                        <div id="display-text-en" class="text-4xl font-bold mb-4"></div>
+                        <div id="guess-color-options-en" class="color-guess-radios"></div>
+                        <div id="current-color-box-en" class="color-display-box"></div>
+                        <div class="game-controls">
+                            <button class="check-button" onclick="en.check()">Check</button>
+                            <button class="reset-button" onclick="en.start(true)">New game</button>
+                        </div>
+                        <div id="game-feedback-en" class="game-feedback"></div>
+                        <div class="game-feedback mt-2">Correct answers:
+                            <span id="correct-guesses-count-en">0</span>
+                        </div>
+                    </div>
+
+
+                </div>                
+            </div>
+
+            <!-- Перевірка знань -->
+            <!-- Вручну треба змінювати лише ті значення minimum-height (min-h-[300px]), які потрібно, і треба використовувати медіа-адаптацію (стилі тут на сторінці в тезі <style>)-->
+                <!-- Тут grid -->
+            <div id="check-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-6 text-center text-lime-600 break-words">Перевірка знань</h3>
+                <p class="text-center text-gray-600 mb-8 break-words">Натисніть на картку, щоб побачити відповідь.</p>
+                <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-lime-100 p-6 rounded-xl shadow-md break-words">1. У яких випадках використовують компонент `Radiobutton`?</div>
+                        <div class="flip-card-back bg-lime-200 p-6 rounded-xl shadow-md break-words">Коли потрібно вибрати один варіант із декількох запропонованих.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-lime-100 p-6 rounded-xl shadow-md break-words">2. Що забезпечує використання компонента `Checkbutton`?</div>
+                        <div class="flip-card-back bg-lime-200 p-6 rounded-xl shadow-md break-words">Можливість увімкнути або вимкнути певний параметр незалежно від інших.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-lime-100 p-6 rounded-xl shadow-md break-words">3. Як створити зв'язок між радіокнопками?</div>
+                        <div class="flip-card-back bg-lime-200 p-6 rounded-xl shadow-md break-words">Використовуючи спільну змінну класу `IntVar` та вказуючи її в атрибуті `variable` для кожної радіокнопки.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-lime-100 p-6 rounded-xl shadow-md break-words">4. Назвіть три відмінності між об'єктами класу `Radiobutton` та `Checkbutton`.</div>
+                        <div class="flip-card-back bg-lime-200 p-6 rounded-xl shadow-md break-words">
+                            <ul class="list-disc list-inside">
+                                <li>**Вибір:** `Radiobutton` - один з багатьох, `Checkbutton` - кілька з багатьох.</li>
+                                <li>**Тип змінної:** `Radiobutton` - `IntVar`, `Checkbutton` - `BooleanVar`.</li>
+                                <li>**Значення:** `Radiobutton` - числові `value`, `Checkbutton` - `onvalue`/`offvalue` (зазвичай 1/0).</li>
+                            </ul>
+                        </div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-lime-100 p-6 rounded-xl shadow-md break-words">5. Як організувати перевірку стану прапорця в Python?</div>
+                            <div class="flip-card-back bg-lime-200 p-6 rounded-xl shadow-md break-words">За допомогою методу `.get()` змінної `BooleanVar`, пов'язаної з прапорцем (`if cb_var.get() != 0:`).</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-lime-100 p-6 rounded-xl shadow-md break-words">6. Як додати до програми Конструктор піц ще один прапорець (наприклад, для вибору складника "Бекон")?</div>
+                            <div class="flip-card-back bg-lime-200 p-6 rounded-xl shadow-md break-words">
+                                <ul class="list-inside">
+                                    <li>1. Створити нову `BooleanVar()`: `cvar3 = BooleanVar()`.</li>
+                                    <li>2. Створити `Checkbutton`: `Checkbutton(root, text="Бекон 25 грн", variable=cvar3, onvalue=1, offvalue=0).pack(anchor=W)`.</li>
+                                    <li>3. Оновити функцію `btn_click()` для врахування вартості Бекону: `suma = var.get()*60 + cvar1.get()*8 + cvar2.get()*18 + cvar3.get()*25`.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 217-220)</a></i></p>
+                </div>
+            </div>
+         
+
+            <!-- Домашнє завдання -->
+            <div id="homework-content" class="tab-content   bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-lime-600 break-words">Домашнє завдання</h3>                    
+                <!--  -->
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <div>
+                            <p class="break-words break-all"><b>1. Теоретична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li class="break-words break-all">Повторити § 34 (стор. 217-222).</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><b>2. Практична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Виконати вправу № 34 (стор. 221-222).</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p><b>3. Завдання за бажанням (для закріплення):</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Інтерактивна платформа IZZI (8 клас) до § 34: <a href="https://ua.izzi.digital/DOS/1183864/1337128.html" target="_blank" class="text-blue-600 hover:underline break-words break-all block">https://ua.izzi.digital/DOS/1183864/1337128.html</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="./images/img08.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!--  -->
+            </div>
+        </section>
+
+
+        <!-- Додаткові матеріали -->
+        <!-- Additional Materials Section -->
+        <section class="bg-white p-6 rounded-xl shadow-md mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-lime-600 break-words">Додаткові матеріали</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li class="break-words"><a href="https://sites.google.com/view/lga84-9/tehnika_bezpeky" target="_blank" class="text-blue-600 hover:underline">Техніка безпеки</a></li>
+
+                <li class="break-words"><a href="https://drive.google.com/file/d/1C9_KEF981LvokY0GWNOhUXb7rJKJUUbM/view" target="_blank" class="text-blue-600 hover:underline">Оцінювання учнів та учениць на уроках інформатики</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу</a> (§ 34, стор. 217-222)</li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">Інтерактивна платформа IZZI (8 клас)</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до § 34: <a href="https://ua.izzi.digital/DOS/1183864/1337128.html" target="_blank" class="text-blue-600 hover:underline">https://ua.izzi.digital/DOS/1183864/1337128.html</a></li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm   bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>           
+        </ul>
+    </footer>    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Початок:
+            // Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання".
+            const tabs = document.getElementById('tabs');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            tabs.addEventListener('click', (e) => {
+                // Ensure the click target is a BUTTON (tab button)
+                if (e.target.tagName === 'BUTTON') {
+                    const tab = e.target.dataset.tab;
+
+                    // Remove 'active' class from all buttons and add to the clicked one
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Hide all tab contents and show the corresponding one
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Use === for strict comparison
+                        if (content.id === `${tab}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                }
+            });
+            // Кінець.
+
+
+            // Початок:
+            // ГРУПИ РЕЗУЛЬТАТІВ.
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            // 1. Створення об'єкту-мапи для відповідності значень і кольорів
+            // Тут вручну можна поміняти значення background й border
+            const colorMap = {
+                1: {
+                    background: '#f7fee7', // text-lime-100
+                    border: '#e5ff8b'      // text-lime-200
+                },
+                2: {
+                    background: '#e5ff8b', // text-lime-200
+                    border: '#cffc05'       // text-lime-300
+                },
+                3: {
+                    background: '#cffc05',  // text-lime-300
+                    border: '#a3e635'        // text-lime-400
+                },
+                4: {
+                    background: '#a3e635',   // text-lime-400
+                    border: '#84cc16'      // text-lime-500
+                }
+            };
+
+            // Дані, які можна змінювати вручну
+            const chartData = [2, 4, 3, 2];
+
+            // 2. Генерація масивів кольорів на основі даних
+            const backgroundColors = chartData.map(value => colorMap[value].background);
+            const borderColors = chartData.map(value => colorMap[value].border);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ГР1', 'ГР2', 'ГР3', 'ГР4'],
+                    datasets: [{
+                        label: 'Важливість',
+                        data: chartData, // Використовуємо змінну
+                        backgroundColor: backgroundColors, // Використовуємо згенерований масив
+                        borderColor: borderColors, // Використовуємо згенерований масив
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const labels = ['', 'Важлива', 'Дуже важлива', 'Найважливіша'];
+                                    return labels[value] || '';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.parsed.y;
+                                    const importanceLabels = {4: 'Найважливіша', 3: 'Дуже важлива', 2: 'Важлива', 1: 'Найменш важлива'};
+                                    label += importanceLabels[value] || '';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // Кінець. ГРУПИ РЕЗУЛЬТАТІВ.
+
+
+            // Початок.
+            // ПОВОРОТ КАРТОК "Перевірка знань"
+            const flipCards = document.querySelectorAll('.flip-card');
+            flipCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+            // Кінець. ПОВОРОТ КАРТОК.
+
+        });
+    </script>
+
+    <!-- Скрипт для інтерактивної вправи -->
+    <!-- Одна гра -->
+    <!-- <script>
+        const colors = ["black", "red", "blue", "yellow", "green", "pink"];
+        let bal = 0;
+        let currentFgColor = '';
+        let currentText = '';
+        let roundTimeoutId = null; // <-- запам'ятовуємо таймер
+
+        const displayTextElement = document.getElementById('display-text');
+        const guessOptionsContainer = document.getElementById('guess-color-options');
+        const gameFeedbackElement = document.getElementById('game-feedback');
+        const correctGuessesCountElement = document.getElementById('correct-guesses-count');
+        const currentColorBox = document.getElementById('current-color-box');
+
+        function getRandomColor() {
+        return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        // reset=true — повний скидання (обнулити бал і очистити повідомлення)
+        function startNewGame(reset = false) {
+        // скасувати відкладений автоперезапуск попереднього раунду
+        if (roundTimeoutId !== null) {
+            clearTimeout(roundTimeoutId);
+            roundTimeoutId = null;
+        }
+
+        if (reset) {
+            bal = 0;                        // <-- обнуляємо лічильник
+            gameFeedbackElement.textContent = '';
+            gameFeedbackElement.classList.remove('correct', 'incorrect');
+        }
+
+        currentText = getRandomColor();
+        currentFgColor = getRandomColor();
+
+        displayTextElement.textContent = currentText;
+        displayTextElement.style.color = currentFgColor;
+        currentColorBox.style.backgroundColor = 'white';
+
+        // згенерувати радіокнопки
+        guessOptionsContainer.innerHTML = '';
+        colors.forEach(colorName => {
+            const label = document.createElement('label');
+            label.innerHTML = `<input type="radio" name="guess_color" value="${colorName}"> ${colorName}`;
+            guessOptionsContainer.appendChild(label);
+        });
+
+        updateCorrectGuessesCount();
+        }
+
+        function checkGuess() {
+        const selectedRadio = document.querySelector('input[name="guess_color"]:checked');
+        if (!selectedRadio) {
+            gameFeedbackElement.textContent = 'Будь ласка, оберіть колір.';
+            gameFeedbackElement.classList.remove('correct');
+            gameFeedbackElement.classList.add('incorrect');
+            return;
+        }
+
+        const guessedColor = selectedRadio.value;
+        if (guessedColor === currentFgColor) {
+            bal++;
+            gameFeedbackElement.textContent = 'Правильно! 👍';
+            gameFeedbackElement.classList.remove('incorrect');
+            gameFeedbackElement.classList.add('correct');
+        } else {
+            gameFeedbackElement.textContent = `Неправильно! Справжній колір був "${currentFgColor}". 👎`;
+            gameFeedbackElement.classList.remove('correct');
+            gameFeedbackElement.classList.add('incorrect');
+        }
+        currentColorBox.style.backgroundColor = currentFgColor;
+        updateCorrectGuessesCount();
+
+        // автоперезапуск через 2 с
+        roundTimeoutId = setTimeout(() => startNewGame(false), 2000);
+        }
+
+        function updateCorrectGuessesCount() {
+        correctGuessesCountElement.textContent = bal;
+        }
+
+        // перший запуск
+        startNewGame(true);
+    </script> -->
+
+    <!-- Скрипт для інтерактивної вправи -->
+    <!-- Дві гри -->
+    <script>
+    function createColorGame(cfg) {
+        const {
+            id,                                     // суфікс: 'ua' або 'en'
+            words,                                   // слова, які показуємо
+            colors,                                  // масив CSS-імен кольорів
+            labelByCss,                              // підпис на радіокнопці для CSS-кольору
+            texts                                    // локалізовані рядки
+        } = cfg;
+
+        const els = {
+            text:   document.getElementById(`display-text-${id}`),
+            opts:   document.getElementById(`guess-color-options-${id}`),
+            box:    document.getElementById(`current-color-box-${id}`),
+            msg:    document.getElementById(`game-feedback-${id}`),
+            count:  document.getElementById(`correct-guesses-count-${id}`)
+        };
+
+        let score = 0;
+        let fgCss = '';        // справжній CSS-колір тексту
+        let wordShown = '';    // показане слово (UA/EN)
+        let timeoutId = null;
+
+        const rand = arr => arr[Math.floor(Math.random()*arr.length)];
+
+        function renderOptions() {
+            els.opts.innerHTML = '';
+            colors.forEach(css => {
+            const label = document.createElement('label');
+            label.innerHTML =
+                `<input type="radio" name="guess_${id}" value="${css}"> ${labelByCss(css)}`;
+            els.opts.appendChild(label);
+            });
+        }
+
+        function updateScore() {
+            els.count.textContent = score;
+        }
+
+        function start(reset=false) {
+            if (timeoutId) { clearTimeout(timeoutId); timeoutId = null; }
+            if (reset) {
+            score = 0;
+            els.msg.textContent = '';
+            els.msg.classList.remove('correct','incorrect');
+            updateScore();
+            }
+            wordShown = rand(words);
+            fgCss = rand(colors);
+
+            els.text.textContent = wordShown;
+            els.text.style.color = fgCss;
+            els.box.style.backgroundColor = 'white';
+
+            renderOptions();
+        }
+
+        function check() {
+            const radio = els.opts.querySelector(`input[name="guess_${id}"]:checked`);
+            if (!radio) {
+            els.msg.textContent = texts.selectPrompt;
+            els.msg.classList.remove('correct');
+            els.msg.classList.add('incorrect');
+            return;
+            }
+            const guessCss = radio.value;
+            els.box.style.backgroundColor = fgCss;
+
+            if (guessCss === fgCss) {
+            score++;
+            els.msg.textContent = texts.correct;
+            els.msg.classList.remove('incorrect');
+            els.msg.classList.add('correct');
+            } else {
+            els.msg.textContent = texts.wrong(labelByCss(fgCss));
+            els.msg.classList.remove('correct');
+            els.msg.classList.add('incorrect');
+            }
+            updateScore();
+            timeoutId = setTimeout(() => start(false), 2000);
+        }
+
+        // перший запуск
+        start(true);
+
+        return { start, check };
+        }
+
+        /* -------- Ініціалізація: UA -------- */
+        const cssColors = ["black","red","blue","yellow","green","pink"];
+        const uaNames   = { black:"чорний", red:"червоний", blue:"синій", yellow:"жовтий", green:"зелений", pink:"рожевий" };
+
+        // показуємо слова українською (будь-які зручні)
+        const uaWords = Object.values(uaNames);
+        // підпис на радіокнопках — теж український
+        const labelUa = css => uaNames[css];
+
+        window.ua = createColorGame({
+        id: 'ua',
+        words: uaWords,
+        colors: cssColors,
+        labelByCss: labelUa,
+        texts: {
+            selectPrompt: 'Будь ласка, оберіть колір.',
+            correct: 'Правильно! 👍',
+            wrong: (trueName) => `Неправильно! Справжній колір був «${trueName}». 👎`
+        }
+        });
+
+        /* -------- Ініціалізація: EN -------- */
+        const labelEn = (css) => css;           // підпис = css-імʼя
+        const enWords = cssColors;              // слово, що показуємо — англійською
+
+        window.en = createColorGame({
+        id: 'en',
+        words: enWords,
+        colors: cssColors,
+        labelByCss: labelEn,
+        texts: {
+            selectPrompt: 'Please select a color.',
+            correct: 'Correct! 👍',
+            wrong: (trueName) => `Wrong! The real color was “${trueName}”. 👎`
+        }
+    });
+
+    // У кожної версії унікальні ID (-ua та -en) й власний лічильник.
+    // Українська версія показує слова українською й варіанти вибору теж українською, але фарбує за CSS‑іменами (правильне зіставлення).
+    // Кнопка «Нова гра» в UA та EN обнуляє відповідний лічильник і не заважає іншій версії.
+    </script>
+
+</body>
+</html>

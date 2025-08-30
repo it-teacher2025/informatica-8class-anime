@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: 8 клас</title>
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Тіло документа */
+        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
+
+        /* Стилі для навігації в меню */
+        .logo-main { display: none; }
+        .main-title-text { width: 140px; text-align: center; }
+        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
+        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
+        @media screen and (min-width: 768px) {
+            .main-title-text { width: auto; }
+            .main-navigation { display: inline; width: auto; }
+        }
+
+        /* main стилі */
+        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
+        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
+        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
+        .source-text { padding: 8px; }
+        @media screen and (min-width: 300px) {
+            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
+            .text-2xlooo { font-size: 1.25rem; }
+        }
+        @media screen and (min-width: 480px) {
+            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
+            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
+            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
+        }
+
+        /* Стилі для "Про урок" */
+        /* Групи результатів */
+        .text-group-result { padding-top: 16px; }
+
+        /* Style to hide inactive tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Style to tab content */
+        .tab-btn.active { 
+            color: #16a34a;                /* text-green-600 */
+            border-bottom-color: #16a34a;  /* text-green-600 */
+            background-color: #dcfce7;     /* text-green-100 */
+        }
+        .tab-btn { 
+            transition: color 0.3s, 
+            border-color 0.3s, 
+            background-color 0.3s; 
+            border-bottom: 2px solid transparent;
+        }
+
+        /* Styles for flip cards */
+        .flip-card {
+            background-color: transparent;
+            width: 100%; /* Make cards responsive to grid column width */
+            height: 200px; /* Fixed height for consistency, adjust as needed */
+            perspective: 1000px; /* 3D effect */
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left; /* Adjust text alignment as needed */
+            overflow-wrap: break-word; /* break-words */
+            /*word-break: break-all;*/ /* break-all */
+        }
+
+        .flip-card-front {
+            color: #4b5563; /* text-gray-700 */
+        }
+
+        .flip-card-back {
+            color: #4b5563; /* text-gray-700 */
+            transform: rotateY(180deg);
+        }
+
+        /* Responsive adjustments for min-height */
+        @media (min-width: 768px) { /* md breakpoint */
+            .flip-card.min-h-md {
+                min-height: 250px; /* Example, adjust as needed for medium screens */
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .flip-card.min-h-lg {
+                min-height: 200px; /* Example, adjust as needed for large screens */
+            }
+        }
+
+    </style>
+
+    <!-- Стилі для інтерактивних вправ -->
+    <style>
+        .exercise-container {
+            background-color: #f0fdf4; /* bg-green-50 */
+            border: 1px solid #dcfce7; /* border-green-100 */
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .exercise-container h5 {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #4a5568;
+        }
+        .exercise-container p {
+            margin-bottom: 15px;
+            color: #4a5568;
+        }
+        .code-block {
+            background-color: #1f2937; /* bg-gray-800 */
+            color: #e5e7eb; /* text-gray-200 */
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+            overflow-x: auto;
+            margin-bottom: 15px;
+        }
+        .mc-container .mc-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f9fafb; /* bg-gray-50 */
+            border: 1px solid #e5e7eb; /* border-gray-200 */
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .mc-container .mc-option:hover {
+            background-color: #f3f4f6; /* bg-gray-100 */
+        }
+        .mc-container .mc-option input[type="radio"],
+        .mc-container .mc-option input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        .mc-container .mc-option label {
+            flex-grow: 1;
+            cursor: pointer;
+        }
+        .mc-container .mc-option.correct {
+            background-color: #d1fae5; /* bg-green-100 */
+            border-color: #34d399; /* border-green-400 */
+        }
+        .mc-container .mc-option.incorrect {
+            background-color: #fee2e2; /* bg-red-100 */
+            border-color: #ef4444; /* border-red-500 */
+        }
+        .check-button, .reset-button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            margin: 0 5px;
+        }
+        .check-button {
+            background-color: #16a34a; /* bg-green-600 */
+            color: white;
+            border: none;
+        }
+        .check-button:hover {
+            background-color: #15803d; /* darker green */
+            transform: translateY(-1px);
+        }
+        .check-button:active {
+            transform: translateY(0);
+        }
+        .reset-button {
+            background-color: #dcfce7; /* bg-green-100 */
+            color: #16a34a; /* text-green-600 */
+            border: 1px solid #16a34a;
+        }
+        .reset-button:hover {
+            background-color: #bbf7d0; /* bg-green-200 */
+            transform: translateY(-1px);
+        }
+        .reset-button:active {
+            transform: translateY(0);
+        }
+        .feedback {
+            margin-top: 15px;
+            font-weight: 600;
+            color: #343a40; /* text-gray-800 */
+        }
+        .feedback.correct {
+            color: #10b981; /* text-green-500 */
+        }
+        .feedback.incorrect {
+            color: #ef4444; /* text-red-500 */
+        }
+    </style>
+</head>
+<body>
+
+    <header class="container mx-auto flex justify-between items-center   bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10  logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
+            </ul>
+            <!-- <a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a>
+            <a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a> -->
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <!-- Секція теми уроку -->
+        <section class="text-center mb-8">
+            <h1 class="text-lg text-slate-600 mt-2 break-words">Тема 5: «Алгоритми та програми». Урок № 53. (До § 35)</h1>
+            <h1 class="text-3xlooo md:text-4xl font-bold text-slate-900 break-words  theme-text">Алгоритми з повтореннями. Цикли</h1>
+            <h2 class="text-lg text-slate-600 mt-2 break-words">Інтерактивний план-конспект уроку для 8 класу НУШ</h2>
+        </section>
+
+
+        <!-- Секція "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання" -->
+        <section>
+            <!-- Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання". -->
+            <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+                <nav id="tabs" class="flex flex-wrap justify-center gap-2 sm:gap-4">
+                    <button data-tab="about" class="tab-btn active text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Про урок</button>
+                    <button data-tab="theory" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Теоретичний блок</button>
+                    <button data-tab="practice" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Практичний блок</button>
+                    <button data-tab="check" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Перевірка знань</button>
+                    <button data-tab="homework" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Домашнє завдання</button>
+                </nav>
+            </div>
+
+            <!-- Про урок -->
+            <div id="about-content" class="tab-content active">
+                <div class="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Lesson Goal -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-green-600 break-words break-all">🎯 Мета уроку</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Освітня:</b> ознайомити учнів з поняттям циклічного алгоритму, основними типами циклів (з параметром `for` та передумовою `while`) в Python, їх синтаксисом та сферами застосування.</li>
+                            <li class="break-words"><b>Розвивальна:</b> розвивати логічне мислення, вміння аналізувати задачі та вибирати оптимальний тип циклу для їх розв'язання, навички написання та налагодження програм з циклами.</li>
+                            <li class="break-words"><b>Виховна:</b> виховувати інтерес до програмування, акуратність у кодуванні, розуміння ефективності використання циклів для вирішення повторюваних завдань.</li>
+                        </ul>
+                    </div>
+                    <!-- Expected Outcomes -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-green-600 break-words break-all">✅ Очікувані результати</h3>
+                        <p class="mb-2 text-gray-600">Після уроку учні зможуть:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Визначати ситуації, де необхідно використовувати цикли.</li>
+                            <li class="break-words">Розрізняти цикли з параметром (`for`) та цикли з передумовою (`while`).</li>
+                            <li class="break-words">Записувати синтаксис циклу `for` та `while` в Python.</li>
+                            <li class="break-words">Використовувати функцію `range()` для організації циклів з лічильником.</li>
+                            <li class="break-words">Створювати прості програми, що містять цикли для повторення дій.</li>
+                            <li class="break-words">Пояснювати призначення вкладених циклів.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-bold mb-3 text-green-600 break-words">📊 Групи результатів (НУШ)</h3>
+                        <p class="text-gray-600 mb-4 break-words">Візуалізація важливості груп результатів для цього уроку.</p>
+                        <div class="chart-container relative h-64 w-full max-w-md mx-auto">
+                            <canvas id="resultsChart"></canvas>
+                        </div>
+                        <p class="text-gray-600 mb-4 break-words text-group-result"><i>Учень / учениця:</i></p>
+                        <ul>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР1 – працює з інформацією, даними, моделями;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР2 – створює інформаційні продукти;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР3 – працює в цифровому середовищі;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР4 – безпечно та відповідально працює з інформаційними технологіями.</p></li>
+                        </ul>
+                    </div>
+                    <!-- Lesson Type & Equipment -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-green-600 break-words">📚 Тип уроку</h3>
+                        <p class="text-gray-700 break-words">Урок вивчення нового матеріалу.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-green-600 break-words">💻 Обладнання та ПЗ</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Персональні комп'ютери з встановленим Python.</li>
+                            <li class="break-words">Середовище розробки (IDLE, VS Code).</li>
+                            <li class="break-words">Проєктор або інтерактивна дошка.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-green-600 break-words">🔗 Міжпредметні зв'язки</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Математика (послідовності, ряди, обчислення).</li>
+                            <li class="break-words">Трудове навчання (алгоритми дій, повторювані операції).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Теоретичний блок -->
+            <div id="theory-content" class="tab-content   mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">
+                <!-- ВАРІАНТ № 2, початок -->
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-green-500 mb-4 heading-underline break-words  title-review">ПОВТОРЮЄМО</h2>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">Актуалізація опорних знань</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2">
+                        <li class="break-words">У яких випадках використовують компонент `Radiobutton`?</li>
+                        <li class="break-words">Що забезпечує використання компонента `Checkbutton`?</li>
+                        <li class="break-words">Як створити зв'язок між радіокнопками?</li>
+                        <li class="break-words">Назвіть три відмінності між об'єктами класу `Radiobutton` та `Checkbutton`.</li>
+                        <li class="break-words">Як організувати перевірку стану прапорця в Python?</li>                        
+                    </ol>
+                    <img src="./images/img-tema5-03.webp" alt="Знак питання" class="rounded-lg shadow-md" width="200">
+                </div>
+                
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 217-220)</a></i></p>
+                </div>
+                <!-- ВАРІАНТ № 2, кінець -->
+
+                <!-- <hr class="my-8 border-gray-200"> -->
+                <!-- Новий матеріал -->
+                <!-- <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-green-500 mb-4 heading-underline break-words title-review">ВИВЧАЄМО НОВЕ</h2>
+                </div>
+
+                <h4 class="text-2xlooo font-bold text-gray-800 mb-6 break-words">§ 35. Алгоритми з повтореннями. Цикли</h4>
+                <p class="text-gray-700 mb-4">Ви вже маєте досвід записування алгоритмів із повтореннями (циклів) мовою Python і вмієте використовувати два види операторів циклу: із параметром та з умовою.</p>
+                <p class="text-gray-700 mb-4">Як вам відомо, **повторення (цикл)** — це алгоритмічна структура, за допомогою якої та сама послідовність дій виконується кілька разів.</p>
+                <p class="text-gray-700 mb-4">Цикли дають змогу запрограмувати повторення подібних обчислень, команди для створення однакових елементів зображення (наприклад, квадрати, лінії, кола), що зменшує кількість написаного коду і спрощує його зміною.</p>
+                <p class="text-gray-700 mb-4">Цикли незамінні при створенні програм з анімацією, моделюванні руху об’єктів на екрані та ін.</p>
+                <p class="text-gray-700 mb-4">Згадаємо: команди, що повторюються під час виконання циклу, називають **тілом циклу**, а кожне виконання тіла циклу — **ітерацією**.</p>
+                <img src="./images/image_216130.jpg" alt="Блок-схема циклу" class="rounded-lg shadow-md mx-auto mb-4" width="300">
+                <p class="text-center text-sm text-gray-600 mt-2 mb-4">Рис. 35.1. Блок-схема циклу</p>
+
+                <h5 class="text-xl font-semibold mb-3 text-gray-800 break-words">Цикл із параметром</h5>
+                <p class="text-gray-700 mb-4">**Цикл із параметром (або цикл for)** використовують, якщо кількість повторень визначається певною послідовністю значень (символи рядка, елементи списку тощо). Блок-схему циклу подано на рис. 35.1.</p>
+                <p class="text-gray-700 mb-4">Синтаксис циклу `for`:</p>
+                <pre class="code-block"><code>for x in &lt;послідовність&gt;:
+    &lt;тіло циклу&gt;</code></pre>
+                <p class="text-gray-700 mb-4">Змінна `x` — **параметр циклу** — послідовно набуває значень кожного члена послідовності.</p>
+                <p class="source-text break-words mb-4"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 223)</a></i></p>
+
+                <p class="text-gray-700 mb-4">Пояснювальна обробка рядка: виведемо рядок, пропустивши *зірочки*.</p>
+                <pre class="code-block"><code>s = "ABC*D*E*F*G"
+for c in s:
+    if c != '*': print(c, end = "")</code></pre>
+                <p class="text-gray-700 mb-4">Дано список днів тижня. Скільки з них припадають на вихідні (сб, нд)?</p>
+                <pre class="code-block"><code>d = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'нд', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'нд']
+k = 0
+for day in d:
+    if day in ['сб', 'нд']: k += 1
+print('Вихідних днів -', k)
+>>> Вихідних днів - 7</code></pre>
+                <p class="text-gray-700 mb-4">Числові послідовності можна задавати за допомогою вбудованої функції: `range(start [, finish][, step])`</p>
+                <p class="text-gray-700 mb-4">Вона створює послідовність цілих чисел від значення `start` до `finish` із заданим кроком. Зауважмо, що саме значення `finish` у послідовність не входить.</p>
+                <p class="text-gray-700 mb-4">Надрукувати числа від 20 до 24. Якщо `step = 1`, цей параметр можна не зазначати.</p>
+                <pre class="code-block"><code>for i in range(20, 25): print(i)</code></pre>
+                <p class="text-gray-700 mb-4">Надрукувати числа від 0 до 3. Якщо `start = 0`, цей параметр можна не зазначати:</p>
+                <pre class="code-block"><code>for i in range(4): print(i)</code></pre>
+                <p class="text-gray-700 mb-4">Надрукувати числа від 5 до 1. Якщо потрібно вести відлік у зворотному порядку, крок має бути від'ємним:</p>
+                <pre class="code-block"><code>for i in range(5, 0, -1): print(i)</code></pre>
+                <p class="text-gray-700 mb-4">У мові програмування Python цикл із параметром відрізняє багато можливостей. Так, використовуючи його, ми можемо запрограмувати рух об'єктів у вікні програми.</p>
+                <p class="source-text break-words mb-4"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 224)</a></i></p>
+
+                <p class="text-gray-700 mb-4">Запрограмувати пересування в програмному вікні об'єкта `lab` класу `Label` із координатами (`x`, `sin x`) (рис. 35.2).</p>
+                <img src="./images/image_2160f6.jpg" alt="Рух об'єкта" class="rounded-lg shadow-md mx-auto mb-4" width="400">
+                <p class="text-center text-sm text-gray-600 mt-2 mb-4">Рис. 35.2. Рух об'єкта</p>
+                <pre class="code-block"><code>from tkinter import *
+import time
+root = Tk() # Створюємо вікно програми
+root.title('Човник')
+root.geometry('800x250')
+im = PhotoImage(file = '1.png')
+lab = Label(root, width = 70, height = 70, image = im)
+lab.place(x = 1, y = 90) # Початкове розташування об'єкта lab
+for x1 in range(1, 250):
+    lab.place(x = x1*2, y = 10*math.sin(x1)+100) # Розташування об'єкта lab на x1-й ітерації
+    root.update() # Оновлення полотна
+    time.sleep(0.1) # Пауза на 0.1 секунди
+root.mainloop() # Запуск головного циклу обробки подій</code></pre>
+                <p class="source-text break-words mb-4"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 225)</a></i></p>
+
+                <h5 class="text-xl font-semibold mb-3 text-gray-800 break-words">Цикл із передумовою</h5>
+                <p class="text-gray-700 mb-4">**Цикл із передумовою (або цикл while)** повторюватися доти, поки істинна певна умова. Синтаксис циклу `while`:</p>
+                <pre class="code-block"><code>while &lt;умова&gt;:
+    &lt;тіло циклу&gt;</code></pre>
+                <p class="text-gray-700 mb-4">Блок-схему команди `while` подано на рис. 35.3.</p>
+                <img src="./images/image_2160f6.jpg" alt="Блок-схема циклу while" class="rounded-lg shadow-md mx-auto mb-4" width="300">
+                <p class="text-center text-sm text-gray-600 mt-2 mb-4">Рис. 35.3. Блок-схема циклу `while`</p>
+                <p class="text-gray-700 mb-4">Виконання команди `while` починається з обчислення значення логічного виразу — **умови повторення циклу**. Внутрішній цикл `for` і призначений для визначення кількості пропусків перед числами, що правильно вирівняти трикутник по центру.</p>
+                <p class="text-gray-700 mb-4">Якщо умова хибна, то виконується команда, яка є наступною після команди `while`.</p>
+                <p class="text-gray-700 mb-4 text-red-600 font-bold">⚠️ Слід мати на увазі, що тіло циклу `while` може не виконатися жодного разу. Це буває, коли при першій перевірці умова виявляється хибною.</p>
+                <p class="text-gray-700 mb-4">**Леонардо Фібоначчі** — видатний математик середньовічної Європи. Числами Фібоначчі називають послідовність чисел, у якій кожне наступне число є сумою двох попередніх: $Fib[1] = Fib[2] = 1; Fib[n] = Fib[n-1] + Fib[n-2]$.</p>
+                <p class="text-gray-700 mb-4">Для визначення номера першого числа Фібоначчі, яке більше за 1000, потрібен цикл із умовою:</p>
+                <pre class="code-block"><code>a = b = 1
+c = 2
+n = 3
+while c &lt; 1000:
+    a, b, c = b, c, a+b
+    n += 1
+print('Число', c, 'має номер', n)</code></pre>
+                <p class="source-text break-words mb-4"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 226)</a></i></p>
+
+                <h5 class="text-xl font-semibold mb-3 text-gray-800 break-words">Переривання роботи циклу</h5>
+                <p class="text-gray-700 mb-4">Команда `break` використовується для дострокового завершення виконання циклу. Вона дає змогу зупинити роботу циклу після знаходження необхідного результату та уникнути виконання зайвих ітерацій. Звернімо увагу, що команда `break` здійснює вихід із циклу, навіть якщо виконано не всі ітерації.</p>
+                <p class="text-gray-700 mb-4">У нескінченному циклі здійснюється додавання чисел, що вводяться з клавіатури. Якщо введене число 0, цикл припиняється (рис. 35.4).</p>
+                <pre class="code-block"><code>suma = 0
+k = 0
+while True:
+    a = int(input(a = ?))
+    if a == 0: break
+    k += 1
+    suma += a
+print('Сума', k, 'чисел дорівнює', suma)</code></pre>
+                <img src="./images/image_215e11.jpg" alt="Нескінченний цикл" class="rounded-lg shadow-md mx-auto mb-4" width="400">
+                <p class="text-center text-sm text-gray-600 mt-2 mb-4">Рис. 35.4. Нескінченний цикл</p>
+                <p class="source-text break-words mb-4"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 227)</a></i></p>
+
+                <h5 class="text-xl font-semibold mb-3 text-gray-800 break-words">Вкладені цикли</h5>
+                <p class="text-gray-700 mb-4">**Вкладені цикли** використовують в алгоритмах розв'язання таких задач, які сортування, обчислення всіх можливих комбінацій або перестановок, побудова орнаментів тощо.</p>
+                <p class="text-gray-700 mb-4">**Вкладений цикл** — цикл, який міститься в тілі іншого циклу. Такий цикл також називають **внутрішнім**, а цикл, у якому він міститься, — **зовнішнім**.</p>
+                <p class="text-gray-700 mb-4">Усередині вкладеного циклу може бути наступний вкладений цикл, і так далі.</p>
+                <p class="text-gray-700 mb-4">Ознайомимося з принципом виконання вкладених циклів.</p>
+                <ul class="list-disc list-inside space-y-2 text-gray-700 mb-4">
+                    <li class="break-words">При першій ітерації зовнішній цикл викликає внутрішній цикл, який виконується до свого завершення, після чого керування передається в тіло зовнішнього циклу.</li>
+                    <li class="break-words">При другій ітерації зовнішній цикл знову викликає внутрішній цикл.</li>
+                    <li class="break-words">Такі дії тривають до завершення зовнішнього циклу (рис. 35.5).</li>
+                </ul>
+                <img src="./images/image_215e11.jpg" alt="Блок-схема вкладених циклів" class="rounded-lg shadow-md mx-auto mb-4" width="300">
+                <p class="text-center text-sm text-gray-600 mt-2 mb-4">Рис. 35.5. Блок-схема вкладених циклів</p>
+                <p class="source-text break-words mb-4"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 227)</a></i></p>
+
+                <p class="text-gray-700 mb-4">Зобразити трикутник із чисел від 1 до 5, як наведено на рис. 35.6.</p>
+                <pre class="code-block"><code>for i in range(1, 6):
+    print(str(i)*i)</code></pre>
+                <img src="./images/image_215e11.jpg" alt="Трикутник із чисел" class="rounded-lg shadow-md mx-auto mb-4" width="200">
+                <p class="text-center text-sm text-gray-600 mt-2 mb-4">Рис. 35.6. Трикутник із чисел</p>
+                <p class="text-gray-700 mb-4">Зовнішній цикл `for i` відповідає за побудову кожного рядка (рядка) трикутника. Внутрішній цикл `for j` призначений для визначення кількості пропусків перед числами, що правильно вирівняти трикутник по центру.</p>
+                <p class="text-gray-700 mb-4">У внутрішньому циклі `for k` виводяться `(2*i-1)` цифр.</p>
+                <pre class="code-block"><code>rows = 5 # Задання кількості рядків у піраміді
+for i in range(1, rows + 1): # Зовнішній цикл для рядків
+    for j in range(rows-i): # Внутрішній цикл для пропусків
+        print(" ", end="")
+    for k in range(2*i-1): # Внутрішній цикл для значення і
+        print(i, end = "")
+    print() # Перехід на новий рядок</code></pre>
+                <p class="text-gray-700 mb-4">Вивести в багаторядкове текстове поле таблицю множення.</p>
+                <pre class="code-block"><code>from tkinter import *
+root = Tk()
+root.title('Таблиця Піфагора')
+text1 = Text(width=70, height=10) # Створюємо об'єкт класу Text
+text1.pack()
+for i in range(1, 10):
+    s = ""
+    for j in range(1, 10):
+        s += str(i*j)+"\\t" # Формуємо i-й рядок таблиці Піфагора
+    k = float(i) # Перетворюємо значення i на дробове, щоб
+    text1.insert(k, s) # отримати позицію початку виведення рядка s
+root.mainloop()</code></pre>
+                <p class="text-gray-700 mb-4">Отже, маємо таке.</p>
+                <p class="text-gray-700 mb-4">Зовнішній цикл `for i in range(1,10)` спрацьовує 9 разів. Внутрішній цикл `for j in range(1,10)` спрацьовує 9 разів для однієї ітерації зовнішнього циклу й відповідно 81 раз для всіх ітерацій зовнішнього циклу.</p>
+                <p class="text-gray-700 mb-4">У внутрішньому циклі формується рядок добитків чисел `i` та `j` (рис. 35.7).</p>
+                <img src="./images/image_215dcb.jpg" alt="Таблиця Піфагора" class="rounded-lg shadow-md mx-auto mb-4" width="500">
+                <p class="text-center text-sm text-gray-600 mt-2 mb-4">Рис. 35.7. Таблиця Піфагора</p>
+                <p class="source-text break-words mb-4"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 228)</a></i></p>
+
+                <p class="text-gray-700 mb-4">Вивести прості числа, що належать проміжку (a; b).</p>
+                <p class="text-gray-700 mb-4">За умовою задачі потрібно для кожного `k` від `a` до `b` перевірити, чи є число `k` простим. Для цього в циклі `while` перебираються всі числа `j` від 2 до `k//2`.</p>
+                <p class="text-gray-700 mb-4">Якщо число `k` є дільником числа `j` (тобто ділиться на `k` без остачі), то прапорцевій змінній `prap` присвоюється значення `True`, і за командою `break` перебір можливих дільників припиняється. Якщо після завершення роботи циклу `while` значення `prap` залишилося рівним `False`, це означає, що поточне значення `k` є простим числом (рис. 35.8).</p>
+                <pre class="code-block"><code>a, b = 100, 150
+for i in range(a, b+1):
+    k = 2
+    prap = False
+    while k &lt;= i // 2:
+        if i % k == 0:
+            prap = True
+            break
+        k += 1
+    if not prap: print(i)</code></pre>
+                <img src="./images/image_215dcb.jpg" alt="Прості числа" class="rounded-lg shadow-md mx-auto mb-4" width="300">
+                <p class="text-center text-sm text-gray-600 mt-2 mb-4">Рис. 35.8. Прості числа</p>
+                <p class="source-text break-words mb-4"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 229)</a></i></p> -->
+
+            </div>
+            
+
+            <!-- Практичний блок -->
+            <div id="practice-content" class="tab-content">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-6 text-center text-green-600 break-words">Практичний блок уроку</h3>
+
+                    <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Інтерактивні вправи</h4>
+                    <p class="text-gray-600 mb-4">Відпрацюйте навички роботи з циклами в Python.</p>
+
+                    <!-- Exercise 1: Loop with range() -->
+                    <div class="mb-8 exercise-container">
+                        <h5 class="text-lg font-medium mb-3 text-gray-800">1. Заповніть пропуски, щоб програма вивела числа від 5 до 1:</h5>
+                        <p class="text-gray-600">Оберіть правильні значення для функції `range()`.</p>
+                        <div class="code-block">
+                            <code>for i in range(___, ___, ___):<br>&nbsp;&nbsp;&nbsp;&nbsp;print(i)</code>
+                        </div>
+                        <div class="mc-container" id="range-exercise">
+                            <div class="mc-option">
+                                <input type="radio" name="range_options" value="a" id="range_a">
+                                <label for="range_a">range(1, 5, -1)</label>
+                            </div>
+                            <div class="mc-option">
+                                <input type="radio" name="range_options" value="b" id="range_b">
+                                <label for="range_b">range(5, 0, -1)</label>
+                            </div>
+                            <div class="mc-option">
+                                <input type="radio" name="range_options" value="c" id="range_c">
+                                <label for="range_c">range(5, 1, 1)</label>
+                            </div>
+                        </div>
+                        <div class="text-center mt-6">
+                            <button class="check-button" onclick="checkRangeExercise()">Перевірити</button>
+                            <button class="reset-button" onclick="resetRangeExercise()">Скинути</button>
+                            <div id="range-feedback" class="feedback"></div>
+                        </div>
+                    </div>
+
+                    <!-- Exercise 2: while loop simulation -->
+                    <div class="mb-8 exercise-container">
+                        <h5 class="text-lg font-medium mb-3 text-gray-800">2. Яке значення `suma` буде виведено після виконання цього коду, якщо користувач введе числа 1, 2, 0?</h5>
+                        <div class="code-block">
+                            <code>suma = 0<br>k = 0<br>while True:<br>&nbsp;&nbsp;&nbsp;&nbsp;a = int(input("Введіть число: "))<br>&nbsp;&nbsp;&nbsp;&nbsp;if a == 0: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break<br>&nbsp;&nbsp;&nbsp;&nbsp;k += 1<br>&nbsp;&nbsp;&nbsp;&nbsp;suma += a<br><br>print('Сума', k, 'чисел дорівнює', suma)</code>
+                        </div>
+                        <div class="mc-container" id="while-exercise">
+                            <div class="mc-option">
+                                <input type="radio" name="while_options" value="a" id="while_a">
+                                <label for="while_a">Сума 2 чисел дорівнює 3</label>
+                            </div>
+                            <div class="mc-option">
+                                <input type="radio" name="while_options" value="b" id="while_b">
+                                <label for="while_b">Сума 3 чисел дорівнює 3</label>
+                            </div>
+                            <div class="mc-option">
+                                <input type="radio" name="while_options" value="c" id="while_c">
+                                <label for="while_c">Сума 1 чисел дорівнює 1</label>
+                            </div>
+                        </div>
+                        <div class="text-center mt-6">
+                            <button class="check-button" onclick="checkWhileExercise()">Перевірити</button>
+                            <button class="reset-button" onclick="resetWhileExercise()">Скинути</button>
+                            <div id="while-feedback" class="feedback"></div>
+                        </div>
+                    </div>
+
+                    <!-- Exercise 3: Nested loops for a pattern -->
+                    <div class="mb-8 exercise-container">
+                        <h5 class="text-lg font-medium mb-3 text-gray-800">3. Що буде виведено цим кодом?</h5>
+                        <div class="code-block">
+                            <code>for i in range(1, 4):<br>&nbsp;&nbsp;&nbsp;&nbsp;print(str(i) * i)</code>
+                        </div>
+                        <div class="mc-container" id="nested-loop-exercise">
+                            <div class="mc-option">
+                                <input type="radio" name="nested_loop_options" value="a" id="nested_a">
+                                <label for="nested_a">
+                                    1<br>
+                                    22<br>
+                                    333
+                                </label>
+                            </div>
+                            <div class="mc-option">
+                                <input type="radio" name="nested_loop_options" value="b" id="nested_b">
+                                <label for="nested_b">
+                                    1<br>
+                                    12<br>
+                                    123
+                                </label>
+                            </div>
+                            <div class="mc-option">
+                                <input type="radio" name="nested_loop_options" value="c" id="nested_c">
+                                <label for="nested_c">
+                                    1<br>
+                                    2<br>
+                                    3
+                                </label>
+                            </div>
+                        </div>
+                        <div class="text-center mt-6">
+                            <button class="check-button" onclick="checkNestedLoopExercise()">Перевірити</button>
+                            <button class="reset-button" onclick="resetNestedLoopExercise()">Скинути</button>
+                            <div id="nested-loop-feedback" class="feedback"></div>
+                        </div>
+                    </div>
+
+                    <p class="text-gray-600"><i>Для реального виконання Python-коду потрібно використовувати інтерпретатор Python. Ці вправи надають інтерактивну симуляцію результатів.</i></p>                  
+
+                </div>                
+            </div>
+
+            <!-- Перевірка знань -->
+            <!-- Вручну треба змінювати лише ті значення minimum-height (min-h-[300px]), які потрібно, і треба використовувати медіа-адаптацію (стилі тут на сторінці в тезі <style>)-->
+                <!-- Тут grid -->
+            <div id="check-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-6 text-center text-green-600 break-words">Перевірка знань</h3>
+                <p class="text-center text-gray-600 mb-8 break-words">Натисніть на картку, щоб побачити відповідь.</p>
+                <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-green-100 p-6 rounded-xl shadow-md break-words">1. Що таке цикл в програмуванні?</div>
+                        <div class="flip-card-back bg-green-200 p-6 rounded-xl shadow-md break-words">Цикл — це алгоритмічна структура, за допомогою якої та сама послідовність дій виконується кілька разів.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-green-100 p-6 rounded-xl shadow-md break-words">2. Які є основні типи циклів у Python?</div>
+                        <div class="flip-card-back bg-green-200 p-6 rounded-xl shadow-md break-words">
+                            <ul class="list-disc list-inside">
+                                <li>Цикл із параметром (`for`)</li>
+                                <li>Цикл із передумовою (`while`).</li>
+                            </ul>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-green-100 p-6 rounded-xl shadow-md break-words">3. Для чого використовується функція `range()` в циклах `for`?</div>
+                        <div class="flip-card-back bg-green-200 p-6 rounded-xl shadow-md break-words">Для створення послідовності цілих чисел, за якою відбувається ітерація циклу.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-green-100 p-6 rounded-xl shadow-md break-words">4. Коли використовують цикл `while`?</div>
+                        <div class="flip-card-back bg-green-200 p-6 rounded-xl shadow-md break-words">Коли потрібно повторювати дії доти, поки істинна певна умова, і кількість повторень заздалегідь невідома.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-green-100 p-6 rounded-xl shadow-md break-words">5. Що таке вкладений цикл?</div>
+                            <div class="flip-card-back bg-green-200 p-6 rounded-xl shadow-md break-words">Вкладений цикл — це цикл, який міститься в тілі іншого циклу.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-green-100 p-6 rounded-xl shadow-md break-words">6. Яке призначення команди `break`?</div>
+                            <div class="flip-card-back bg-green-200 p-6 rounded-xl shadow-md break-words">Команда `break` використовується для дострокового завершення виконання циклу.</div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 223-230)</a></i></p>
+                </div>
+            </div>
+         
+
+            <!-- Домашнє завдання -->
+            <div id="homework-content" class="tab-content   bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-green-600 break-words">Домашнє завдання</h3>                    
+                <!--  -->
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <div>
+                            <p class="break-words break-all"><b>1. Теоретична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li class="break-words break-all">Опрацювати § 35 (стор. 223-232).</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><b>2. Практична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Виконати із "Питання для самоперевірки" завдання № 4 (стор. 230).</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p><b>3. Завдання за бажанням (для закріплення):</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Інтерактивна платформа IZZI (8 клас) до § 35: <a href="https://ua.izzi.digital/DOS/1183864/1337130.html" target="_blank" class="text-blue-600 hover:underline break-words break-all block">https://ua.izzi.digital/DOS/1183864/1337130.html</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="./images/img08.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!--  -->
+            </div>
+        </section>
+
+
+        <!-- Додаткові матеріали -->
+        <!-- Additional Materials Section -->
+        <section class="bg-white p-6 rounded-xl shadow-md mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-green-600 break-words">Додаткові матеріали</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li class="break-words"><a href="https://sites.google.com/view/lga84-9/tehnika_bezpeky" target="_blank" class="text-blue-600 hover:underline">Техніка безпеки</a></li>
+
+                <li class="break-words"><a href="https://drive.google.com/file/d/1C9_KEF981LvokY0GWNOhUXb7rJKJUUbM/view" target="_blank" class="text-blue-600 hover:underline">Оцінювання учнів та учениць на уроках інформатики</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу</a> (§ 35, стор. 223-232)</li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">Інтерактивна платформа IZZI (8 клас)</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до § 35: <a href="https://ua.izzi.digital/DOS/1183864/1337130.html" target="_blank" class="text-blue-600 hover:underline">https://ua.izzi.digital/DOS/1183864/1337130.html</a></li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm   bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>           
+        </ul>
+    </footer>    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Початок:
+            // Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання".
+            const tabs = document.getElementById('tabs');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            tabs.addEventListener('click', (e) => {
+                // Ensure the click target is a BUTTON (tab button)
+                if (e.target.tagName === 'BUTTON') {
+                    const tab = e.target.dataset.tab;
+
+                    // Remove 'active' class from all buttons and add to the clicked one
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Hide all tab contents and show the corresponding one
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Use === for strict comparison
+                        if (content.id === `${tab}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                }
+            });
+            // Кінець.
+
+
+            // Початок:
+            // ГРУПИ РЕЗУЛЬТАТІВ.
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            // 1. Створення об'єкту-мапи для відповідності значень і кольорів
+            // Тут вручну можна поміняти значення background й border
+            const colorMap = {
+                1: {
+                    background: '#dcfce7', // text-green-100
+                    border: '#bbf7d0'      // text-green-200
+                },
+                2: {
+                    background: '#bbf7d0', // text-green-200
+                    border: '#86efac'       // text-green-300
+                },
+                3: {
+                    background: '#86efac',  // text-green-300
+                    border: '#4ade80'        // text-green-400
+                },
+                4: {
+                    background: '#4ade80',   // text-green-400
+                    border: '#22c55e'      // text-green-500
+                }
+            };
+
+            // Дані, які можна змінювати вручну
+            const chartData = [3, 4, 2, 2];
+
+            // 2. Генерація масивів кольорів на основі даних
+            const backgroundColors = chartData.map(value => colorMap[value].background);
+            const borderColors = chartData.map(value => colorMap[value].border);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ГР1', 'ГР2', 'ГР3', 'ГР4'],
+                    datasets: [{
+                        label: 'Важливість',
+                        data: chartData, // Використовуємо змінну
+                        backgroundColor: backgroundColors, // Використовуємо згенерований масив
+                        borderColor: borderColors, // Використовуємо згенерований масив
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const labels = ['', 'Важлива', 'Дуже важлива', 'Найважливіша'];
+                                    return labels[value] || '';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.parsed.y;
+                                    const importanceLabels = {4: 'Найважливіша', 3: 'Дуже важлива', 2: 'Важлива', 1: 'Найменш важлива'};
+                                    label += importanceLabels[value] || '';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // Кінець. ГРУПИ РЕЗУЛЬТАТІВ.
+
+
+            // Початок.
+            // ПОВОРОТ КАРТОК "Перевірка знань"
+            const flipCards = document.querySelectorAll('.flip-card');
+            flipCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+            // Кінець. ПОВОРОТ КАРТОК.
+
+        });
+    </script>
+
+    <!-- Скрипт для практичного блоку -->
+    <script>
+        // Start of interactive exercises logic
+            function checkRangeExercise() {
+                const options = document.querySelectorAll('#range-exercise input[name="range_options"]');
+                const feedbackDiv = document.getElementById('range-feedback');
+                let selectedValue = null;
+                options.forEach(option => {
+                    option.parentElement.classList.remove('correct', 'incorrect');
+                    if (option.checked) {
+                        selectedValue = option.value;
+                    }
+                });
+
+                if (selectedValue === 'b') { // range(5, 0, -1)
+                    document.getElementById('range_b').parentElement.classList.add('correct');
+                    feedbackDiv.textContent = 'Правильно! 👍 Функція `range(5, 0, -1)` згенерує послідовність 5, 4, 3, 2, 1.';
+                    feedbackDiv.classList.remove('incorrect');
+                    feedbackDiv.classList.add('correct');
+                } else {
+                    if (selectedValue) {
+                        document.querySelector(`#range_${selectedValue}`).parentElement.classList.add('incorrect');
+                    }
+                    document.getElementById('range_b').parentElement.classList.add('correct'); // Highlight correct answer
+                    feedbackDiv.textContent = 'Неправильно. Згадайте, що значення `finish` не включається в послідовність, а від’ємний крок потрібен для зворотного порядку.';
+                    feedbackDiv.classList.remove('correct');
+                    feedbackDiv.classList.add('incorrect');
+                }
+            }
+
+            function resetRangeExercise() {
+                const options = document.querySelectorAll('#range-exercise input[name="range_options"]');
+                const feedbackDiv = document.getElementById('range-feedback');
+                options.forEach(option => {
+                    option.checked = false;
+                    option.parentElement.classList.remove('correct', 'incorrect');
+                });
+                feedbackDiv.textContent = '';
+                feedbackDiv.classList.remove('correct', 'incorrect');
+            }
+
+            function checkWhileExercise() {
+                const options = document.querySelectorAll('#while-exercise input[name="while_options"]');
+                const feedbackDiv = document.getElementById('while-feedback');
+                let selectedValue = null;
+                options.forEach(option => {
+                    option.parentElement.classList.remove('correct', 'incorrect');
+                    if (option.checked) {
+                        selectedValue = option.value;
+                    }
+                });
+
+                // Simulation:
+                // Input: 1, 2, 0
+                // 1st iteration: a=1, k=1, suma=1
+                // 2nd iteration: a=2, k=2, suma=1+2=3
+                // 3rd iteration: a=0, break
+                // Output: Сума 2 чисел дорівнює 3
+                if (selectedValue === 'a') {
+                    document.getElementById('while_a').parentElement.classList.add('correct');
+                    feedbackDiv.textContent = 'Правильно! 👍 Після введення 1, 2, 0 програма виведе "Сума 2 чисел дорівнює 3".';
+                    feedbackDiv.classList.remove('incorrect');
+                    feedbackDiv.classList.add('correct');
+                } else {
+                    if (selectedValue) {
+                        document.querySelector(`#while_${selectedValue}`).parentElement.classList.add('incorrect');
+                    }
+                    document.getElementById('while_a').parentElement.classList.add('correct'); // Highlight correct answer
+                    feedbackDiv.textContent = 'Неправильно. Проаналізуйте послідовність виконання циклу та команду `break`.';
+                    feedbackDiv.classList.remove('correct');
+                    feedbackDiv.classList.add('incorrect');
+                }
+            }
+
+            function resetWhileExercise() {
+                const options = document.querySelectorAll('#while-exercise input[name="while_options"]');
+                const feedbackDiv = document.getElementById('while-feedback');
+                options.forEach(option => {
+                    option.checked = false;
+                    option.parentElement.classList.remove('correct', 'incorrect');
+                });
+                feedbackDiv.textContent = '';
+                feedbackDiv.classList.remove('correct', 'incorrect');
+            }
+
+            function checkNestedLoopExercise() {
+                const options = document.querySelectorAll('#nested-loop-exercise input[name="nested_loop_options"]');
+                const feedbackDiv = document.getElementById('nested-loop-feedback');
+                let selectedValue = null;
+                options.forEach(option => {
+                    option.parentElement.classList.remove('correct', 'incorrect');
+                    if (option.checked) {
+                        selectedValue = option.value;
+                    }
+                });
+
+                // Simulation:
+                // i=1: print(str(1)*1) -> "1"
+                // i=2: print(str(2)*2) -> "22"
+                // i=3: print(str(3)*3) -> "333"
+                if (selectedValue === 'a') {
+                    document.getElementById('nested_a').parentElement.classList.add('correct');
+                    feedbackDiv.textContent = 'Правильно! 👍 Код виведе числа, повторені i разів в кожному рядку.';
+                    feedbackDiv.classList.remove('incorrect');
+                    feedbackDiv.classList.add('correct');
+                } else {
+                    if (selectedValue) {
+                        document.querySelector(`#nested_${selectedValue}`).parentElement.classList.add('incorrect');
+                    }
+                    document.getElementById('nested_a').parentElement.classList.add('correct'); // Highlight correct answer
+                    feedbackDiv.textContent = 'Неправильно. Згадайте, як працює оператор множення для рядків.';
+                    feedbackDiv.classList.remove('correct');
+                    feedbackDiv.classList.add('incorrect');
+                }
+            }
+
+            function resetNestedLoopExercise() {
+                const options = document.querySelectorAll('#nested-loop-exercise input[name="nested_loop_options"]');
+                const feedbackDiv = document.getElementById('nested-loop-feedback');
+                options.forEach(option => {
+                    option.checked = false;
+                    option.parentElement.classList.remove('correct', 'incorrect');
+                });
+                feedbackDiv.textContent = '';
+                feedbackDiv.classList.remove('correct', 'incorrect');
+            }
+            // End of interactive exercises logic
+    </script>
+</body>
+</html>

@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: 8 клас</title>
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Тіло документа */
+        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
+
+        /* Стилі для навігації в меню */
+        .logo-main { display: none; }
+        .main-title-text { width: 140px; text-align: center; }
+        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
+        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
+        @media screen and (min-width: 768px) {
+            .main-title-text { width: auto; }
+            .main-navigation { display: inline; width: auto; }
+        }
+
+        /* main стилі */
+        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
+        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
+        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
+        .source-text { padding: 8px; }
+        @media screen and (min-width: 300px) {
+            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
+            .text-2xlooo { font-size: 1.25rem; }
+        }
+        @media screen and (min-width: 480px) {
+            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
+            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
+            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
+        }
+
+        /* Стилі для "Про урок" */
+        /* Групи результатів */
+        .text-group-result { padding-top: 16px; }
+
+        /* Style to hide inactive tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Style to tab content */
+        .tab-btn.active { 
+            color: #a16207;                /* text-yellow-600 */
+            border-bottom-color: #a16207;  /* text-yellow-600 */
+            background-color: #fef9c3;     /* text-yellow-100 */
+        }
+        .tab-btn { 
+            transition: color 0.3s, 
+            border-color 0.3s, 
+            background-color 0.3s; 
+            border-bottom: 2px solid transparent;
+        }
+
+        /* Styles for flip cards */
+        .flip-card {
+            background-color: transparent;
+            width: 100%; /* Make cards responsive to grid column width */
+            height: 300px; /* Fixed height for consistency, adjust as needed */
+            perspective: 1000px; /* 3D effect */
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left; /* Adjust text alignment as needed */
+            overflow-wrap: break-word; /* break-words */
+            /*word-break: break-all;*/ /* break-all */
+        }
+
+        .flip-card-front {
+            color: #4b5563; /* text-gray-700 */
+        }
+
+        .flip-card-back {
+            color: #4b5563; /* text-gray-700 */
+            transform: rotateY(180deg);
+        }
+
+        /* Responsive adjustments for min-height */
+        @media (min-width: 768px) { /* md breakpoint */
+            .flip-card.min-h-md {
+                min-height: 250px; /* Example, adjust as needed for medium screens */
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .flip-card.min-h-lg {
+                min-height: 200px; /* Example, adjust as needed for large screens */
+            }
+        }
+
+    </style>
+
+    <style>
+        /* Styles for interactive exercises */
+        .exercise-container {
+            background-color: #fffbeb; /* bg-yellow-50 */
+            border: 1px solid #fde68a; /* border-yellow-200 */
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .exercise-container h5 {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #4a5568;
+        }
+        .exercise-container p {
+            margin-bottom: 15px;
+            color: #4a5568;
+        }
+        .option-group {
+            margin-bottom: 15px;
+        }
+        .option-group label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 6px;
+            background-color: #fefce8; /* bg-yellow-50 */
+            border: 1px solid #e5e7eb;
+            transition: background-color 0.2s ease;
+        }
+        .option-group label:hover {
+            background-color: #fcf6c6; /* light yellow hover */
+        }
+        .option-group input[type="radio"],
+        .option-group input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        .check-button, .reset-button, .execute-button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            margin: 0 5px;
+        }
+        .check-button, .execute-button {
+            background-color: #a16207; /* bg-yellow-600 */
+            color: white;
+            border: none;
+        }
+        .check-button:hover, .execute-button:hover {
+            background-color: #844c00; /* darker yellow */
+            transform: translateY(-1px);
+        }
+        .check-button:active, .execute-button:active {
+            transform: translateY(0);
+        }
+        .reset-button {
+            background-color: #fef9c3; /* bg-yellow-100 */
+            color: #a16207; /* text-yellow-600 */
+            border: 1px solid #a16207;
+        }
+        .reset-button:hover {
+            background-color: #fde047; /* bg-yellow-200 */
+            transform: translateY(-1px);
+        }
+        .reset-button:active {
+            transform: translateY(0);
+        }
+        .feedback {
+            margin-top: 15px;
+            font-weight: 600;
+            color: #343a40; /* text-gray-800 */
+        }
+        .feedback.correct {
+            color: #10b981; /* text-green-500 */
+        }
+        .feedback.incorrect {
+            color: #ef4444; /* text-red-500 */
+        }
+        .highlight-correct {
+            background-color: #d1fae5 !important; /* bg-green-100 */
+            border-color: #34d399 !important; /* border-green-400 */
+        }
+        .highlight-incorrect {
+            background-color: #fee2e2 !important; /* bg-red-100 */
+            border-color: #ef4444 !important; /* border-red-500 */
+        }
+        .pizza-builder-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+            background-color: #fffbeb;
+        }
+        .pizza-builder-controls div {
+            margin-bottom: 10px;
+        }
+        .pizza-builder-controls label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: #4a5568;
+        }
+        .pizza-builder-output {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #fef9c3;
+            border: 1px solid #fde047;
+            font-weight: 600;
+            color: #4a5568;
+            min-height: 80px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="container mx-auto flex justify-between items-center   bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10  logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
+            </ul>
+            <!-- <a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a>
+            <a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a> -->
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <!-- Секція теми уроку -->
+        <section class="text-center mb-8">
+            <h1 class="text-lg text-slate-600 mt-2 break-words">Тема 5: «Алгоритми та програми». Урок № 51. (До § 34)</h1>
+            <h1 class="text-3xlooo md:text-4xl font-bold text-slate-900 break-words  theme-text">Елементи вибору</h1>
+            <h2 class="text-lg text-slate-600 mt-2 break-words">Інтерактивний план-конспект уроку для 8 класу НУШ</h2>
+        </section>
+
+
+        <!-- Секція "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання" -->
+        <section>
+            <!-- Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання". -->
+            <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+                <nav id="tabs" class="flex flex-wrap justify-center gap-2 sm:gap-4">
+                    <button data-tab="about" class="tab-btn active text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Про урок</button>
+                    <button data-tab="theory" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Теоретичний блок</button>
+                    <button data-tab="practice" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Практичний блок</button>
+                    <button data-tab="check" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Перевірка знань</button>
+                    <button data-tab="homework" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Домашнє завдання</button>
+                </nav>
+            </div>
+
+            <!-- Про урок -->
+            <div id="about-content" class="tab-content active">
+                <div class="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Lesson Goal -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-yellow-600 break-words break-all">🎯 Мета уроку</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Освітня:</b> ознайомити учнів з елементами вибору в `tkinter` – **Радіокнопками (Radiobutton)** та **Прапорцями (Checkbutton)**, навчити створювати та використовувати ці елементи для взаємодії з користувачем у графічних застосунках.</li>
+                            <li class="break-words"><b>Розвивальна:</b> розвивати навички проектування інтерфейсу користувача, логічне мислення при створенні умов для обробки вибору, вміння реалізовувати варіативну поведінку програми залежно від стану елементів вибору.</li>
+                            <li class="break-words"><b>Виховна:</b> виховувати акуратність та уважність при роботі з графічними елементами, розуміння важливості зручного інтерфейсу для користувача, а також творчий підхід до розробки програмного забезпечення.</li>
+                        </ul>
+                    </div>
+                    <!-- Expected Outcomes -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-yellow-600 break-words break-all">✅ Очікувані результати</h3>
+                        <p class="mb-2 text-gray-600">Після уроку учні зможуть:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Розрізняти **Радіокнопки (Radiobutton)** та **Прапорці (Checkbutton)** та розуміти їхнє призначення.</li>
+                            <li class="break-words">Створювати об'єкти класу `Radiobutton` та `Checkbutton` у `tkinter`.</li>
+                            <li class="break-words">Групувати радіокнопки за допомогою атрибута `variable`.</li>
+                            <li class="break-words">Отримувати та встановлювати значення елементів вибору.</li>
+                            <li class="break-words">Розробляти прості програми з графічним інтерфейсом, що використовують елементи вибору для реалізації умовних дій.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-bold mb-3 text-yellow-600 break-words">📊 Групи результатів (НУШ)</h3>
+                        <p class="text-gray-600 mb-4 break-words">Візуалізація важливості груп результатів для цього уроку.</p>
+                        <div class="chart-container relative h-64 w-full max-w-md mx-auto">
+                            <canvas id="resultsChart"></canvas>
+                        </div>
+                        <p class="text-gray-600 mb-4 break-words text-group-result"><i>Учень / учениця:</i></p>
+                        <ul>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР1 – працює з інформацією, даними, моделями;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР2 – створює інформаційні продукти;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР3 – працює в цифровому середовищі;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР4 – безпечно та відповідально працює з інформаційними технологіями.</p></li>
+                        </ul>
+                    </div>
+                    <!-- Lesson Type & Equipment -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-yellow-600 break-words">📚 Тип уроку</h3>
+                        <p class="text-gray-700 break-words">Урок засвоєння нових знань та формування вмінь.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-yellow-600 break-words">💻 Обладнання та ПЗ</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Персональні комп'ютери з встановленим Python та модулем `tkinter`.</li>
+                            <li class="break-words">Середовище розробки (IDLE, VS Code).</li>
+                            <li class="break-words">Проєктор або інтерактивна дошка.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-yellow-600 break-words">🔗 Міжпредметні зв'язки</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Математика (вибір, умови).</li>
+                            <li class="break-words">Дизайн інтерфейсів.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Теоретичний блок -->
+            <div id="theory-content" class="tab-content   mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">
+                <!-- ВАРІАНТ № 2, початок -->
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-yellow-500 mb-4 heading-underline break-words  title-review">ПОВТОРЮЄМО</h2>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">Актуалізація опорних знань</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2">
+                        <li class="break-words">Який математичний вираз використовується для обчислення дискримінанта квадратного рівняння?</li>
+                        <li class="break-words">Скільки коренів має квадратне рівняння, якщо його дискримінант більше нуля?</li>
+                        <li class="break-words">Що означає, якщо дискримінант квадратного рівняння дорівнює нулю?</li>
+                        <li class="break-words">Який результат, якщо дискримінант квадратного рівняння менше нуля?</li>
+                        <li class="break-words">Який модуль Python використовується для роботи з математичними функціями, такими як квадратний корінь?</li>
+                        <li class="break-words">Яка функція `tkinter.messagebox` використовується для виведення інформаційних повідомлень?</li>
+                    </ol>
+                    <img src="./images/img-tema5-09.webp" alt="Знак питання" class="rounded-lg shadow-md" width="200">
+                </div>
+                
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 216)</a></i></p>
+                </div>
+                <!-- ВАРІАНТ № 2, кінець -->
+
+                <!-- <hr class="my-8 border-gray-200"> -->
+                <!-- Новий матеріал -->
+                <!-- <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-yellow-500 mb-4 heading-underline break-words title-review">ВИВЧАЄМО НОВЕ</h2>
+                </div>
+
+                <h4 class="text-2xlooo font-bold text-gray-800 mb-6 break-words">§ 34. Елементи вибору</h4>
+                <p class="text-gray-700 mb-4">Вам, напевно, доводилося робити вибір певних значень із низки запропонованих у діалоговому вікні за допомогою таких елементів керування, як перемикачі та прапорці (Рис. 34.1).</p>
+                <p class="text-gray-700 mb-4">У `Tkinter` перемикачі складаються з об’єктів класу `Radiobutton` (радіокнопка), прапорці ж є об’єктами класу `Checkbutton`.</p>
+                <img src="./images/image_23ae13.jpg" alt="Приклад елементів вибору" class="rounded-lg shadow-md mx-auto mb-4" width="250">
+                <p class="text-center text-sm text-gray-600 mt-2 mb-4">Рис. 34.1. Приклад елементів вибору</p>
+
+                <h5 class="text-xl font-semibold mb-3 text-gray-800 break-words">Елемент керування Радіокнопка (Radiobutton)</h5>
+                <p class="text-gray-700 mb-4">Перемикачі, що складаються з двох або більше радіокнопок (віджетів класу `Radiobutton`), використовують, коли потрібно вибрати один із декількох варіантів.</p>
+                <p class="text-gray-700 mb-4 text-red-600 font-bold">⚠️ У разі вибору іншої радіокнопки попередня вимикається.</p>
+                <p class="text-gray-700 mb-4">Перемикачі корисні, коли важливо уникнути вибору декількох значень одночасно. Наприклад, вибір способу оплати: "Кредитна картка", "Готівка", або вибір рівня складності гри: "Легкий", "Середній", "Складний".</p>
+                <p class="text-gray-700 mb-4">Зв’язок між радіокнопками перемикача встановлюється через спільну змінну. Її назву зазначають в атрибуті `variable` кожної з радіокнопок. Ця змінна має бути екземпляром спеціального класу `IntVar`, описаного у `tkinter`, і може набувати, відповідно, цілих значень. Щоб отримати значення змінної, слід викликати метод `get()`, а щоб його змінити, — метод `set()`.</p>
+                <p class="text-gray-700 mb-4">Якщо радіокнопку вибрано, спільна змінна отримує значення її атрибута `value`, і навпаки — надавши їй певного значення, можна увімкнути радіокнопку з відповідним значенням `value`.</p>
+                <p class="source-text break-words mb-4"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 217)</a></i></p>
+
+                <p class="text-gray-700 mb-4">Отже, для створення перемикача потрібно:</p>
+                <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2 mb-4">
+                    <li class="break-words">створити змінну `var` класу `IntVar` для керування станом перемикача;</li>
+                    <li class="break-words">створити потрібну кількість об’єктів класу `Radiobutton` із різними значеннями властивості `value`;</li>
+                    <li class="break-words">занести в атрибут `variable` усіх радіокнопок назву змінної `var`.</li>
+                </ol>
+                <p class="text-gray-700 mb-4">Створимо перемикач для вибору одного з трьох кольорів.</p>
+                <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto mb-4"><code>var = IntVar() # Змінна для зв'язку між радіокнопками
+var.set(0) # Активізуємо радіокнопку з value = 0
+rbR = Radiobutton(text = "Червоний", variable = var, value = 0)
+rbY = Radiobutton(text = "Жовтий", variable = var, value = 1)
+rbG = Radiobutton(text = "Зелений", variable = var, value = 2)
+rbR.pack(anchor = W)
+rbY.pack(anchor = W)
+rbG.pack(anchor = W)</code></pre>
+                <p class="text-gray-700 mb-4">Параметр `anchor` поміщає віджет у певний частині контейнера. Щоб вирівняти радіокнопки за лівим краєм, слід надати параметру значення `W` (West (захід)) — ліва сторона). Під час запуску програми виявиться ввімкненою радіокнопка `rbR`, бо значення її атрибута `value = 0` збігається з поточним значенням змінної `var`. Якщо вибрати радіокнопку `rbY`, то вона увімкнеться, а кнопка `rbR` вимкнеться, і змінна `var` набуде значення `1`.</p>
+                <p class="text-gray-700 mb-4">Щоб у відповідь на перемикання виконувалися певні дії, потрібно пов’язати радіокнопки з обробниками подій.</p>
+                <p class="text-gray-700 mb-4">Пов’яжемо всі кнопки з функцією — обробником команди (`command`), так само, як ми це робили для кнопок (`Button`). В обробнику, залежно від того, яка з радіокнопок активна, змінюватимемо колір тла форми (рис. 34.2).</p>
+                <img src="./images/image_23ae13.jpg" alt="Приклад вікна з радіокнопками" class="rounded-lg shadow-md mx-auto mb-4" width="250">
+                <p class="text-center text-sm text-gray-600 mt-2 mb-4">Рис. 34.2. Вікно з радіокнопками</p>
+                <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto mb-4"><code>def change():
+    if var.get() == 0: root.config(bg = 'red')
+    elif var.get() == 1: root.config(bg = 'yellow')
+    elif var.get() == 2: root.config(bg = 'green')</code></pre>
+                <p class="source-text break-words mb-4"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 218)</a></i></p>
+
+                <p class="text-gray-700 mb-4">Розробимо програму Конструктор піц, яка при замовленні дає змогу користувачеві вибирати розмір піци (рис. 34.3).</p>
+                <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto mb-4"><code>from tkinter import *
+def btn_click():
+    lab.config(text = 'Вартість: ' + str(var.get())*60 + ' грн')
+
+root = Tk()
+root.title("Конструктор піц")
+var = IntVar()
+var.set(0)
+Radiobutton(text = "Великий корж", variable = var, value = 2).pack(anchor = W)
+Radiobutton(text = "Середній корж", variable = var, value = 1).pack(anchor = W)
+Radiobutton(text = "Маленький корж", variable = var, value = 0).pack(anchor = W) # Додано для повноти прикладу
+Button(root, text = "Замовити", command = btn_click).pack(pady = 10)
+lab = Label(root, text = 'Вартість: ', width = 20, anchor = W)
+lab.pack(padx = 5, pady = 5)
+root.mainloop()</code></pre>
+                <img src="./images/image_23ab66.jpg" alt="Інтерфейс програми Конструктор піц" class="rounded-lg shadow-md mx-auto mb-4" width="250">
+                <p class="text-center text-sm text-gray-600 mt-2 mb-4">Рис. 34.3. Конструктор піц</p>
+                <p class="source-text break-words mb-4"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 219)</a></i></p>
+
+                <h5 class="text-xl font-semibold mb-3 text-gray-800 break-words">Елемент керування Прапорець (Checkbutton)</h5>
+                <p class="text-gray-700 mb-4">**Прапорець** — об’єкт класу `Checkbutton` — використовують у програмі для того, щоб умикати або вимикати певний параметр. Тобто для візуалізації станів увімкнено/вимкнено, коли серед параметрів необхідно вибрати потрібні.</p>
+                <p class="text-gray-700 mb-4">Прапорці можна також розташовувати групою, але кожна позначка в такій групі встановлюється або знімається незалежно від стану інших прапорців. Тобто в групі можна одночасно встановлювати декілька позначок.</p>
+                <p class="text-gray-700 mb-4">Кожний об’єкт класу `Checkbutton` повинен мати свою змінну типу `BooleanVar()`.</p>
+                <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto mb-4"><code>cb_var = BooleanVar()
+cb_var.set(0)</code></pre>
+                <p class="text-gray-700 mb-4">За значенням цієї змінної, пов’язаної з об’єктом `Checkbutton`, можна визначити стан об’єкта (чи встановлено прапорець).</p>
+                <p class="text-gray-700 mb-4">Об’єкт `cb` класу `Checkbutton` створюють такою командою:</p>
+                <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto mb-4"><code>cb = Checkbutton(text = "Напис", variable = cb_var, onvalue = 1, offvalue = 0)</code></pre>
+                <p class="text-gray-700 mb-4">За встановленого прапорця пов’язана з ним змінна набуває значення `onvalue`, а за знятого — `offvalue`.</p>
+                <p class="text-gray-700 mb-4">Для перевірки стану прапорця та активізації пов’язаних із ним параметрів слід отримати значення змінної: `if cb_var.get() != 0: &lt;активізація параметрів&gt;`</p>
+                <p class="text-gray-700 mb-4">Додамо до програми Конструктор піц (див. приклад 3) можливість вибирати складники піци (рис. 34.4).</p>
+                <p class="text-gray-700 mb-4">Додамо перед рядком із викликом конструктора `Button()` команди для створення та налаштування прапорців:</p>
+                <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto mb-4"><code>Label(root, text = 'Виберіть складники', width = 20, anchor = W).pack(pady = 10)
+cvar1 = BooleanVar()
+Checkbutton(text = "Цибуля 8 грн", variable = cvar1, onvalue = 1, offvalue = 0).pack(anchor = W)
+
+cvar2 = BooleanVar()
+Checkbutton(text = "Моцарела 18 грн", variable = cvar2, onvalue = 1, offvalue = 0).pack(anchor = W)</code></pre>
+                <p class="text-gray-700 mb-4">Змінимо обробник `btn_click()`, щоб під час розрахунку враховувався стан прапорців:</p>
+                <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto mb-4"><code>def btn_click():
+    suma = var.get()*60+cvar1.get()*8+cvar2.get()*18
+    lab.config(text = 'Вартість: ' + str(suma) + ' грн')</code></pre>
+                <img src="./images/image_23ab66.jpg" alt="Інтерфейс програми Конструктор піц з прапорцями" class="rounded-lg shadow-md mx-auto mb-4" width="250">
+                <p class="text-center text-sm text-gray-600 mt-2 mb-4">Рис. 34.4. Конструктор піц з прапорцями</p>
+                <p class="text-gray-700 mb-4">Віджети `Radiobutton` і `Checkbutton` підтримують могутність атрибутів зовнішнього вигляду, які є в інших елементів графічного інтерфейсу.</p>
+                <p class="source-text break-words mb-4"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 218-220)</a></i></p> -->
+
+            </div>
+            
+
+            <!-- Практичний блок -->
+            <div id="practice-content" class="tab-content">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-6 text-center text-yellow-600 break-words">Практичний блок уроку</h3>
+                    
+                    <!-- Exercise 1: Radiobutton choice (Pizza Size) -->
+                    <div class="mb-8 exercise-container">
+                        <h5 class="text-lg font-medium mb-3 text-gray-800">1. Оберіть розмір піци (середній корж):</h5>
+                        <div class="option-group" id="pizza-size-exercise">
+                            <label><input type="radio" name="pizza_size" value="0"> Маленький корж</label>
+                            <label><input type="radio" name="pizza_size" value="1"> Середній корж</label>
+                            <label><input type="radio" name="pizza_size" value="2"> Великий корж</label>
+                        </div>
+                        <div class="text-center mt-6">
+                            <button class="check-button" onclick="checkPizzaSize()">Підтвердити вибір</button>
+                            <button class="reset-button" onclick="resetPizzaSize()">Скинути</button>
+                            <div id="pizza-size-feedback" class="feedback"></div>
+                        </div>
+                    </div>
+
+                    <!-- Exercise 2: Checkbutton choice (Pizza Toppings) -->
+                    <div class="mb-8 exercise-container">
+                        <h5 class="text-lg font-medium mb-3 text-gray-800">2. Оберіть складники для піци (цибулю й моцарелу):</h5>
+                        <div class="option-group" id="pizza-toppings-exercise">
+                            <label><input type="checkbox" name="pizza_topping" value="onion"> Цибуля (8 грн)</label>
+                            <label><input type="checkbox" name="pizza_topping" value="mozzarella"> Моцарела (18 грн)</label>
+                            <label><input type="checkbox" name="pizza_topping" value="bacon"> Бекон (25 грн)</label>
+                        </div>
+                        <div class="text-center mt-6">
+                            <button class="check-button" onclick="checkPizzaToppings()">Підтвердити вибір</button>
+                            <button class="reset-button" onclick="resetPizzaToppings()">Скинути</button>
+                            <div id="pizza-toppings-feedback" class="feedback"></div>
+                        </div>
+                    </div>
+
+                    <!-- Exercise 3: Combined Pizza Builder (simulated) -->
+                    <div class="mb-8 exercise-container">
+                        <h5 class="text-lg font-medium mb-3 text-gray-800">3. Симулятор конструктора піци (комбінований)</h5>
+                        <p class="text-gray-600 mb-4">Виберіть розмір піци та додайте бажані складники. Розрахуйте загальну вартість.</p>
+                        
+                        <div class="pizza-builder-controls">
+                            <div>
+                                <label>Розмір піци:</label>
+                                <label><input type="radio" name="sim_pizza_size" value="0" data-price="60"> Маленький корж (60 грн)</label>
+                                <label><input type="radio" name="sim_pizza_size" value="1" data-price="120"> Середній корж (120 грн)</label>
+                                <label><input type="radio" name="sim_pizza_size" value="2" data-price="180"> Великий корж (180 грн)</label>
+                            </div>
+                            <div>
+                                <label>Додаткові складники:</label>
+                                <label><input type="checkbox" name="sim_pizza_topping" value="onion" data-price="8"> Цибуля (8 грн)</label>
+                                <label><input type="checkbox" name="sim_pizza_topping" value="mozzarella" data-price="18"> Моцарела (18 грн)</label>
+                                <label><input type="checkbox" name="sim_pizza_topping" value="bacon" data-price="25"> Бекон (25 грн)</label>
+                            </div>
+                            <button class="execute-button" onclick="calculatePizzaCost()">Розрахувати вартість</button>
+                            <button class="reset-button" onclick="resetPizzaBuilder()">Скинути</button>
+                        </div>
+                        <div id="pizza-cost-output" class="pizza-builder-output">
+                            Загальна вартість: 0 грн
+                        </div>
+                    </div>
+
+                    <p class="text-gray-600"><i>Зверніть увагу, що для повного функціонування цих прикладів на вашому комп'ютері потрібно запускати Python-код з бібліотекою `tkinter`. Тут представлена симуляція взаємодії.</i></p>
+
+                </div>                
+            </div>
+
+            <!-- Перевірка знань -->
+            <!-- Вручну треба змінювати лише ті значення minimum-height (min-h-[300px]), які потрібно, і треба використовувати медіа-адаптацію (стилі тут на сторінці в тезі <style>)-->
+                <!-- Тут grid -->
+            <div id="check-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-6 text-center text-yellow-600 break-words">Перевірка знань</h3>
+                <p class="text-center text-gray-600 mb-8 break-words">Натисніть на картку, щоб побачити відповідь.</p>
+                <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-yellow-100 p-6 rounded-xl shadow-md break-words">1. У яких випадках використовують компонент `Radiobutton`?</div>
+                        <div class="flip-card-back bg-yellow-200 p-6 rounded-xl shadow-md break-words">Коли потрібно вибрати один варіант із декількох запропонованих.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-yellow-100 p-6 rounded-xl shadow-md break-words">2. Що забезпечує використання компонента `Checkbutton`?</div>
+                        <div class="flip-card-back bg-yellow-200 p-6 rounded-xl shadow-md break-words">Можливість увімкнути або вимкнути певний параметр незалежно від інших.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-yellow-100 p-6 rounded-xl shadow-md break-words">3. Як створити зв'язок між радіокнопками?</div>
+                        <div class="flip-card-back bg-yellow-200 p-6 rounded-xl shadow-md break-words">Використовуючи спільну змінну класу `IntVar` та вказуючи її в атрибуті `variable` для кожної радіокнопки.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-yellow-100 p-6 rounded-xl shadow-md break-words">4. Назвіть три відмінності між об'єктами класу `Radiobutton` та `Checkbutton`.</div>
+                        <div class="flip-card-back bg-yellow-200 p-6 rounded-xl shadow-md break-words">
+                            <ul class="list-disc list-inside">
+                                <li>**Вибір:** `Radiobutton` - один з багатьох, `Checkbutton` - кілька з багатьох.</li>
+                                <li>**Тип змінної:** `Radiobutton` - `IntVar`, `Checkbutton` - `BooleanVar`.</li>
+                                <li>**Значення:** `Radiobutton` - числові `value`, `Checkbutton` - `onvalue`/`offvalue` (зазвичай 1/0).</li>
+                            </ul>
+                        </div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-yellow-100 p-6 rounded-xl shadow-md break-words">5. Як організувати перевірку стану прапорця в Python?</div>
+                            <div class="flip-card-back bg-yellow-200 p-6 rounded-xl shadow-md break-words">За допомогою методу `.get()` змінної `BooleanVar`, пов'язаної з прапорцем (`if cb_var.get() != 0:`).</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-yellow-100 p-6 rounded-xl shadow-md break-words">6. Як додати до програми Конструктор піц ще один прапорець (наприклад, для вибору складника "Бекон")?</div>
+                            <div class="flip-card-back bg-yellow-200 p-6 rounded-xl shadow-md break-words">
+                                <ul class="list-inside">
+                                    <li>1. Створити нову `BooleanVar()`: `cvar3 = BooleanVar()`.</li>
+                                    <li>2. Створити `Checkbutton`: `Checkbutton(root, text="Бекон 25 грн", variable=cvar3, onvalue=1, offvalue=0).pack(anchor=W)`.</li>
+                                    <li>3. Оновити функцію `btn_click()` для врахування вартості Бекону: `suma = var.get()*60 + cvar1.get()*8 + cvar2.get()*18 + cvar3.get()*25`.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 217-220)</a></i></p>
+                </div>
+            </div>
+         
+
+            <!-- Домашнє завдання -->
+            <div id="homework-content" class="tab-content   bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-yellow-600 break-words">Домашнє завдання</h3>                    
+                <!--  -->
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <div>
+                            <p class="break-words break-all"><b>1. Теоретична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li class="break-words break-all">Опрацювати § 34 (стор. 217-222).</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><b>2. Практична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Виконати завдання із прикладів №№ 1-5 (стор. 218-220).</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p><b>3. Завдання за бажанням (для закріплення):</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Інтерактивна платформа IZZI (8 клас) до § 34: <a href="https://ua.izzi.digital/DOS/1183864/1337128.html" target="_blank" class="text-blue-600 hover:underline break-words break-all block">https://ua.izzi.digital/DOS/1183864/1337128.html</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="./images/img08.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!--  -->
+            </div>
+        </section>
+
+
+        <!-- Додаткові матеріали -->
+        <!-- Additional Materials Section -->
+        <section class="bg-white p-6 rounded-xl shadow-md mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-yellow-600 break-words">Додаткові матеріали</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li class="break-words"><a href="https://sites.google.com/view/lga84-9/tehnika_bezpeky" target="_blank" class="text-blue-600 hover:underline">Техніка безпеки</a></li>
+
+                <li class="break-words"><a href="https://drive.google.com/file/d/1C9_KEF981LvokY0GWNOhUXb7rJKJUUbM/view" target="_blank" class="text-blue-600 hover:underline">Оцінювання учнів та учениць на уроках інформатики</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу</a> (§ 34, стор. 217-222)</li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">Інтерактивна платформа IZZI (8 клас)</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до § 34: <a href="https://ua.izzi.digital/DOS/1183864/1337128.html" target="_blank" class="text-blue-600 hover:underline">https://ua.izzi.digital/DOS/1183864/1337128.html</a></li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm   bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>           
+        </ul>
+    </footer>    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Початок:
+            // Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання".
+            const tabs = document.getElementById('tabs');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            tabs.addEventListener('click', (e) => {
+                // Ensure the click target is a BUTTON (tab button)
+                if (e.target.tagName === 'BUTTON') {
+                    const tab = e.target.dataset.tab;
+
+                    // Remove 'active' class from all buttons and add to the clicked one
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Hide all tab contents and show the corresponding one
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Use === for strict comparison
+                        if (content.id === `${tab}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                }
+            });
+            // Кінець.
+
+
+            // Початок:
+            // ГРУПИ РЕЗУЛЬТАТІВ.
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            // 1. Створення об'єкту-мапи для відповідності значень і кольорів
+            // Тут вручну можна поміняти значення background й border
+            const colorMap = {
+                1: {
+                    background: '#fef9c3', // text-yellow-100
+                    border: '#fde047'      // text-yellow-200
+                },
+                2: {
+                    background: '#fde047', // text-yellow-200
+                    border: '#facc15'       // text-yellow-300
+                },
+                3: {
+                    background: '#facc15',  // text-yellow-300
+                    border: '#eab308'        // text-yellow-400
+                },
+                4: {
+                    background: '#eab308',   // text-yellow-400
+                    border: '#ca8a04'      // text-yellow-500
+                }
+            };
+
+            // Дані, які можна змінювати вручну
+            const chartData = [2, 4, 3, 2];
+
+            // 2. Генерація масивів кольорів на основі даних
+            const backgroundColors = chartData.map(value => colorMap[value].background);
+            const borderColors = chartData.map(value => colorMap[value].border);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ГР1', 'ГР2', 'ГР3', 'ГР4'],
+                    datasets: [{
+                        label: 'Важливість',
+                        data: chartData, // Використовуємо змінну
+                        backgroundColor: backgroundColors, // Використовуємо згенерований масив
+                        borderColor: borderColors, // Використовуємо згенерований масив
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const labels = ['', 'Важлива', 'Дуже важлива', 'Найважливіша'];
+                                    return labels[value] || '';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.parsed.y;
+                                    const importanceLabels = {4: 'Найважливіша', 3: 'Дуже важлива', 2: 'Важлива', 1: 'Найменш важлива'};
+                                    label += importanceLabels[value] || '';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // Кінець. ГРУПИ РЕЗУЛЬТАТІВ.
+
+
+            // Початок.
+            // ПОВОРОТ КАРТОК "Перевірка знань"
+            const flipCards = document.querySelectorAll('.flip-card');
+            flipCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+            // Кінець. ПОВОРОТ КАРТОК.
+
+        });
+    </script>
+
+    <!-- Скрипт для інтерактивних вправ -->
+    <script>
+        // Start of Interactive Exercises logic
+            function checkPizzaSize() {
+                const options = document.querySelectorAll('#pizza-size-exercise input[name="pizza_size"]');
+                const feedbackDiv = document.getElementById('pizza-size-feedback');
+                let selectedValue = null;
+                options.forEach(option => {
+                    option.parentElement.classList.remove('highlight-correct', 'highlight-incorrect');
+                    if (option.checked) {
+                        selectedValue = option.value;
+                    }
+                });
+
+                if (selectedValue === null) {
+                    feedbackDiv.textContent = 'Будь ласка, оберіть розмір піци.';
+                    feedbackDiv.classList.remove('correct');
+                    feedbackDiv.classList.add('incorrect');
+                } else if (selectedValue === '1') { // Assuming "Середній корж" (value=1) is the "correct" or desired choice for this mock exercise
+                    options[1].parentElement.classList.add('highlight-correct');
+                    feedbackDiv.textContent = 'Чудово! Вибрано середній корж.';
+                    feedbackDiv.classList.remove('incorrect');
+                    feedbackDiv.classList.add('correct');
+                } else {
+                    options.forEach(option => {
+                        if (option.checked) {
+                            option.parentElement.classList.add('highlight-incorrect');
+                        }
+                    });
+                    options[1].parentElement.classList.add('highlight-correct'); // Highlight correct answer
+                    feedbackDiv.textContent = 'Спробуйте ще раз. Зазвичай середній корж є оптимальним вибором.';
+                    feedbackDiv.classList.remove('correct');
+                    feedbackDiv.classList.add('incorrect');
+                }
+            }
+
+            function resetPizzaSize() {
+                const options = document.querySelectorAll('#pizza-size-exercise input[name="pizza_size"]');
+                const feedbackDiv = document.getElementById('pizza-size-feedback');
+                options.forEach(option => {
+                    option.checked = false;
+                    option.parentElement.classList.remove('highlight-correct', 'highlight-incorrect');
+                });
+                feedbackDiv.textContent = '';
+                feedbackDiv.classList.remove('correct', 'incorrect');
+            }
+
+            function checkPizzaToppings() {
+                const options = document.querySelectorAll('#pizza-toppings-exercise input[name="pizza_topping"]');
+                const feedbackDiv = document.getElementById('pizza-toppings-feedback');
+                let selectedToppings = [];
+                options.forEach(option => {
+                    option.parentElement.classList.remove('highlight-correct', 'highlight-incorrect');
+                    if (option.checked) {
+                        selectedToppings.push(option.value);
+                    }
+                });
+
+                // Assuming 'onion' and 'mozzarella' are a good combination
+                const correctToppings = ['onion', 'mozzarella'];
+                let isCorrect = (selectedToppings.length === correctToppings.length && 
+                                 correctToppings.every(topping => selectedToppings.includes(topping)));
+
+                if (selectedToppings.length === 0) {
+                    feedbackDiv.textContent = 'Будь ласка, оберіть хоча б один складник.';
+                    feedbackDiv.classList.remove('correct');
+                    feedbackDiv.classList.add('incorrect');
+                } else if (isCorrect) {
+                    options.forEach(option => {
+                        if (option.checked) option.parentElement.classList.add('highlight-correct');
+                    });
+                    feedbackDiv.textContent = 'Відмінно! Це гарний вибір складників!';
+                    feedbackDiv.classList.remove('incorrect');
+                    feedbackDiv.classList.add('correct');
+                } else {
+                    options.forEach(option => {
+                        if (option.checked && !correctToppings.includes(option.value)) {
+                            option.parentElement.classList.add('highlight-incorrect');
+                        } else if (option.checked && correctToppings.includes(option.value)) {
+                            option.parentElement.classList.add('highlight-correct');
+                        }
+                    });
+                    correctToppings.forEach(correctName => {
+                        const correctOption = Array.from(options).find(opt => opt.value === correctName);
+                        if (correctOption && !correctOption.checked) {
+                            correctOption.parentElement.classList.add('highlight-correct'); // Highlight missed correct answers
+                        }
+                    });
+                    feedbackDiv.textContent = 'Цікавий вибір, але спробуйте поекспериментувати з цибулею та моцарелою!';
+                    feedbackDiv.classList.remove('correct');
+                    feedbackDiv.classList.add('incorrect');
+                }
+            }
+
+            function resetPizzaToppings() {
+                const options = document.querySelectorAll('#pizza-toppings-exercise input[name="pizza_topping"]');
+                const feedbackDiv = document.getElementById('pizza-toppings-feedback');
+                options.forEach(option => {
+                    option.checked = false;
+                    option.parentElement.classList.remove('highlight-correct', 'highlight-incorrect');
+                });
+                feedbackDiv.textContent = '';
+                feedbackDiv.classList.remove('correct', 'incorrect');
+            }
+
+            function calculatePizzaCost() {
+                let totalCost = 0;
+
+                // Get pizza size cost
+                const sizeRadios = document.querySelectorAll('input[name="sim_pizza_size"]:checked');
+                if (sizeRadios.length > 0) {
+                    totalCost += parseFloat(sizeRadios[0].dataset.price);
+                }
+
+                // Get toppings cost
+                const toppingCheckboxes = document.querySelectorAll('input[name="sim_pizza_topping"]:checked');
+                toppingCheckboxes.forEach(checkbox => {
+                    totalCost += parseFloat(checkbox.dataset.price);
+                });
+
+                document.getElementById('pizza-cost-output').textContent = `Загальна вартість: ${totalCost} грн`;
+            }
+
+            function resetPizzaBuilder() {
+                document.querySelectorAll('input[name="sim_pizza_size"]').forEach(radio => radio.checked = false);
+                document.querySelectorAll('input[name="sim_pizza_topping"]').forEach(checkbox => checkbox.checked = false);
+                document.getElementById('pizza-cost-output').textContent = 'Загальна вартість: 0 грн';
+            }
+            // End of Interactive Exercises logic
+    </script>
+</body>
+</html>

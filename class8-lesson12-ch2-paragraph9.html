@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: 8 клас</title>
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Тіло документа */
+        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
+
+        /* Стилі для навігації в меню */
+        .logo-main { display: none; }
+        .main-title-text { width: 140px; text-align: center; }
+        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
+        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
+        @media screen and (min-width: 768px) {
+            .main-title-text { width: auto; }
+            .main-navigation { display: inline; width: auto; }
+        }
+
+        /* main стилі */
+        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
+        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
+        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
+        .source-text { padding: 8px; }
+        @media screen and (min-width: 300px) {
+            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
+            .text-2xlooo { font-size: 1.25rem; }
+        }
+        @media screen and (min-width: 480px) {
+            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
+            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
+            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
+        }
+
+        /* Стилі для "Про урок" */
+        /* Групи результатів */
+        .text-group-result { padding-top: 16px; }
+
+        /* Style to hide inactive tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Style to tab content */
+        .tab-btn.active { 
+            color: #7c3aed;                /* text-violet-600 */
+            border-bottom-color: #7c3aed;  /* text-violet-600 */
+            background-color: #ede9fe;     /* text-violet-100 */
+        }
+        .tab-btn { 
+            transition: color 0.3s, 
+            border-color 0.3s, 
+            background-color 0.3s; 
+            border-bottom: 2px solid transparent;
+        }
+
+        /* Styles for flip cards */
+        .flip-card {
+            background-color: transparent;
+            width: 100%; /* Make cards responsive to grid column width */
+            height: 200px; /* Fixed height for consistency, adjust as needed */
+            perspective: 1000px; /* 3D effect */
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left; /* Adjust text alignment as needed */
+            overflow-wrap: break-word; /* break-words */
+            /*word-break: break-all;*/ /* break-all */
+        }
+
+        .flip-card-front {
+            color: #4b5563; /* text-gray-700 */
+        }
+
+        .flip-card-back {
+            color: #4b5563; /* text-gray-700 */
+            transform: rotateY(180deg);
+        }
+
+        /* Responsive adjustments for min-height */
+        @media (min-width: 768px) { /* md breakpoint */
+            .flip-card.min-h-md {
+                min-height: 250px; /* Example, adjust as needed for medium screens */
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .flip-card.min-h-lg {
+                min-height: 200px; /* Example, adjust as needed for large screens */
+            }
+        }
+
+        /* Styles for general buttons */
+        .check-button, .reset-button {
+            background-color: #7c3aed; /* Violet */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .reset-button {
+            background-color: #EF4444; /* Red */
+            margin-left: 10px;
+        }
+
+        .check-button:hover {
+            background-color: #6d28d9; /* Darker Violet */
+        }
+
+        .reset-button:hover {
+            background-color: #DC2626; /* Darker Red */
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .feedback.correct {
+            color: #10B981; /* Green */
+        }
+        .feedback.incorrect {
+            color: #EF4444; /* Red */
+        }
+
+        /* Multiple choice / Checkbox exercise styles */
+        .mc-container {
+            background-color: #f5f3ff; /* Light violet background */
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .mc-option {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border: 1px solid #ede9fe;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .mc-option:hover {
+            background-color: #faf5ff;
+        }
+
+        .mc-option input[type="radio"], .mc-option input[type="checkbox"] {
+            margin-right: 10px;
+            accent-color: #7c3aed; /* Violet accent */
+            cursor: pointer;
+        }
+
+        .mc-option.correct {
+            background-color: #d1fae5; /* Light green */
+            border-color: #10B981; /* Green border */
+            color: #047857;
+        }
+
+        .mc-option.incorrect {
+            background-color: #fee2e2; /* Light red */
+            border-color: #EF4444; /* Red border */
+            color: #b91c1c;
+        }
+
+        /* Matching exercise styles */
+        .matching-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .matching-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .matching-item {
+            background-color: #f5f3ff; /* Light violet */
+            border: 1px solid #ede9fe;
+            padding: 10px;
+            border-radius: 5px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #7c3aed; /* Darker violet text */
+        }
+
+        .matching-target {
+            background-color: #fff;
+            border: 1px dashed #ccc;
+            min-height: 50px;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .matching-item.draggable {
+            cursor: grab;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+        .matching-item.dragging {
+            opacity: 0.7;
+        }
+        .matching-target.drag-over {
+            background-color: #ede9fe; /* Lighter violet on drag over */
+        }
+        .matched-item {
+            background-color: #c8e6c9; /* Green for matched */
+            border-color: #a5d6a7;
+            color: #388e3c;
+        }
+
+
+        .text-violet-600 { color: #7c3aed; }
+        .text-violet-500 { color: #8b5cf6; }
+        .bg-violet-100 { background-color: #ede9fe; }
+        .bg-violet-200 { background-color: #ddd6fe; }
+
+    </style>
+</head>
+<body>
+
+    <header class="container mx-auto flex justify-between items-center   bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10  logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
+            </ul>
+            <!-- <a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a>
+            <a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a> -->
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <!-- Секція теми уроку -->
+        <section class="text-center mb-8">
+            <h1 class="text-lg text-slate-600 mt-2 break-words">Тема 2: «Створення та публікація вебресурсів». Урок № 12. (До § 9)</h1>
+            <h1 class="text-3xlooo md:text-4xl font-bold text-slate-900 break-words  theme-text">Розмічання тексту засобами HTML</h1>
+            <h2 class="text-lg text-slate-600 mt-2 break-words">Інтерактивний план-конспект уроку для 8 класу НУШ</h2>
+        </section>
+
+
+        <!-- Секція "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання" -->
+        <section>
+            <!-- Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання". -->
+            <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+                <nav id="tabs" class="flex flex-wrap justify-center gap-2 sm:gap-4">
+                    <button data-tab="about" class="tab-btn active text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Про урок</button>
+                    <button data-tab="theory" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Теоретичний блок</button>
+                    <button data-tab="practice" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Практичний блок</button>
+                    <button data-tab="check" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Перевірка знань</button>
+                    <button data-tab="homework" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Домашнє завдання</button>
+                </nav>
+            </div>
+
+            <!-- Про урок -->
+            <div id="about-content" class="tab-content active">
+                <div class="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Lesson Goal -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-violet-600 break-words break-all">🎯 Мета уроку</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Освітня:</b> Ознайомити учнів з основними поняттями мови HTML, тегами, атрибутами та їх використанням для розмічання тексту.</li>
+                            <li class="break-words"><b>Розвивальна:</b> Розвивати логічне мислення, вміння застосовувати отримані знання для створення простих вебсторінок.</li>
+                            <li class="break-words"><b>Виховна:</b> Формувати акуратність, уважність та посидючість при роботі з кодом.</li>
+                        </ul>
+                    </div>
+                    <!-- Expected Outcomes -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-violet-600 break-words break-all">✅ Очікувані результати</h3>
+                        <p class="mb-2 text-gray-600">Після уроку учні зможуть:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">визначати поняття HTML-документ, тег, атрибут;</li>
+                            <li class="break-words">розрізняти парні та непарні теги;</li>
+                            <li class="break-words">називати основні складові структури HTML-документа;</li>
+                            <li class="break-words">використовувати теги для форматування тексту (заголовки, абзаци, жирний, курсив);</li>
+                            <li class="break-words">створювати марковані та нумеровані списки за допомогою HTML.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-bold mb-3 text-violet-600 break-words">📊 Групи результатів (НУШ)</h3>
+                        <p class="text-gray-600 mb-4 break-words">Візуалізація важливості груп результатів для цього уроку.</p>
+                        <div class="chart-container relative h-64 w-full max-w-md mx-auto">
+                            <canvas id="resultsChart"></canvas>
+                        </div>
+                        <p class="text-gray-600 mb-4  break-words text-group-result"><i>Учень / учениця:</i></p>
+                        <ul>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР1 – працює з інформацією, даними, моделями;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР2 – створює інформаційні продукти;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР3 – працює в цифровому середовищі;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР4 – безпечно та відповідально працює з інформаційними технологіями.</p></li>
+                        </ul>
+                    </div>
+                    <!-- Lesson Type & Equipment -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-violet-600 break-words">📚 Тип уроку</h3>
+                        <p class="text-gray-700 break-words">Урок вивчення нового матеріалу з елементами практичної роботи.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-violet-600 break-words">💻 Обладнання та ПЗ</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Персональні комп’ютери, підключені до мережі Інтернет.</li>
+                            <li class="break-words">Підручник «Інформатика 8 клас» О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов.</li>
+                            <li class="break-words">Текстовий редактор (Блокнот, Notepad++, Sublime Text тощо).</li>
+                            <li class="break-words">Браузер для перегляду HTML-файлів.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-violet-600 break-words">🔗 Міжпредметні зв'язки</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Українська мова:</b> Робота з текстом, його структурування.</li>
+                            <li class="break-words"><b>Мистецтво:</b> Естетика оформлення документів.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Теоретичний блок -->
+            <div id="theory-content" class="tab-content   mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">              
+                <!-- ВАРІАНТ № 2, початок -->
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-violet-500 mb-4 heading-underline break-words  title-review">ПОВТОРЮЄМО</h2>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">Актуалізація опорних знань</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2">
+                        <li class="break-words">Що таке вебсторінка?</li>
+                        <li class="break-words">Які основні етапи створення сайту?</li>
+                        <li class="break-words">Що таке гіпертекст?</li>
+                        <li class="break-words">Що таке хостинг?</li>
+                        <li class="break-words">Назвіть приклади популярних безкоштовних СКВ.</li>
+                        <li class="break-words">Які відмінності між ієрархічною та лінійною структурою сайту?</li>
+                    </ol>
+                    <img src="./images/img-tema2-4.webp" alt="Знак питання" class="rounded-lg shadow-md" width="200">
+                </div>
+                
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 47-52)</a></i></p>
+                </div>
+                <!-- ВАРІАНТ № 2, кінець -->
+            </div>
+
+            <!-- <div id="theory-content2" class="tab-content mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-violet-500 mb-4 heading-underline break-words title-review">ПОВТОРЮЄМО</h2>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">Поняття про мову HTML</h2>
+                </div>
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="md:w-3/4 text-gray-700 text-lg">
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Щоб браузер належно відображав дані на вебсторінці, до її неформатованого тексту додають спеціальні позначки — **теги**. Вони та правила їх використання утворюють мову розмітки. Одну з мов розмітки, а саме **HTML**, ми й розглянемо далі.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;**HTML** (англ. **HyperText Markup Language** — мова розмітки гіпертексту) — набір тегів та правил їх застосування для створення гіпертекстових документів.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Отже, вебсторінка сайту являє собою текстовий документ, розмічений тегами HTML для відображення у вікні браузера.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;**Тег** — це позначка (мітка), записана в кутових дужках `< >`, яку опрацьовує браузер. Теги бувають **парними** й **непарними**. Парний тег складається із відкритого тегу та закриваючого тегу, який починається символом `/`. Наприклад: `<b>...</b>` – парний тег жирного накреслення. Непарний тег розриву рядка: `<br>`. </p>
+                        <img src="https://placehold.co/600x200/ADD8E6/000000?text=Приклад+парного+тегу" alt="Приклад парного тегу" class="rounded-lg shadow-md my-4">
+                        <p class="mb-4 break-words">Рис. 9.2. Приклад парного тегу</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">HTML-документ</h2>
+                </div>
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="md:w-3/4 text-gray-700 text-lg">
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Існують спеціалізовані HTML-редактори: Microsoft SharePoint Designer, Notepad++, Phoenix Code Editor, Sublime Text, та онлайнові редактори: Online HTML Editor, HTML Instant, Real-Time HTML Editor та інші. Проте оскільки HTML-документ (HTML-файл) є текстовим документом, то створити його можна й у будь-якому текстовому редакторі, з яким ви вмієте працювати.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;На рис. 9.1 наведено приклад HTML-коду та його відображення у вікні браузера.</p>
+                        <img src="https://placehold.co/600x200/D8BFD8/000000?text=Приклад+HTML-коду+та+його+відображення" alt="Приклад HTML-коду та його відображення" class="rounded-lg shadow-md my-4">
+                        <p class="mb-4 break-words">Рис. 9.1. Приклад HTML-коду та його відображення у вікні браузера</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Тут використано тільки теги, які визначають **структуру HTML-документа**:</p>
+                        <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+                            <thead>
+                                <tr class="bg-gray-100 border-b">
+                                    <th class="py-2 px-4 text-left text-gray-600 font-semibold">Тег</th>
+                                    <th class="py-2 px-4 text-left text-gray-600 font-semibold">Призначення</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b">
+                                    <td class="py-2 px-4">`<html></html>`</td>
+                                    <td class="py-2 px-4">Початок і кінець документа</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-2 px-4">`<head></head>`</td>
+                                    <td class="py-2 px-4">Початок і кінець заголовка — службової частини коду</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-2 px-4">`<title></title>`</td>
+                                    <td class="py-2 px-4">Початок і кінець назви, що виводитиметься на вкладці браузера</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4">`<body></body>`</td>
+                                    <td class="py-2 px-4">Початок і кінець тіла документа, яке виводить браузер у робочому полі вікна</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">Форматування тексту</h2>
+                </div>
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="md:w-3/4 text-gray-700 text-lg">
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Теги із тегами в HTML-документі можна розташовувати довільно: розбивати на абзаци, робити відступи. Це не вплине на вигляд вебсторінки у вікні браузера, адже її вигляд залежить тільки від розмітки. Теги з помилками або такі, що не підтримуються браузером, буде знехтувано.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;**Теги HTML визначають вигляд і функціонування об’єктів на вебсторінці сайту.**</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Розглянемо деякі теги форматування тексту:</p>
+                        <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+                            <thead>
+                                <tr class="bg-gray-100 border-b">
+                                    <th class="py-2 px-4 text-left text-gray-600 font-semibold">Тег</th>
+                                    <th class="py-2 px-4 text-left text-gray-600 font-semibold">Тип</th>
+                                    <th class="py-2 px-4 text-left text-gray-600 font-semibold">Призначення</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b">
+                                    <td class="py-2 px-4">`<p>`</td>
+                                    <td class="py-2 px-4">Парний</td>
+                                    <td class="py-2 px-4">Новий абзац із відступом</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-2 px-4">`<h1>`</td>
+                                    <td class="py-2 px-4">Парний</td>
+                                    <td class="py-2 px-4">Заголовок: `<h1>` – найвищий рівень</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="py-2 px-4">`<h6>`</td>
+                                    <td class="py-2 px-4">Парний</td>
+                                    <td class="py-2 px-4">Заголовок: `<h6>` – найнижчий</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4">`<i>`</td>
+                                    <td class="py-2 px-4">Парний</td>
+                                    <td class="py-2 px-4">Курсив</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Теги можуть мати **атрибути**, значення яких впливають на його дію. Атрибути записують у відкриваючому тегу після назви, відокремлюючи один від одного пропуском. Значення атрибутів, що містять пропуски, беруть у одинарні або подвійні лапки. Для решти значень це не обов’язково.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Наприклад, для зміни кольору тексту та фону: `<body text="white" bgcolor="green">`</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">Марковані та нумеровані списки</h2>
+                </div>
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="md:w-3/4 text-gray-700 text-lg">
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Для створення **маркованого списку** використовують тег `<ul>...</ul>` з атрибутом `type`, який задає вигляд маркера: `disk` — `●`, `circle` — `○`, `square` — `■`.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Для створення **нумерованого списку** використовують тег `<ol>...</ol>` з атрибутом `type` (тип нумерації: `1` — арабські цифри, `A` — латинські літери, `I` — римська нумерація тощо) та атрибутом `start` (задання початкового номера в списку з нумерацією арабськими цифрами).</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Елементи списку розмічають тегами `<li>...</li>`.</p>
+                        <img src="https://placehold.co/600x200/ADD8E6/000000?text=Приклад+списків+в+HTML" alt="Приклад списків в HTML" class="rounded-lg shadow-md my-4">
+                        <p class="mb-4 break-words">Рис. 9.4. Приклад списків в HTML</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 52-55)</a></i></p>
+                </div>
+            </div> -->
+            
+
+            <!-- Практичний блок -->
+             <div id="practice-content" class="tab-content">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-4 text-violet-600 break-words">Практичний блок уроку</h3>
+
+                    <!-- Exercise 1: Типи тегів (Multiple Choice) -->
+                    <div class="mb-8">
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Вправа 1: Який із наведених тегів є непарним?</h4>
+                        <p class="text-gray-600 mb-4">Виберіть єдиний правильний варіант.</p>
+                        <div class="mc-container" id="tag-type-exercise">
+                            <div class="mc-option" data-correct="false">
+                                <input type="radio" id="tag-type-option-1" name="tag-type" value="p">
+                                <label for="tag-type-option-1">`&lt;p&gt;`</label>
+                            </div>
+                            <div class="mc-option" data-correct="true">
+                                <input type="radio" id="tag-type-option-2" name="tag-type" value="br">
+                                <label for="tag-type-option-2">`&lt;br&gt;`</label>
+                            </div>
+                            <div class="mc-option" data-correct="false">
+                                <input type="radio" id="tag-type-option-3" name="tag-type" value="body">
+                                <label for="tag-type-option-3">`&lt;body&gt;`</label>
+                            </div>
+                            <div class="mc-option" data-correct="false">
+                                <input type="radio" id="tag-type-option-4" name="tag-type" value="title">
+                                <label for="tag-type-option-4">`&lt;title&gt;`</label>
+                            </div>
+                        </div>
+                        <div class="text-center mt-6">
+                            <button id="check-tag-type" class="check-button">Перевірити відповідь</button>
+                            <button id="reset-tag-type" class="reset-button">Скинути</button>
+                            <div id="tag-type-feedback" class="feedback mt-2"></div>
+                        </div>
+                    </div>
+
+                    <hr class="my-8 border-gray-200">
+
+                    <!-- Exercise 2: Призначення тегів структури HTML (Matching) -->
+                    <div class="mb-8">
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Вправа 2: Зіставте теги структури HTML-документа з їхнім призначенням.</h4>
+                        <p class="text-gray-600 mb-4">Перетягніть тег до відповідного призначення.</p>
+                        <div class="matching-container">
+                            <div class="matching-column" id="html-structure-items-container">
+                                <!-- Items will be shuffled and appended here by JS -->
+                            </div>
+                            <div class="matching-column">
+                                <div class="matching-target" id="html-target" data-accept="html">Початок і кінець документа</div>
+                                <div class="matching-target" id="head-target" data-accept="head">Початок і кінець заголовка — службової частини коду</div>
+                                <div class="matching-target" id="title-target" data-accept="title">Початок і кінець назви, що виводитиметься на вкладці браузера</div>
+                                <div class="matching-target" id="body-target" data-accept="body">Початок і кінець тіла документа, яке виводить браузер у робочому полі вікна</div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-6">
+                            <button id="check-html-structure" class="check-button">Перевірити відповідь</button>
+                            <button id="reset-html-structure" class="reset-button">Скинути</button>
+                            <div id="html-structure-feedback" class="feedback mt-2"></div>
+                        </div>
+                    </div>
+
+                    <hr class="my-8 border-gray-200">
+
+                    <!-- Exercise 3: Теги форматування тексту (Checkbox) -->
+                    <div class="mb-8">
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Вправа 3: Виберіть теги, які використовуються для форматування тексту.</h4>
+                        <p class="text-gray-600 mb-4">Відмітьте всі правильні варіанти.</p>
+                        <div class="mc-container" id="text-formatting-exercise">
+                            <div class="mc-option" data-correct="true">
+                                <input type="checkbox" id="format-option-1" name="text-formatting" value="p">
+                                <label for="format-option-1">`&lt;p&gt;` (абзац)</label>
+                            </div>
+                            <div class="mc-option" data-correct="false">
+                                <input type="checkbox" id="format-option-2" name="text-formatting" value="img">
+                                <label for="format-option-2">`&lt;img&gt;` (зображення)</label>
+                            </div>
+                            <div class="mc-option" data-correct="true">
+                                <input type="checkbox" id="format-option-3" name="text-formatting" value="h1">
+                                <label for="format-option-3">`&lt;h1&gt;` (заголовок)</label>
+                            </div>
+                            <div class="mc-option" data-correct="true">
+                                <input type="checkbox" id="format-option-4" name="text-formatting" value="i">
+                                <label for="format-option-4">`&lt;i&gt;` (курсив)</label>
+                            </div>
+                            <div class="mc-option" data-correct="false">
+                                <input type="checkbox" id="format-option-5" name="text-formatting" value="a">
+                                <label for="format-option-5">`&lt;a&gt;` (гіперпосилання)</label>
+                            </div>
+                        </div>
+                        <div class="text-center mt-6">
+                            <button id="check-text-formatting" class="check-button">Перевірити відповіді</button>
+                            <button id="reset-text-formatting" class="reset-button">Скинути</button>
+                            <div id="text-formatting-feedback" class="feedback mt-2"></div>
+                        </div>
+                    </div>
+
+                    <hr class="my-8 border-gray-200">
+
+                    <!-- Exercise 4: Атрибути для списків (Fill in the Blanks/Multiple Select) -->
+                    <div class="mb-8">
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Вправа 4: Які атрибути можна використовувати для налаштування вигляду маркованих та нумерованих списків в HTML?</h4>
+                        <p class="text-gray-600 mb-4">Виберіть усі правильні варіанти.</p>
+                        <div class="mc-container" id="list-attributes-exercise">
+                            <div class="mc-option" data-correct="true">
+                                <input type="checkbox" id="list-attribute-1" name="list-attributes" value="type">
+                                <label for="list-attribute-1">`type` (тип маркера/нумерації)</label>
+                            </div>
+                            <div class="mc-option" data-correct="true">
+                                <input type="checkbox" id="list-attribute-2" name="list-attributes" value="start">
+                                <label for="list-attribute-2">`start` (початковий номер)</label>
+                            </div>
+                            <div class="mc-option" data-correct="false">
+                                <input type="checkbox" id="list-attribute-3" name="list-attributes" value="color">
+                                <label for="list-attribute-3">`color` (колір)</label>
+                            </div>
+                            <div class="mc-option" data-correct="false">
+                                <input type="checkbox" id="list-attribute-4" name="list-attributes" value="size">
+                                <label for="list-attribute-4">`size` (розмір)</label>
+                            </div>
+                        </div>
+                        <div class="text-center mt-6">
+                            <button id="check-list-attributes" class="check-button">Перевірити відповіді</button>
+                            <button id="reset-list-attributes" class="reset-button">Скинути</button>
+                            <div id="list-attributes-feedback" class="feedback mt-2"></div>
+                        </div>
+                    </div>
+                </div>        
+            </div>
+
+            <!-- Перевірка знань -->
+            <!-- Вручну треба змінювати лише ті значення minimum-height (min-h-[300px]), які потрібно, і треба використовувати медіа-адаптацію (стилі тут на сторінці в тезі <style>)-->
+                <!-- Тут grid -->
+            <div id="check-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-6 text-center text-violet-600 break-words">Перевірка знань</h3>
+                <p class="text-center text-gray-600 mb-8 break-words">Натисніть на картку, щоб побачити відповідь.</p>
+                <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <li class="flip-card min-h-md min-h-lg">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-violet-100 p-6 rounded-xl shadow-md break-words">1. Що таке HTML?</div>
+                            <div class="flip-card-back bg-violet-200 p-6 rounded-xl shadow-md break-words">HTML (HyperText Markup Language) — це мова розмітки гіпертексту, набір тегів та правил їх застосування для створення веб-документів.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card min-h-md min-h-lg">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-violet-100 p-6 rounded-xl shadow-md break-words">2. Наведіть приклади парних та непарних тегів.</div>
+                            <div class="flip-card-back bg-violet-200 p-6 rounded-xl shadow-md break-words">**Парні теги:** `&lt;b&gt;...&lt;/b&gt;` (жирний), `&lt;p&gt;...&lt;/p&gt;` (абзац). **Непарні теги:** `&lt;br&gt;` (розрив рядка).</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card min-h-md min-h-lg">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-violet-100 p-6 rounded-xl shadow-md break-words">3. Назвіть складові структури HTML-документа.</div>
+                            <div class="flip-card-back bg-violet-200 p-6 rounded-xl shadow-md break-words">Складові структури HTML-документа: `&lt;html&gt;`, `&lt;head&gt;`, `&lt;title&gt;`, `&lt;body&gt;`.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card min-h-md min-h-lg">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-violet-100 p-6 rounded-xl shadow-md break-words">4. Що таке атрибут тегу?</div>
+                            <div class="flip-card-back bg-violet-200 p-6 rounded-xl shadow-md break-words">Атрибут тегу — це властивість, яка впливає на дію тегу, записується у відкриваючому тегу.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card min-h-md min-h-lg">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-violet-100 p-6 rounded-xl shadow-md break-words">5. Якими засобами HTML можна змінити колір тла вебсторінки сайту?</div>
+                            <div class="flip-card-back bg-violet-200 p-6 rounded-xl shadow-md break-words">Для зміни кольору тла вебсторінки сайту можна використати атрибут `bgcolor` в тегу `&lt;body&gt;`, наприклад: `&lt;body bgcolor="green"&gt;`.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card min-h-md min-h-lg">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-violet-100 p-6 rounded-xl shadow-md break-words">6. Які теги використовуються для створення списків?</div>
+                            <div class="flip-card-back bg-violet-200 p-6 rounded-xl shadow-md break-words">Для створення маркованих списків використовують `&lt;ul&gt;`, для нумерованих — `&lt;ol&gt;`. Елементи списків розмічають тегами `&lt;li&gt;`.</div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 52-56)</a></i></p>
+                </div>
+            </div>
+         
+
+            <!-- Домашнє завдання -->
+            <div id="homework-content" class="tab-content   bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-violet-600 break-words">Домашнє завдання</h3>                    
+                <!--  -->
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <div>
+                            <p class="break-words break-all"><b>1. Теоретична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li class="break-words break-all">Опрацювати § 9 (стор. 52-56).</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><b>2. Практична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Виконати вправу № 9 (стор. 56).</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p><b>3. Завдання за бажанням (для закріплення):</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Інтерактивна платформа IZZI (8 клас) до § 9: <a href="https://ua.izzi.digital/DOS/1183864/1197765.html" target="_blank" class="text-blue-600 hover:underline break-words break-all block">https://ua.izzi.digital/DOS/1183864/1197765.html</a></li>                                
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="./images/img08.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!--  -->
+            </div>
+        </section>
+
+
+        <!-- Додаткові матеріали -->
+        <!-- Additional Materials Section -->
+        <section class="bg-white p-6 rounded-xl shadow-md mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-violet-600 break-words">Додаткові матеріали</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li class="break-words"><a href="https://sites.google.com/view/lga84-9/tehnika_bezpeky" target="_blank" class="text-blue-600 hover:underline">Техніка безпеки</a></li>
+
+                <li class="break-words"><a href="https://drive.google.com/file/d/1C9_KEF981LvokY0GWNOhUXb7rJKJUUbM/view" target="_blank" class="text-blue-600 hover:underline">Оцінювання учнів та учениць на уроках інформатики</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу</a> (§ 9, стор. 52-56)</li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">Інтерактивна платформа IZZI (8 клас)</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до § 9: <a href="https://ua.izzi.digital/DOS/1183864/1197765.html" target="_blank" class="text-blue-600 hover:underline">https://ua.izzi.digital/DOS/1183864/1197765.html</a></li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm   bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>           
+        </ul>
+    </footer>    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Початок:
+            // Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання".
+            const tabs = document.getElementById('tabs');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            tabs.addEventListener('click', (e) => {
+                // Ensure the click target is a BUTTON (tab button)
+                if (e.target.tagName === 'BUTTON') {
+                    const tab = e.target.dataset.tab;
+
+                    // Remove 'active' class from all buttons and add to the clicked one
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Hide all tab contents and show the corresponding one
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Use === for strict comparison
+                        if (content.id === `${tab}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                }
+            });
+            // Кінець.
+
+
+            // Початок:
+            // ГРУПИ РЕЗУЛЬТАТІВ.
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            // 1. Створення об'єкту-мапи для відповідності значень і кольорів
+            // Тут вручну можна поміняти значення background й border
+            const colorMap = {
+                1: {
+                    background: '#ede9fe', // text-violet-100
+                    border: '#ddd6fe'      // text-violet-200
+                },
+                2: {
+                    background: '#ddd6fe', // text-violet-200
+                    border: '#c4b5fd'       // text-violet-300
+                },
+                3: {
+                    background: '#c4b5fd',  // text-violet-300
+                    border: '#a78bfa'        // text-violet-400
+                },
+                4: {
+                    background: '#a78bfa',   // text-violet-400
+                    border: '#8b5cf6'      // text-violet-500
+                }
+            };
+
+            // Дані, які можна змінювати вручну
+            const chartData = [2, 4, 2, 3];
+
+            // 2. Генерація масивів кольорів на основі даних
+            const backgroundColors = chartData.map(value => colorMap[value].background);
+            const borderColors = chartData.map(value => colorMap[value].border);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ГР1', 'ГР2', 'ГР3', 'ГР4'],
+                    datasets: [{
+                        label: 'Важливість',
+                        data: chartData, // Використовуємо змінну
+                        backgroundColor: backgroundColors, // Використовуємо згенерований масив
+                        borderColor: borderColors, // Використовуємо згенерований масив
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const labels = ['', 'Важлива', 'Дуже важлива', 'Найважливіша'];
+                                    return labels[value] || '';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.parsed.y;
+                                    const importanceLabels = {4: 'Найважливіша', 3: 'Дуже важлива', 2: 'Важлива', 1: 'Найменш важлива'};
+                                    label += importanceLabels[value] || '';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // Кінець. ГРУПИ РЕЗУЛЬТАТІВ.
+
+
+            // Початок.
+            // ПОВОРОТ КАРТОК "Перевірка знань"
+            const flipCards = document.querySelectorAll('.flip-card');
+            flipCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+            // Кінець. ПОВОРОТ КАРТОК.
+
+            // Початок: Практичний блок - Вправа 1: Типи тегів (Multiple Choice)
+            const tagTypeOptions = document.querySelectorAll('#tag-type-exercise .mc-option');
+            const checkTagTypeBtn = document.getElementById('check-tag-type');
+            const resetTagTypeBtn = document.getElementById('reset-tag-type');
+            const tagTypeFeedback = document.getElementById('tag-type-feedback');
+
+            checkTagTypeBtn.addEventListener('click', () => {
+                let selectedOptionElement = null;
+                tagTypeOptions.forEach(option => {
+                    const radio = option.querySelector('input[type="radio"]');
+                    option.classList.remove('correct', 'incorrect');
+                    if (radio.checked) {
+                        selectedOptionElement = option;
+                    }
+                });
+
+                tagTypeFeedback.textContent = '';
+                tagTypeFeedback.classList.remove('correct', 'incorrect');
+                tagTypeFeedback.style.display = 'block';
+
+                if (selectedOptionElement) {
+                    const isCorrect = selectedOptionElement.dataset.correct === 'true';
+                    if (isCorrect) {
+                        selectedOptionElement.classList.add('correct');
+                        tagTypeFeedback.textContent = 'Чудово! Відповідь правильна!';
+                        tagTypeFeedback.classList.add('correct');
+                    } else {
+                        selectedOptionElement.classList.add('incorrect');
+                        tagTypeFeedback.textContent = 'Неправильно. Спробуйте ще раз!';
+                        tagTypeFeedback.classList.add('incorrect');
+                    }
+                } else {
+                    tagTypeFeedback.textContent = 'Будь ласка, виберіть варіант відповіді.';
+                    tagTypeFeedback.classList.add('incorrect');
+                }
+            });
+
+            resetTagTypeBtn.addEventListener('click', () => {
+                document.querySelectorAll('#tag-type-exercise input[type="radio"]').forEach(radio => {
+                    radio.checked = false;
+                });
+                tagTypeOptions.forEach(option => {
+                    option.classList.remove('correct', 'incorrect');
+                });
+                tagTypeFeedback.textContent = '';
+                tagTypeFeedback.classList.remove('correct', 'incorrect');
+                tagTypeFeedback.style.display = 'none';
+            });
+            // Кінець: Практичний блок - Вправа 1 (Multiple Choice)
+
+
+            // Початок: Практичний блок - Вправа 2: Призначення тегів структури HTML (Matching)
+            const htmlStructureItemsContainer = document.getElementById('html-structure-items-container');
+            const htmlStructureTargets = document.querySelectorAll('#practice-content #html-structure-items-container + .matching-column .matching-target');
+            const checkHtmlStructureBtn = document.getElementById('check-html-structure');
+            const resetHtmlStructureBtn = document.getElementById('reset-html-structure');
+            const htmlStructureFeedback = document.getElementById('html-structure-feedback');
+
+            let currentDraggedHtmlItem = null;
+
+            const initialHtmlStructureItemsData = [
+                { text: '&lt;html&gt;', match: 'html' },
+                { text: '&lt;head&gt;', match: 'head' },
+                { text: '&lt;title&gt;', match: 'title' },
+                { text: '&lt;body&gt;', match: 'body' }
+            ];
+
+            const initialHtmlStructureTargetsContent = Array.from(htmlStructureTargets).map(target => target.innerHTML);
+            const initialHtmlStructureTargetsDataAccept = Array.from(htmlStructureTargets).map(target => target.dataset.accept);
+
+            const shuffleArray = (array) => {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            };
+
+            const shuffleAndDisplayHtmlStructureItems = () => {
+                htmlStructureItemsContainer.innerHTML = '';
+                const shuffledData = shuffleArray([...initialHtmlStructureItemsData]);
+                shuffledData.forEach(itemData => {
+                    const div = document.createElement('div');
+                    div.classList.add('matching-item', 'draggable');
+                    div.setAttribute('draggable', 'true');
+                    div.innerHTML = itemData.text; // Use innerHTML for HTML entities
+                    div.dataset.match = itemData.match;
+                    htmlStructureItemsContainer.appendChild(div);
+                });
+                attachHtmlStructureDragListeners();
+            };
+
+            const attachHtmlStructureDragListeners = () => {
+                document.querySelectorAll('#html-structure-items-container .matching-item').forEach(item => {
+                    item.removeEventListener('dragstart', handleHtmlStructureDragStart);
+                    item.removeEventListener('dragend', handleHtmlStructureDragEnd);
+                    item.addEventListener('dragstart', handleHtmlStructureDragStart);
+                    item.addEventListener('dragend', handleHtmlStructureDragEnd);
+                });
+            };
+
+            const handleHtmlStructureDragStart = (e) => {
+                currentDraggedHtmlItem = e.target;
+                e.dataTransfer.setData('text/plain', e.target.dataset.match);
+                e.target.classList.add('dragging');
+            };
+
+            const handleHtmlStructureDragEnd = (e) => {
+                e.target.classList.remove('dragging');
+                currentDraggedHtmlItem = null;
+            };
+
+            htmlStructureTargets.forEach(target => {
+                target.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    target.classList.add('drag-over');
+                });
+
+                target.addEventListener('dragleave', (e) => {
+                    target.classList.remove('drag-over');
+                });
+
+                target.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    target.classList.remove('drag-over');
+
+                    if (currentDraggedHtmlItem) {
+                        const existingDroppedItem = target.querySelector('.matching-item');
+                        if (!existingDroppedItem) {
+                            target.appendChild(currentDraggedHtmlItem);
+                            currentDraggedHtmlItem.classList.remove('draggable');
+                            currentDraggedHtmlItem.classList.add('matched-item');
+                        } else {
+                            htmlStructureItemsContainer.appendChild(currentDraggedHtmlItem);
+                        }
+                    }
+                    if (currentDraggedHtmlItem) {
+                        currentDraggedHtmlItem.classList.remove('dragging');
+                    }
+                    currentDraggedHtmlItem = null;
+                });
+            });
+
+            checkHtmlStructureBtn.addEventListener('click', () => {
+                let allCorrect = true;
+                htmlStructureTargets.forEach(target => {
+                    const expectedMatch = target.dataset.accept;
+                    const droppedItem = target.querySelector('.matching-item');
+
+                    if (droppedItem && droppedItem.dataset.match === expectedMatch) {
+                        target.style.borderColor = '#10B981'; // Green for correct
+                        droppedItem.style.borderColor = '#10B981';
+                    } else {
+                        allCorrect = false;
+                        target.style.borderColor = '#EF4444'; // Red for incorrect
+                        if (droppedItem) {
+                            droppedItem.style.borderColor = '#EF4444';
+                        }
+                    }
+                });
+
+                if (allCorrect) {
+                    htmlStructureFeedback.textContent = 'Правильно! Усі зіставлення вірні!';
+                    htmlStructureFeedback.classList.remove('incorrect');
+                    htmlStructureFeedback.classList.add('correct');
+                } else {
+                    htmlStructureFeedback.textContent = 'Є помилки. Спробуйте ще раз!';
+                    htmlStructureFeedback.classList.remove('correct');
+                    htmlStructureFeedback.classList.add('incorrect');
+                }
+            });
+
+            resetHtmlStructureBtn.addEventListener('click', () => {
+                htmlStructureTargets.forEach((target, index) => {
+                    target.innerHTML = initialHtmlStructureTargetsContent[index];
+                    target.dataset.accept = initialHtmlStructureTargetsDataAccept[index];
+                    target.style.borderColor = '#ccc';
+                });
+
+                shuffleAndDisplayHtmlStructureItems();
+
+                htmlStructureFeedback.textContent = '';
+                htmlStructureFeedback.classList.remove('correct', 'incorrect');
+            });
+
+            shuffleAndDisplayHtmlStructureItems();
+            // Кінець: Практичний блок - Вправа 2 (Matching)
+
+            // Початок: Практичний блок - Вправа 3: Теги форматування тексту (Checkbox)
+            const textFormattingOptions = document.querySelectorAll('#text-formatting-exercise .mc-option');
+            const checkTextFormattingBtn = document.getElementById('check-text-formatting');
+            const resetTextFormattingBtn = document.getElementById('reset-text-formatting');
+            const textFormattingFeedback = document.getElementById('text-formatting-feedback');
+
+            checkTextFormattingBtn.addEventListener('click', () => {
+                let allCorrect = true;
+                let anyChecked = false;
+
+                textFormattingOptions.forEach(option => {
+                    const checkbox = option.querySelector('input[type="checkbox"]');
+                    const isCorrectOption = option.dataset.correct === 'true';
+
+                    option.classList.remove('correct', 'incorrect'); // Clear previous feedback
+
+                    if (checkbox.checked) {
+                        anyChecked = true;
+                        if (isCorrectOption) {
+                            option.classList.add('correct');
+                        } else {
+                            option.classList.add('incorrect');
+                            allCorrect = false;
+                        }
+                    } else { // If not checked
+                        if (isCorrectOption) { // If it's a correct option but not checked
+                            option.classList.add('incorrect'); // Mark as incorrect for not being selected
+                            allCorrect = false;
+                        }
+                        // If it's an incorrect option and not checked, it's fine (no class needed or default)
+                    }
+                });
+
+                textFormattingFeedback.textContent = '';
+                textFormattingFeedback.classList.remove('correct', 'incorrect');
+                textFormattingFeedback.style.display = 'block';
+
+                if (anyChecked && allCorrect) {
+                    textFormattingFeedback.textContent = 'Чудово! Усі теги визначено правильно!';
+                    textFormattingFeedback.classList.add('correct');
+                } else if (!anyChecked) {
+                    textFormattingFeedback.textContent = 'Будь ласка, виберіть хоча б один варіант.';
+                    textFormattingFeedback.classList.add('incorrect');
+                }
+                else {
+                    textFormattingFeedback.textContent = 'Є помилки. Спробуйте ще раз!';
+                    textFormattingFeedback.classList.add('incorrect');
+                }
+            });
+
+            resetTextFormattingBtn.addEventListener('click', () => {
+                textFormattingOptions.forEach(option => {
+                    const checkbox = option.querySelector('input[type="checkbox"]');
+                    checkbox.checked = false; // Uncheck all checkboxes
+                    option.classList.remove('correct', 'incorrect'); // Clear feedback classes
+                });
+                textFormattingFeedback.textContent = '';
+                textFormattingFeedback.classList.remove('correct', 'incorrect');
+                textFormattingFeedback.style.display = 'none';
+            });
+            // Кінець: Практичний блок - Вправа 3 (Checkbox)
+
+            // Початок: Практичний блок - Вправа 4: Атрибути для списків (Checkbox)
+            const listAttributesOptions = document.querySelectorAll('#list-attributes-exercise .mc-option');
+            const checkListAttributesBtn = document.getElementById('check-list-attributes');
+            const resetListAttributesBtn = document.getElementById('reset-list-attributes');
+            const listAttributesFeedback = document.getElementById('list-attributes-feedback');
+
+            checkListAttributesBtn.addEventListener('click', () => {
+                let allCorrect = true;
+                let anyChecked = false;
+
+                listAttributesOptions.forEach(option => {
+                    const checkbox = option.querySelector('input[type="checkbox"]');
+                    const isCorrectOption = option.dataset.correct === 'true';
+
+                    option.classList.remove('correct', 'incorrect'); // Clear previous feedback
+
+                    if (checkbox.checked) {
+                        anyChecked = true;
+                        if (isCorrectOption) {
+                            option.classList.add('correct');
+                        } else {
+                            option.classList.add('incorrect');
+                            allCorrect = false;
+                        }
+                    } else { // If not checked
+                        if (isCorrectOption) { // If it's a correct option but not checked
+                            option.classList.add('incorrect'); // Mark as incorrect for not being selected
+                            allCorrect = false;
+                        }
+                        // If it's an incorrect option and not checked, it's fine (no class needed or default)
+                    }
+                });
+
+                listAttributesFeedback.textContent = '';
+                listAttributesFeedback.classList.remove('correct', 'incorrect');
+                listAttributesFeedback.style.display = 'block';
+
+                if (anyChecked && allCorrect) {
+                    listAttributesFeedback.textContent = 'Чудово! Усі атрибути визначено правильно!';
+                    listAttributesFeedback.classList.add('correct');
+                } else if (!anyChecked) {
+                    listAttributesFeedback.textContent = 'Будь ласка, виберіть хоча б один варіант.';
+                    listAttributesFeedback.classList.add('incorrect');
+                }
+                else {
+                    listAttributesFeedback.textContent = 'Є помилки. Спробуйте ще раз!';
+                    listAttributesFeedback.classList.add('incorrect');
+                }
+            });
+
+            resetListAttributesBtn.addEventListener('click', () => {
+                listAttributesOptions.forEach(option => {
+                    const checkbox = option.querySelector('input[type="checkbox"]');
+                    checkbox.checked = false; // Uncheck all checkboxes
+                    option.classList.remove('correct', 'incorrect'); // Clear feedback classes
+                });
+                listAttributesFeedback.textContent = '';
+                listAttributesFeedback.classList.remove('correct', 'incorrect');
+                listAttributesFeedback.style.display = 'none';
+            });
+            // Кінець: Практичний блок - Вправа 4 (Checkbox)
+
+        });
+    </script>
+</body>
+</html>

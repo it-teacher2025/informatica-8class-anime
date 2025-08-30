@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: 8 клас</title>
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Тіло документа */
+        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
+
+        /* Стилі для навігації в меню */
+        .logo-main { display: none; }
+        .main-title-text { width: 140px; text-align: center; }
+        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
+        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
+        @media screen and (min-width: 768px) {
+            .main-title-text { width: auto; }
+            .main-navigation { display: inline; width: auto; }
+        }
+
+        /* main стилі */
+        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
+        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
+        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
+        .source-text { padding: 8px; }
+        @media screen and (min-width: 300px) {
+            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
+            .text-2xlooo { font-size: 1.25rem; }
+        }
+        @media screen and (min-width: 480px) {
+            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
+            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
+            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
+        }
+
+        /* Стилі для "Про урок" */
+        /* Групи результатів */
+        .text-group-result { padding-top: 16px; }
+
+        /* Style to hide inactive tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Style to tab content */
+        .tab-btn.active { 
+            color: #65a30d;          /* text-lime-600 */
+            border-bottom-color: #65a30d;  /* text-lime-600 */
+            background-color: #f7fee7;     /* text-lime-100 */
+        }
+        .tab-btn { 
+            transition: color 0.3s, 
+            border-color 0.3s, 
+            background-color 0.3s; 
+            border-bottom: 2px solid transparent;
+        }
+
+        /* Styles for flip cards */
+        .flip-card {
+            background-color: transparent;
+            width: 100%; /* Make cards responsive to grid column width */
+            height: 300px; /* Fixed height for consistency, adjust as needed */
+            perspective: 1000px; /* 3D effect */
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left; /* Adjust text alignment as needed */
+            overflow-wrap: break-word; /* break-words */
+            /*word-break: break-all;*/ /* break-all */
+        }
+
+        .flip-card-front {
+            color: #4b5563; /* text-gray-700 */
+        }
+
+        .flip-card-back {
+            color: #4b5563; /* text-gray-700 */
+            transform: rotateY(180deg);
+        }
+
+        /* Responsive adjustments for min-height */
+        @media (min-width: 768px) { /* md breakpoint */
+            .flip-card.min-h-md {
+                min-height: 250px; /* Example, adjust as needed for medium screens */
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .flip-card.min-h-lg {
+                min-height: 200px; /* Example, adjust as needed for large screens */
+            }
+        }
+
+        /* Стилі для практичної частини */
+        .exercise-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: #f8fafc;
+            border-radius: 0.75rem;
+            border: 1px solid #e2e8f0;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: #475569;
+        }
+        .count-button {
+            background-color: #3b82f6;
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .count-button:hover {
+            background-color: #2563eb;
+            transform: translateY(-1px);
+        }
+        .count-button:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .result {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #e0f2fe;
+            border: 1px solid #93c5fd;
+            border-radius: 0.5rem;
+            color: #1e40af;
+            font-weight: 500;
+        }
+        .error {
+            background-color: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #dc2626;
+        }
+        canvas {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            width: 100%; /* Make canvas responsive */
+            height: auto; /* Maintain aspect ratio */
+            display: block;
+        }
+        .color-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        .color-table th, .color-table td {
+            border: 1px solid #cbd5e1;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        .color-table th {
+            background-color: #e2e8f0;
+            font-weight: 600;
+            color: #475569;
+        }
+        .color-preview {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+            border: 1px solid #cbd5e1;
+        }
+        /*  */
+
+        /* Custom styles for the quiz */
+        .quiz-question {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: #f0fdf4; /* lime-50 */
+            border-radius: 0.5rem;
+            border: 1px solid #d9f991; /* lime-200 */
+        }
+        .quiz-question h4 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #4d7c0f; /* lime-700 */
+        }
+        .quiz-options label {
+            display: block;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s;
+        }
+        .quiz-options label:hover {
+            background-color: #ecfccb; /* lime-100 */
+        }
+        .quiz-options input[type="radio"] {
+            margin-right: 0.5rem;
+        }
+        .quiz-submit-btn {
+            background-color: #65a30d; /* lime-600 */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 1rem;
+        }
+        .quiz-submit-btn:hover {
+            background-color: #4d7c0f; /* lime-700 */
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+        .quiz-feedback.correct {
+            background-color: #dcfce7; /* green-100 */
+            color: #166534; /* green-800 */
+        }
+        .quiz-feedback.incorrect {
+            background-color: #fee2e2; /* red-100 */
+            color: #b91c1c; /* red-800 */
+        }
+        .exercise-section {
+            background-color: #f7fee7; /* lime-100 */
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+        .exercise-section h3 {
+            color: #4d7c0f; /* lime-700 */
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .terminal-output {
+            background-color: #1a202c; /* gray-900 */
+            color: #a7f3d0; /* emerald-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', 'Cascadia Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="container mx-auto flex justify-between items-center bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10 logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <!-- Секція теми уроку -->
+        <section class="text-center mb-8">
+            <h1 class="text-lg text-slate-600 mt-2 break-words">Тема 1: «Кодування даних та апаратне забезпечення». Урок № 4. (До § 3)</h1>
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 break-words theme-text">Кодування графічних даних</h1>
+            <h2 class="text-lg text-slate-600 mt-2 break-words">Інтерактивний план-конспект уроку для 8 класу НУШ</h2>
+        </section>
+
+
+        <!-- Секція "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання" -->
+        <section>
+            <!-- Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання". -->
+            <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+                <nav id="tabs" class="flex flex-wrap justify-center gap-2 sm:gap-4">
+                    <button data-tab="about" class="tab-btn active text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300 break-words break-all">Про урок</button>
+                    <button data-tab="theory" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300 break-words break-all">Теоретичний блок</button>
+                    <button data-tab="practice" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300 break-words break-all">Практичний блок</button>
+                    <button data-tab="check" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300 break-words break-all">Перевірка знань</button>
+                    <button data-tab="homework" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300 break-words break-all">Домашнє завдання</button>
+                </nav>
+            </div>
+
+            <!-- Про урок -->
+            <div id="about-content" class="tab-content active">
+                <div class="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Lesson Goal -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words break-all">🎯 Мета уроку</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Освітня:</b> ознайомити учнів з основними способами кодування графічних даних, розглянути поняття растрового та векторного зображення, глибини кольору, бітової глибини, принципи кодування графічних об’єктів, навчити обчислювати обсяг двійкового коду зображення.</li>
+                            <li class="break-words"><b>Розвивальна:</b> розвивати логічне мислення, пам'ять, увагу, аналітичні здібності, вміння порівнювати, узагальнювати, робити висновки, формувати навички розв'язування задач з кодування графічних даних.</li>
+                            <li class="break-words"><b>Виховна:</b> виховувати інтерес до вивчення інформатики, акуратність, дисциплінованість, відповідальність під час роботи з комп’ютерною технікою.</li>
+                        </ul>
+                    </div>
+                    <!-- Expected Outcomes -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words break-all">✅ Очікувані результати</h3>
+                        <p class="mb-2 text-gray-600">Після уроку учні зможуть:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">описувати способи кодування графічних даних;</li>
+                            <li class="break-words">розрізняти растрові та векторні зображення;</li>
+                            <li class="break-words">пояснювати поняття глибини кольору;</li>
+                            <li class="break-words">визначати бітову глибину;</li>
+                            <li class="break-words">обчислювати обсяг двійкового коду растрових зображень.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words">📊 Групи результатів (НУШ)</h3>
+                        <p class="text-gray-600 mb-4 break-words">Візуалізація важливості груп результатів для цього уроку.</p>
+                        <div class="chart-container relative h-64 w-full max-w-md mx-auto">
+                            <canvas id="resultsChart"></canvas>
+                        </div>
+                        <p class="text-gray-600 mb-4 break-words text-group-result"><i>Учень / учениця:</i></p>
+                        <ul>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР1 – працює з інформацією, даними, моделями;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР2 – створює інформаційні продукти;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР3 – працює в цифровому середовищі;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР4 – безпечно та відповідально працює з інформаційними технологіями.</p></li>
+                        </ul>
+                    </div>
+                    <!-- Lesson Type & Equipment -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words">📚 Тип уроку</h3>
+                        <p class="text-gray-700 break-words">Урок вивчення нового матеріалу з елементами практичної роботи.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words">💻 Обладнання та ПЗ</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Персональні комп'ютери, інтерактивна дошка (проектор), програмне забезпечення (середовище програмування Python, графічний редактор).</li>
+                            <li class="break-words">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</li>
+                            <li class="break-words">Інтерактивна платформа IZZI (8 клас): <a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">https://ua.izzi.digital/DOS/1183864/1183866.html</a></li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words">🔗 Міжпредметні зв'язки</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Математика (системи числення, геометрія).</li>
+                            <li class="break-words">Фізика (оптика, світло).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Теоретичний блок -->
+            <div id="theory-content" class="tab-content mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">
+                <!-- ВАРІАНТ № 2, початок -->
+                <div class="text-center mb-10">
+                    <h2 class="text-4xl font-extrabold text-lime-500 mb-4 heading-underline break-words title-review">ПОВТОРЮЄМО</h2>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 break-words break-all">Актуалізація опорних знань</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2">
+                        <li class="break-words">Як кодуються дані в комп’ютері?</li>
+                        <li class="break-words">Чому в комп’ютері використовують двійкове кодування?</li>
+                        <li class="break-words">Як кодуються символи в комп’ютері?</li>
+                        <li class="break-words">Що таке біт; байт?</li>
+                        <li class="break-words">У яких одиницях вимірюють довжину двійкового коду?</li>
+                        <li class="break-words">Скільки байтів містить 1 Кіб і 1 МіБ?</li>
+                    </ol>
+                    <img src="./images/img-tema1-3.webp" alt="Знак питання" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!-- ВАРІАНТ № 2, кінець -->
+
+                <!-- ВИВЧАЄМО НОВЕ -->
+                <!-- <div class="text-center mb-10">
+                    <h2 class="text-4xl font-extrabold text-lime-500 mb-4 heading-underline break-words title-review">ВИВЧАЄМО НОВЕ</h2>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4 break-words">Кодування графічних даних</h3>
+                    <p class="text-gray-700 mb-4 break-words">Як ви вже знаєте, існує два основних способи кодування графічних даних: <b class="text-lime-600">растровий</b> і <b class="text-lime-600">векторний</b>.</p>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold text-lime-600 mb-3 break-words">Растрові зображення</h3>
+                    <p class="text-gray-700 mb-4 break-words">Пригадаймо, що растровим називають зображення, подане як набір окремих крапок — <b class="text-lime-600">пікселів</b> (від англ. <b class="text-lime-600">picture element</b> — елемент малюнка). Піксель є найдрібнішою частинкою растрового зображення.</p>
+                    <p class="text-gray-700 mb-4 break-words">Як побудоване растрове зображення, легко зрозуміти, якщо відкрити в графічному редакторі фотографію і значно її збільшити. На <a href="#fig3-1" class="text-blue-600 hover:underline">рис. 3.1</a> показано пікселі, вишикувані в рядки і стовпці. Зображення на екрані монітора також має подібну будову, але через малий розмір пікселів ми бачимо його суцільним.</p>
+                    <div class="flex justify-center mb-4">
+                        <img id="fig3-1" src="http://googleusercontent.com/file_content/0" alt="Растрове зображення пікселів" class="rounded-lg shadow-md max-w-full h-auto" style="max-width: 500px;">
+                    </div>
+                    <p class="text-gray-700 mb-4 break-words">Кожен піксель має певний колір, і змінити його можна тільки повністю. Змінити колір частини пікселя неможливо.</p>
+                    <p class="text-gray-700 mb-4 break-words">Для кодування зображення числами потрібно:</p>
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2">
+                        <li class="break-words">поділити зображення на пікселі;</li>
+                        <li class="break-words">визначити розміри: кількість пікселів у довжину і в ширину;</li>
+                        <li class="break-words">визначити числовий код кольору кожного пікселя.</li>
+                    </ol>
+                    <p class="text-gray-700 mb-4 break-words">Зазвичай ці дії виконують за допомогою пристроїв, найвідомішими з яких є цифровий фотоапарат і сканер.</p>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold text-lime-600 mb-3 break-words">Кодування кольору</h3>
+                    <p class="text-gray-700 mb-4 break-words">Щоб закодувати двоколірне (наприклад, чорно-біле) зображення, достатньо позначити колір кожного пікселя числом 0 (перший колір) або 1 (другий колір). Для зберігання коду пікселя вистачить одного біта, тому кажуть, що двоколірне зображення має <b class="text-lime-600">глибину кольору 1 біт</b> (<a href="#fig3-2" class="text-blue-600 hover:underline">рис. 3.2</a>).</p>
+                    <div class="flex justify-center mb-4">
+                        <img id="fig3-2" src="./images/img_color_coding.png" alt="Кодування двоколірного зображення" class="rounded-lg shadow-md max-w-full h-auto" style="max-width: 200px;">
+                    </div>
+                    <p class="text-gray-700 mb-4 break-words"><b>Глибина кольору зображення</b> — це кількість бітів, які використовуються для кодування кольору одного пікселя.</p>
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4 rounded-md shadow-sm">
+                        <p class="text-yellow-800 break-words">Зображення будиночка складається з пікселів восьми кольорів, які утворюють 32 рядки по 35 пікселів у кожному (<a href="#fig3-3" class="text-blue-600 hover:underline">рис. 3.3</a>). Для кодування восьми кольорів достатньо десяткових чисел від 0 до 7, які можна подати двійковими послідовностями довжиною 3 біти, оскільки $2^3 = 8$. Отже, глибина кольору становить 3 біти.</p>
+                        <p class="text-yellow-800 break-words">Побудуємо таблицю десяткових і двійкових кодів цих кольорів:</p>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200 mt-4 bg-white rounded-md shadow-sm">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Колір</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Код</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Колір</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Код</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Чорний</td><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0_{10} = 000_2$</td><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Червоний</td><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$4_{10} = 100_2$</td></tr>
+                                    <tr><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Синій</td><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$1_{10} = 001_2$</td><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Фіолетовий</td><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$5_{10} = 101_2$</td></tr>
+                                    <tr><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Зелений</td><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$2_{10} = 010_2$</td><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Жовтий</td><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$6_{10} = 110_2$</td></tr>
+                                    <tr><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Коричневий</td><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$3_{10} = 011_2$</td><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Білий</td><td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$7_{10} = 111_2$</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="flex justify-center mb-4 mt-4">
+                            <img id="fig3-3" src="http://googleusercontent.com/file_content/1" alt="Будиночок з пікселів" class="rounded-lg shadow-md max-w-full h-auto" style="max-width: 200px;">
+                        </div>
+                        <p class="text-yellow-800 break-words">Закодуємо зображення послідовністю чисел, зазначивши ширину й висоту в пікселях і код їхніх кольорів, перелічені зліва направо зверху вниз: $35 \ 32 \ 7 \ 7 \ 7 \ 5 \ 5 \ 7 \ 7 \ 1 \ 7$ і т. д. За глибини кольору 3 біти довжина двійкового коду кольорів пікселів зображення будиночка становитиме:</p>
+                        <p class="text-yellow-800 font-bold text-center break-words">$35 \cdot 32 \cdot 3 \text{ (біти)} = 3360 \text{ (бітів)} = 420 \text{ (байтів)}.</p>
+                    </div>
+                    <p class="text-gray-700 mb-4 break-words">За глибини кольору 8 бітів (або 1 байт) можна закодувати $2^8 = 256$ різних кольорів, а за глибини кольору 16 бітів (або 2 байти) — $2^{16} = 65536$ кольорів. Проте для досягнення фотографічної якості потрібна більша глибина кольору — 24 біти ($2^{24} = 16777216$ кольорів).</p>
+                    <p class="text-gray-700 mb-4 break-words">Як бачимо, зі збільшенням кількості кольорів глибина кольору зростає. За однакової кількості пікселів зображення це призводить до збільшення обсягу файлу.</p>
+                    <p class="text-gray-700 mb-4 break-words">У файлі растрового зображення зберігаються значення розмірів зображення та коди кольорів усіх пікселів. Файли більшості растрових форматів містять також іншу інформацію про зображення: дані про прозорість пікселів, тип фотокамери та ін.</p>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold text-lime-600 mb-3 break-words">Векторні зображення</h3>
+                    <p class="text-gray-700 mb-4 break-words">Пригадаймо, що <b class="text-lime-600">векторним</b> називають зображення, яке складається з графічних примітивів — геометричних об’єктів (відрізків, кіл, кривих тощо). Отже, базовим елементом векторного зображення є лінія, описана математичною формулою (<a href="#fig3-4" class="text-blue-600 hover:underline">рис. 3.4</a>).</p>
+                    <div class="flex justify-center mb-4">
+                        <img id="fig3-4" src="./images/img_vector_coding.png" alt="Векторне зображення" class="rounded-lg shadow-md max-w-full h-auto" style="max-width: 200px;">
+                    </div>
+                    <p class="text-gray-700 mb-4 break-words">У найпростішому випадку крапколінійний контур графічного примітива можна розглядати як ланцюжок прямолінійних відрізків, тобто ламану. У такому випадку векторний код контуру буде послідовністю чисел, яку можна побудувати так: перше число — кількість відрізків N, а наступні $2(N+1)$ чисел — координати послідовних вершин ламаної.</p>
+                    <p class="text-gray-700 mb-4 break-words">Контур літери К (<a href="#fig3-5" class="text-blue-600 hover:underline">рис. 3.5</a>) тричі зобразили ланцюжками відрізків, щоразу збільшуючи їх кількість на криволінійних ділянках. Бачимо, зі збільшенням кількості відрізків зростає точність відтворення криволінійного контуру (<a href="#fig3-6" class="text-blue-600 hover:underline">рис. 3.6-3.8</a>).</p>
+                    <div class="flex justify-center space-x-4 mb-4">
+                        <img id="fig3-5" src="./images/img_k_letter_init.png" alt="Початковий контур літери К" class="rounded-lg shadow-md h-24">
+                        <img id="fig3-6" src="./images/img_k_letter_15.png" alt="15 відрізків літери К" class="rounded-lg shadow-md h-24">
+                        <img id="fig3-7" src="./images/img_k_letter_24.png" alt="24 відрізки літери К" class="rounded-lg shadow-md h-24">
+                        <img id="fig3-8" src="./images/img_k_letter_42.png" alt="42 відрізки літери К" class="rounded-lg shadow-md h-24">
+                    </div>
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4 rounded-md shadow-sm">
+                        <p class="text-yellow-800 break-words">Векторний код контуру літери К із 15 відрізків (<a href="#fig3-9" class="text-blue-600 hover:underline">рис. 3.9</a>) складатиметься з $1 + 2(15 + 1) = 33$ чисел і може бути таким:</p>
+                        <p class="text-yellow-800 font-bold break-words text-center">15 0 0 5 38 14 39 10 25 22 28 38 21 22 27 20 31</p>
+                        <p class="text-yellow-800 font-bold break-words text-center">12 20 19 20 0 12 0 16 17 9 17 5 0 0 0</p>
+                        <p class="text-yellow-800 break-words">Координати першої та останньої точок однакові (0, 0), оскільки контур замкнутий.</p>
+                        <div class="flex justify-center mb-4 mt-4">
+                            <img id="fig3-9" src="./images/img_k_letter_code.png" alt="Векторний код літери К" class="rounded-lg shadow-md max-w-full h-auto" style="max-width: 200px;">
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4 break-words">Якщо малюнок складається з кількох контурів, можна послідовно запускати коди кожного з них. Це не ускладнить розкодування, оскільки кількість чисел у коді одного контуру цілком визначається кількістю відрізків, зазначеною на початку. Тому в програмі для виведення малюнка достатньо повторити виведення контуру, доки залишаються неопрацьовані дані.</p>
+                    <p class="text-gray-700 mb-4 break-words">Ми розглянули прості приклади растрового і векторного кодування малюнків, проте в більшості випадків на практиці застосовується значно складніші коди.</p>
+                </div> -->
+            </div>
+            
+            <!-- Практичний блок -->
+            <div id="practice-content" class="tab-content">
+                <h3 class="text-2xl font-bold mb-6 text-center text-lime-600 break-words">Практичний блок уроку</h3>
+
+                <div class="">
+                    <h1>Інтерактивні вправи з кодування графічних даних</h1>
+
+                    <div class="exercise-section">
+                        <h2>Вправа 1: Розрахунок глибини кольору та розміру растрового зображення</h2>
+                        <p><strong>Вихідні дані (Зі скріншоту):</strong></p>
+                        <p>Зображення будівничка складається з пікселів восьми кольорів, які утворюють 32 рядки по 35 пікселів у кожному (рис. 3.3). Для кодування восьми кольорів достатньо десяткових чисел від 0 до 7, які можна подати двійковими послідовностями довжиною 3 біти, оскільки 2**3 = 8. Отже, глибина кольору становить 3 біти.</p>
+                        <p>Закодовано зображення послідовністю чисел, зазначивши ширину й висоту в пікселях і коди їх кольорів, перелічені зліва направо зверху вниз: <code>35 32 7 7 7 5 5 7 1 1 7 1 7</code> д. За глибини кольору 3 біти довжина двійкового коду кольорів пікселів зображення будівничка становитиме: <code>35*32*3=3360 (бітів), або 3360/8=420 (байтів)</code>.</p>
+
+                        <table class="color-table">
+                            <thead>
+                                <tr>
+                                    <th>Колір</th>
+                                    <th>Код (двійковий)</th>
+                                    <th>Колір</th>
+                                    <th>Код (двійковий)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><span class="color-preview" style="background-color: black;"></span>Чорний</td><td>000</td><td><span class="color-preview" style="background-color: #FF7F00;"></span>Оранжевий</td><td>100</td></tr>
+                                <tr><td><span class="color-preview" style="background-color: blue;"></span>Синій</td><td>001</td><td><span class="color-preview" style="background-color: #ADFF2F;"></span>Філетовий</td><td>101</td></tr>
+                                <tr><td><span class="color-preview" style="background-color: green;"></span>Зелений</td><td>010</td><td><span class="color-preview" style="background-color: yellow;"></span>Жовтий</td><td>110</td></tr>
+                                <tr><td><span class="color-preview" style="background-color: brown;"></span>Коричневий</td><td>011</td><td><span class="color-preview" style="background-color: white;"></span>Білий</td><td>111</td></tr>
+                            </tbody>
+                        </table>
+
+                        <label for="numColors">Кількість кольорів:</label>
+                        <input type="number" id="numColors" value="8" min="1" step="1">
+
+                        <label for="widthPixels">Ширина (пікселів):</label>
+                        <input type="number" id="widthPixels" value="35" min="1" step="1">
+
+                        <label for="heightPixels">Висота (пікселів):</label>
+                        <input type="number" id="heightPixels" value="32" min="1" step="1">
+
+                        <button class="count-button" onclick="calculateImageSize()">Розрахувати</button>
+                        <div id="imageSizeResult" class="result"></div>
+                    </div>
+
+                    <div class="exercise-section">
+                        <h2>Вправа 2: Побудова векторного зображення за кодом</h2>
+                        <p><strong>Інструкції:</strong> Введіть векторний код у поле нижче, розділяючи числа пробілами. Програма побудує зображення на полотні.</p>
+                        <p><strong>Приклад з тексту:</strong> Векторний код літери К із 15 відрізків (рис. 3.9) складатиметься з <code>15*2 (1+15) = 32</code> чисел і може бути таким: <code>15 0 0 5 38 14 39 10 25 22 38 28 31 27 20 31 12 20 22 19 20 0 12 0 16 17 9 17 5 0 0 0</code></p>
+                        <p>Координати першої та останньої точок однакові (0,0), оскільки контур замкнутий.</p>
+
+                        <label for="vectorCodeInput">Векторний код (числа через пробіл):</label>
+                        <input type="text" id="vectorCodeInput" placeholder="Наприклад: 15 0 0 5 38 ...">
+
+                        <button class="count-button" onclick="drawVectorImage()">Побудувати зображення</button>
+                        <canvas id="vectorCanvas" width="700" height="400"></canvas>
+                        <div id="vectorResult" class="result"></div>
+                    </div>
+                </div>
+
+                <!-- <div class="exercise-section">
+                    <h3 class="text-xl font-bold mb-3 break-words">✏️ Вправа 2: Складемо програму Python</h3>
+                    <p class="text-gray-700 mb-4 break-words">Складемо програму Python для виведення на екран растрового зображення, якщо відомий його код (приклад 1). Пікселі зображаємо квадратиками — відбитками Черепашки.</p>
+                    <p class="text-gray-700 mb-4 break-words">Завдання: Відтворити зображення за заданим кодом.</p>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">Код програми:</h4>
+                    <pre class="bg-gray-800 text-green-200 p-4 rounded-md overflow-auto text-sm mb-4"><code><span class="text-purple-300">from</span> <span class="text-yellow-300">turtle</span> <span class="text-purple-300">import</span> *
+
+W, H = map(int,input(<span class="text-green-400">'Вводимо растровий код W, H: '</span>).split()) <span class="text-gray-500"># Вводимо ширину W і висоту H</span>
+pic = list(map(int,input().split()))
+<span class="text-gray-500"># pic = [5, 4, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1]  # Приклад коду</span>
+
+pencolor(<span class="text-green-400">'black'</span>)
+shape(<span class="text-green-400">'square'</span>)
+shapesize(<span class="text-green-400">outline=1</span>)
+size = <span class="text-red-300">20</span> <span class="text-gray-500"># Типовий розмір квадратика-Черепашки (пікселя)</span>
+colors = [<span class="text-green-400">'black'</span>, <span class="text-green-400">'blue'</span>, <span class="text-green-400">'green'</span>, <span class="text-green-400">'red'</span>, <span class="text-green-400">'violet'</span>, <span class="text-green-400">'yellow'</span>, <span class="text-green-400">'white'</span>]
+
+<span class="text-purple-300">up</span>()
+<span class="text-blue-300">hideturtle</span>()
+
+<span class="text-purple-300">for</span> r <span class="text-purple-300">in</span> <span class="text-blue-300">range</span>(H):
+    <span class="text-purple-300">for</span> c <span class="text-purple-300">in</span> <span class="text-blue-300">range</span>(W):
+        <span class="text-gray-500"># Малюємо рядок пікселів</span>
+        <span class="text-blue-300">fillcolor</span>(colors[pic[r * W + c]])
+        <span class="text-blue-300">stamp</span>()
+        <span class="text-blue-300">forward</span>(size)
+    <span class="text-blue-300">back</span>(W * size) <span class="text-gray-500"># Перехід на початок</span>
+    <span class="text-blue-300">right</span>(<span class="text-red-300">90</span>)
+    <span class="text-blue-300">forward</span>(size) <span class="text-gray-500"># Наступного рядка</span>
+    <span class="text-blue-300">left</span>(<span class="text-red-300">90</span>)
+</code></pre>
+                    <p class="text-gray-700 mb-2 break-words"><b>Вхідні дані для прикладу 1:</b></p>
+                    <p class="terminal-output">5 4<br>0 1 0 1 0 0 1 1 0 1 1 0 0 0 1 1 0 1</p>
+                    <p class="text-gray-700 mb-2 break-words"><b>Очікуваний результат (Рис. 3.11):</b></p>
+                    <div class="flex justify-center mb-4">
+                        <img src="http://googleusercontent.com/file_content/2" alt="Приклад 1" class="rounded-lg shadow-md max-w-full h-auto" style="max-width: 200px;">
+                    </div>
+                </div>
+
+                <div class="exercise-section">
+                    <h3 class="text-xl font-bold mb-3 break-words">💻 Вправа 3: Кодування векторних даних</h3>
+                    <p class="text-gray-700 mb-4 break-words">Виконати кодування векторних даних.</p>
+                    <p class="text-gray-700 mb-4 break-words">Завдання: Відтворити літеру К за заданим векторним кодом.</p>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">Код програми:</h4>
+                    <pre class="bg-gray-800 text-green-200 p-4 rounded-md overflow-auto text-sm mb-4"><code><span class="text-purple-300">from</span> <span class="text-yellow-300">turtle</span> <span class="text-purple-300">import</span> *
+
+size = <span class="text-red-300">4</span> <span class="text-gray-500"># Масштабний множник</span>
+x0 = <span class="text-red-300">0</span>
+y0 = <span class="text-red-300">0</span> <span class="text-gray-500"># Координати початкової точки</span>
+
+vector_code = <span class="text-blue-300">input</span>() <span class="text-gray-500"># Вводимо рядок з векторним кодом</span>
+<span class="text-gray-500"># vector_code = "15 0 0 5 38 14 39 10 25 22 28 38 21 22 27 20 31 12 20 19 20 0 12 0 16 17 9 17 5 0 0 0" # Приклад коду</span>
+
+<span class="text-purple-300">import</span> json
+code_list = json.loads(<span class="text-green-400">'['</span> + vector_code.replace(<span class="text-green-400">' '</span>, <span class="text-green-400">','</span>) + <span class="text-green-400">']'</span>) <span class="text-gray-500"># Перетворюємо рядок на список чисел</span>
+
+N = code_list[<span class="text-red-300">0</span>] <span class="text-gray-500"># Кількість відрізків в змінній N</span>
+x = [<span class="text-orange-300">None</span>] * (N + <span class="text-red-300">1</span>)
+y = [<span class="text-orange-300">None</span>] * (N + <span class="text-red-300">1</span>)
+
+<span class="text-purple-300">for</span> i <span class="text-purple-300">in</span> <span class="text-blue-300">range</span>(N + <span class="text-red-300">1</span>):
+    x[i] = code_list[<span class="text-red-300">1</span> + <span class="text-red-300">2</span> * i] <span class="text-gray-500"># Формуємо список координат x</span>
+    y[i] = code_list[<span class="text-red-300">1</span> + <span class="text-red-300">2</span> * i + <span class="text-red-300">1</span>] <span class="text-gray-500"># Формуємо список координат y</span>
+
+<span class="text-blue-300">up</span>()
+<span class="text-blue-300">goto</span>(x0, y0) <span class="text-gray-500"># Йдемо в початкову точку</span>
+<span class="text-blue-300">down</span>()
+
+<span class="text-purple-300">for</span> i <span class="text-purple-300">in</span> <span class="text-blue-300">range</span>(N + <span class="text-red-300">1</span>):
+    <span class="text-blue-300">goto</span>(x[i] * size + x0, y[i] * size + y0) <span class="text-gray-500"># Будуємо відрізки</span>
+
+<span class="text-gray-500"># Після запуску програми, увівши рядок із кодом, ми побачимо, як Черепашка послідовно малює відрізки, з яких утворюється векторне зображення (рис. 3.10).</span>
+</code></pre>
+                    <p class="text-gray-700 mb-2 break-words"><b>Вхідні дані для прикладу:</b></p>
+                    <p class="terminal-output">15 0 0 5 38 14 39 10 25 22 28 38 21 22 27 20 31 12 20 19 20 0 12 0 16 17 9 17 5 0 0 0</p>
+                    <p class="text-gray-700 mb-2 break-words"><b>Очікуваний результат (Рис. 3.10):</b></p>
+                    <div class="flex justify-center mb-4">
+                        <img src="./images/img_k_letter_code_result.png" alt="Результат відтворення літери К" class="rounded-lg shadow-md max-w-full h-auto" style="max-width: 200px;">
+                    </div>
+                </div>
+
+                <div class="exercise-section">
+                    <h3 class="text-xl font-bold mb-3 break-words">📝 Завдання 1: Пояснення результатів</h3>
+                    <p class="text-gray-700 mb-4 break-words">Поясніть результат, наведений на <a href="#fig3-11" class="text-blue-600 hover:underline">рис. 3.11</a>.</p>
+                    <div class="flex justify-center mb-4">
+                        <img id="fig3-11" src="./images/img_result_3_11.png" alt="Результат Рис. 3.11" class="rounded-lg shadow-md max-w-full h-auto" style="max-width: 200px;">
+                    </div>
+                </div>
+
+                <div class="exercise-section">
+                    <h3 class="text-xl font-bold mb-3 break-words">💾 Завдання 2: Збереження коду</h3>
+                    <p class="text-gray-700 mb-4 break-words">Запишіть код растрового зображення (<a href="#fig3-12" class="text-blue-600 hover:underline">рис. 3.12-3.14</a>) і перевірте його за допомогою див. п. 1.</p>
+                    <div class="flex justify-center space-x-4 mb-4">
+                        <img id="fig3-12" src="./images/img_result_3_12.png" alt="Зображення 3.12" class="rounded-lg shadow-md h-24">
+                        <img id="fig3-13" src="./images/img_result_3_13.png" alt="Зображення 3.13" class="rounded-lg shadow-md h-24">
+                        <img id="fig3-14" src="./images/img_result_3_14.png" alt="Зображення 3.14" class="rounded-lg shadow-md h-24">
+                    </div>
+                </div>
+
+                <div class="exercise-section">
+                    <h3 class="text-xl font-bold mb-3 break-words">🔄 Завдання 3: Запуск програми з прикладу 2</h3>
+                    <p class="text-gray-700 mb-4 break-words">Запустіть програму з прикладу 2, збережіть її у файл із назвою Вправа 3-2 і випробуйте, ввівши код із прикладу 4.</p>
+                </div>
+
+                <div class="exercise-section">
+                    <h3 class="text-xl font-bold mb-3 break-words">🔧 Завдання 4: Зміна масштабу</h3>
+                    <p class="text-gray-700 mb-4 break-words">Змініть програму так, щоб масштабний множник `size` також уводився з клавіатури, і перевірте її роботу.</p>
+                </div>
+
+                <div class="exercise-section">
+                    <h3 class="text-xl font-bold mb-3 break-words">✨ Завдання 5: Зображення за бажанням</h3>
+                    <p class="text-gray-700 mb-4 break-words">Змініть програму з прикладу 3, щоб зображення виводилося у випадковому виводі. Збережіть файл із назвою Вправа 3-3.</p>
+                </div> -->
+            </div>
+
+            <!-- Перевірка знань -->
+            <div id="check-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-6 text-center text-lime-600 break-words">Перевірка знань</h3>
+                <p class="text-center text-gray-600 mb-8 break-words">Натисніть на картку, щоб побачити відповідь.</p>
+                <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-lime-100 p-6 rounded-xl shadow-md flex items-center justify-center">
+                                <p class="text-lg font-medium text-gray-800 break-words text-center">1. Які є способи кодування графічних даних?</p>
+                            </div>
+                            <div class="flip-card-back bg-lime-200 p-6 rounded-xl shadow-md flex items-center justify-center">
+                                <p class="text-lg text-gray-800 break-words text-center">Існують два основних способи кодування графічних даних: растровий і векторний.</p>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-lime-100 p-6 rounded-xl shadow-md flex items-center justify-center">
+                                <p class="text-lg font-medium text-gray-800 break-words text-center">2. Опишіть особливості растрового зображення; векторного.</p>
+                            </div>
+                            <div class="flip-card-back bg-lime-200 p-6 rounded-xl shadow-md flex items-center justify-center">
+                                <p class="text-lg text-gray-800 break-words text-center">Растрове зображення складається з пікселів, кожен з яких має свій колір. Збільшення растрового зображення призводить до втрати якості (пікселізації). Векторне зображення складається з математично описаних геометричних примітивів (ліній, кіл тощо). Якість векторного зображення не залежить від масштабування.</p>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-lime-100 p-6 rounded-xl shadow-md flex items-center justify-center">
+                                <p class="text-lg font-medium text-gray-800 break-words text-center">3. Якою буде довжина двійкового коду зображення розміром 2048x1536 пікселів, якщо глибина кольору 24 біти?</p>
+                            </div>
+                            <div class="flip-card-back bg-lime-200 p-6 rounded-xl shadow-md flex items-center justify-center">
+                                <p class="text-lg text-gray-800 break-words text-center">Довжина двійкового коду = 2048 x 1536 x 24 біти = 75497472 біти = 9437184 байти = 9.0 МіБ.</p>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-lime-100 p-6 rounded-xl shadow-md flex items-center justify-center">
+                                <p class="text-lg font-medium text-gray-800 break-words text-center">4. Поясніть, як виконується цикл `for v in range(N)` із прикладу 5.</p>
+                            </div>
+                            <div class="flip-card-back bg-lime-200 p-6 rounded-xl shadow-md flex items-center justify-center">
+                                <p class="text-lg text-gray-800 break-words text-center">Цей цикл використовується для ітерації за кількістю відрізків (`N`) у векторному зображенні. Він проходить від першого відрізка до останнього, послідовно малюючи їх, щоб сформувати повний контур зображення.</p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 21)</a></i></p>
+                </div>
+            </div>
+            
+            <!-- Домашнє завдання -->
+            <div id="homework-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-lime-600 break-words">Домашнє завдання</h3>                  
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <div>
+                            <p class="break-words break-all"><b>1. Теоретична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li class="break-words break-all">Опрацювати § 3 (стор. 16-21).</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p><b>2. Практична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Виконати вправу № 3 (стор. 21).</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p><b>3. Завдання за бажанням (для закріплення):</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Інтерактивна платформа IZZI (8 клас) до § 3: <a href="https://ua.izzi.digital/DOS/1183864/1186356.html" target="_blank" class="text-blue-600 hover:underline break-words break-all block">https://ua.izzi.digital/DOS/1183864/1186356.html</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="./images/img08.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="200">
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Додаткові матеріали -->
+        <!-- Additional Materials Section -->
+        <section class="bg-white p-6 rounded-xl shadow-md mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-lime-600 break-words">Додаткові матеріали</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li class="break-words"><a href="https://sites.google.com/view/lga84-9/tehnika_bezpeky" target="_blank" class="text-blue-600 hover:underline">Техніка безпеки</a></li>
+
+                <li class="break-words"><a href="https://drive.google.com/file/d/1C9_KEF981LvokY0GWNOhUXb7rJKJUUbM/view" target="_blank" class="text-blue-600 hover:underline">Оцінювання учнів та учениць на уроках інформатики</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу</a> (§ 3, стор. 16-21)</li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">Інтерактивна платформа IZZI (8 клас)</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до § 3: <a href="https://ua.izzi.digital/DOS/1183864/1186356.html" target="_blank" class="text-blue-600 hover:underline">https://ua.izzi.digital/DOS/1183864/1186356.html</a></li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>          
+        </ul>
+    </footer>    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Початок:
+            // Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання".
+            const tabs = document.getElementById('tabs');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            tabs.addEventListener('click', (e) => {
+                // Ensure the click target is a BUTTON (tab button)
+                if (e.target.tagName === 'BUTTON') {
+                    const tab = e.target.dataset.tab;
+
+                    // Remove 'active' class from all buttons and add to the clicked one
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Hide all tab contents and show the corresponding one
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Use === for strict comparison
+                        if (content.id === `${tab}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                }
+            });
+            // Кінець.
+
+
+            // Початок:
+            // ГРУПИ РЕЗУЛЬТАТІВ.
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            // 1. Створення об'єкту-мапи для відповідності значень і кольорів
+            // Тут вручну можна поміняти значення background й border
+            const colorMap = {
+                1: {
+                    background: '#f7fee7', // text-lime-100
+                    border: '#e5ff8b'      // text-lime-200
+                },
+                2: {
+                    background: '#e5ff8b', // text-lime-200
+                    border: '#cffc05'      // text-lime-300
+                },
+                3: {
+                    background: '#cffc05',  // text-lime-300
+                    border: '#a3e635'        // text-lime-400
+                },
+                4: {
+                    background: '#a3e635',   // text-lime-400
+                    border: '#84cc16'      // text-lime-500
+                }
+            };
+
+            // Дані, які можна змінювати вручну
+            const chartData = [4, 2, 2, 3];
+
+            // 2. Генерація масивів кольорів на основі даних
+            const backgroundColors = chartData.map(value => colorMap[value].background);
+            const borderColors = chartData.map(value => colorMap[value].border);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ГР1', 'ГР2', 'ГР3', 'ГР4'],
+                    datasets: [{
+                        label: 'Важливість',
+                        data: chartData, // Використовуємо змінну
+                        backgroundColor: backgroundColors, // Використовуємо згенерований масив
+                        borderColor: borderColors, // Використовуємо згенерований масив
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const labels = ['', 'Найменш важлива', 'Важлива', 'Дуже важлива', 'Найважливіша'];
+                                    return labels[value] || '';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.parsed.y;
+                                    const importanceLabels = {4: 'Найважливіша', 3: 'Дуже важлива', 2: 'Важлива', 1: 'Найменш важлива'};
+                                    label += importanceLabels[value] || '';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // Кінець. ГРУПИ РЕЗУЛЬТАТІВ.
+
+
+            // Початок.
+            // ПОВОРОТ КАРТОК "Перевірка знань"
+            const flipCards = document.querySelectorAll('.flip-card');
+            flipCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+            // Кінець. ПОВОРОТ КАРТОК.
+
+        });
+
+        /**
+         * Функція для розрахунку глибини кольору та розміру зображення.
+         * Отримує кількість кольорів, ширину та висоту зображення з полів вводу,
+         * обчислює глибину кольору в бітах, загальну кількість бітів та байтів,
+         * а потім відображає результат.
+         */
+        function calculateImageSize() {
+            const numColors = parseInt(document.getElementById('numColors').value);
+            const widthPixels = parseInt(document.getElementById('widthPixels').value);
+            const heightPixels = parseInt(document.getElementById('heightPixels').value);
+            const resultDiv = document.getElementById('imageSizeResult');
+
+            // Перевірка на коректність введених даних
+            if (isNaN(numColors) || isNaN(widthPixels) || isNaN(heightPixels) || numColors <= 0 || widthPixels <= 0 || heightPixels <= 0) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = 'Будь ласка, введіть дійсні позитивні числа для всіх полів.';
+                return;
+            }
+
+            // Розрахунок глибини кольору (кількості бітів на піксель)
+            // Використовуємо Math.ceil(Math.log2(numColors)) для визначення мінімальної кількості біт,
+            // необхідних для представлення numColors унікальних значень.
+            const colorDepthBits = Math.ceil(Math.log2(numColors));
+
+            // Розрахунок загальної кількості бітів
+            const totalBits = widthPixels * heightPixels * colorDepthBits;
+
+            // Розрахунок загальної кількості байтів
+            const totalBytes = totalBits / 8;
+
+            resultDiv.className = 'result';
+            resultDiv.innerHTML = `
+                <p><strong>Глибина кольору:</strong> ${colorDepthBits} біт/піксель</p>
+                <p><strong>Загальна кількість бітів:</strong> ${totalBits} бітів</p>
+                <p><strong>Загальна кількість байтів:</strong> ${totalBytes} байтів</p>
+            `;
+        }
+
+        /**
+         * Функція для малювання векторного зображення на полотні.
+         * Отримує векторний код з поля вводу, парсить його,
+         * а потім малює лінії на елементі canvas.
+         */
+        function drawVectorImage() {
+            const vectorCodeInput = document.getElementById('vectorCodeInput').value;
+            const vectorResultDiv = document.getElementById('vectorResult');
+            const canvas = document.getElementById('vectorCanvas');
+            const ctx2 = canvas.getContext('2d');
+
+            // Очищення полотна перед малюванням нового зображення
+            ctx2.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Перетворення рядка з кодом у масив чисел
+            const vectorCode = vectorCodeInput.split(' ').map(Number);
+
+            // Перевірка на коректність введених даних
+            if (vectorCode.length < 3 || isNaN(vectorCode[0]) || vectorCode[0] <= 0) {
+                vectorResultDiv.className = 'result error';
+                vectorResultDiv.textContent = 'Будь ласка, введіть дійсний векторний код. Він повинен починатися з кількості відрізків.';
+                return;
+            }
+
+            const numSegments = vectorCode[0];
+            const coordinates = vectorCode.slice(1);
+
+            // Перевірка, чи достатньо координат для заданої кількості відрізків
+            // Якщо є N відрізків, то має бути N+1 точок. Кожна точка має 2 координати (x, y).
+            // Отже, очікувана кількість координат (після numSegments) = 2 * (numSegments + 1)
+            const expectedCoordinatesLength = 2 * (numSegments + 1);
+
+            if (coordinates.length !== expectedCoordinatesLength) {
+                vectorResultDiv.className = 'result error';
+                vectorResultDiv.textContent = `Некоректна кількість координат. Очікується ${expectedCoordinatesLength} координат для ${numSegments} відрізків (включно з початковою точкою). Отримано ${coordinates.length}.`;
+                return;
+            }
+
+            // Масштабний коефіцієнт з прикладу Python
+            const size = 2;
+
+            // ВИПРАВЛЕНО: Використання невеликого відступу від верхнього лівого кута
+            // Замість центрування, щоб уникнути проблем з інтерпретацією Y
+            const marginX = 50;
+            const marginY = 50;
+
+            ctx2.beginPath();
+            ctx2.strokeStyle = '#3b82f6';
+            ctx2.lineWidth = 2;
+
+            // Переміщуємо до першої точки. Y-координата НЕ інвертується,
+            // припускаючи, що позитивний Y вхідних даних відповідає позитивному Y на Canvas (вниз).
+            ctx2.moveTo(marginX + size * coordinates[0], marginY + size * coordinates[1]);
+
+            // Малювання відрізків
+            for (let i = 1; i <= numSegments; i++) {
+                const nextX = size * coordinates[2 * i];
+                const nextY = size * coordinates[2 * i + 1];
+                // Y-координата НЕ інвертується
+                ctx2.lineTo(marginX + size * nextX, marginY + size * nextY);
+            }
+            ctx2.stroke();
+
+            vectorResultDiv.className = 'result';
+            vectorResultDiv.textContent = 'Зображення успішно побудовано!';
+        }
+
+        // Автоматична побудова зображення при завантаженні сторінки з прикладом коду
+        window.onload = function() {
+            // Заповнити поле вводу векторного коду прикладом з тексту
+            // Зверніть увагу, що для прикладу літери К з 15 відрізків
+            // і (0,0) як початкової/кінцевої точки, загальна кількість
+            // координат має бути 2 * (15 + 1) = 32.
+            // Приклад з тексту: 15 0 0 5 38 14 39 10 25 22 38 28 31 27 20 31 12 20 22 19 20 0 12 0 16 17 9 17 5 0 0 0
+            // Цей приклад містить 32 координати після числа 15.
+            document.getElementById('vectorCodeInput').value = '15 0 0 5 38 14 39 10 25 22 38 28 31 22 27 20 31 12 20 22 19 20 0 12 0 16 17 9 17 5 0 0 0';
+            drawVectorImage(); // Побудувати зображення за замовчуванням
+        };
+    </script>
+</body>
+</html>

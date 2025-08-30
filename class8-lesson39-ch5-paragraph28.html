@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: 8 клас</title>
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Тіло документа */
+        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
+
+        /* Стилі для навігації в меню */
+        .logo-main { display: none; }
+        .main-title-text { width: 140px; text-align: center; }
+        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
+        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
+        @media screen and (min-width: 768px) {
+            .main-title-text { width: auto; }
+            .main-navigation { display: inline; width: auto; }
+        }
+
+        /* main стилі */
+        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
+        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
+        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
+        .source-text { padding: 8px; }
+        @media screen and (min-width: 300px) {
+            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
+            .text-2xlooo { font-size: 1.25rem; }
+        }
+        @media screen and (min-width: 480px) {
+            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
+            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
+            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
+        }
+
+        /* Стилі для "Про урок" */
+        /* Групи результатів */
+        .text-group-result { padding-top: 16px; }
+
+        /* Style to hide inactive tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Style to tab content */
+        .tab-btn.active { 
+            color: #0d9488;                /* text-teal-600 */
+            border-bottom-color: #0d9488;  /* text-teal-600 */
+            background-color: #cffafe;     /* text-teal-100 */
+        }
+        .tab-btn { 
+            transition: color 0.3s, 
+            border-color 0.3s, 
+            background-color 0.3s; 
+            border-bottom: 2px solid transparent;
+        }
+
+        /* Styles for flip cards */
+        .flip-card {
+            background-color: transparent;
+            width: 100%; /* Make cards responsive to grid column width */
+            height: 200px; /* Fixed height for consistency, adjust as needed */
+            perspective: 1000px; /* 3D effect */
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left; /* Adjust text alignment as needed */
+            overflow-wrap: break-word; /* break-words */
+            /*word-break: break-all;*/ /* break-all */
+        }
+
+        .flip-card-front {
+            color: #4b5563; /* text-gray-700 */
+        }
+
+        .flip-card-back {
+            color: #4b5563; /* text-gray-700 */
+            transform: rotateY(180deg);
+        }
+
+        /* Responsive adjustments for min-height */
+        @media (min-width: 768px) { /* md breakpoint */
+            .flip-card.min-h-md {
+                min-height: 250px; /* Example, adjust as needed for medium screens */
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .flip-card.min-h-lg {
+                min-height: 200px; /* Example, adjust as needed for large screens */
+            }
+        }
+
+
+               
+        /* Стилі для практичного блоку */
+        .exercise-section {
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background-color: #f9fafb;
+            border-radius: 0.75rem;
+            border: 1px solid #e5e7eb;
+        }
+        .question-text {
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            color: #4b5563;
+            cursor: pointer;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s, border-color 0.2s;
+            border: 1px solid transparent; /* Додано для візуального ефекту підсвічування */
+        }
+        .option-label:hover {
+            background-color: #eff6ff;
+        }
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin-right: 0.75rem;
+            transform: scale(1.2);
+            accent-color: #3b82f6;
+        }
+        .fill-in-the-blanks p {
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            color: #1f2937;
+        }
+        .fill-in-the-blanks input[type="text"] {
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 1rem;
+            color: #1f2937;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            width: auto; /* Allow input to size naturally */
+            min-width: 100px; /* Minimum width for visibility */
+            vertical-align: middle;
+            margin: 0 0.25rem;
+        }
+        .fill-in-the-blanks input[type="text"]:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+        .match-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            background-color: #e0f2fe;
+            border-radius: 0.75rem;
+            border: 1px solid #93c5fd;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .match-item-left {
+            font-weight: 500;
+            color: #1e40af;
+            font-size: 1.05rem;
+            flex: 1;
+        }
+        .match-item-right select {
+            border: 1px solid #93c5fd;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 1rem;
+            color: #1e40af;
+            background-color: #ffffff;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .match-item-right select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .submit-button, .reset-button {
+            padding: 0.75rem 2rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #ffffff;
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .submit-button {
+            background-color: #2563eb;
+        }
+        .submit-button:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+        .submit-button:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .reset-button {
+            background-color: #6b7280;
+        }
+        .reset-button:hover {
+            background-color: #4b5563;
+            transform: translateY(-2px);
+        }
+        .reset-button:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .result-message {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .result-message.correct {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .result-message.incorrect {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        .result-message.partial {
+            background-color: #fffbeb;
+            color: #92400e;
+        }
+        .error-message {
+            color: #ef4444;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        /* Styles for highlighting correct/incorrect answers */
+        .is-correct {
+            background-color: #d1fae5 !important;
+            border-color: #34d399 !important;
+        }
+        .is-incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+        }
+        .fill-in-the-blanks input.is-correct {
+            border-color: #34d399 !important;
+            box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.25) !important;
+        }
+        .fill-in-the-blanks input.is-incorrect {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25) !important;
+        }
+        .match-item.is-correct {
+            background-color: #d1fae5 !important;
+            border-color: #34d399 !important;
+        }
+        .match-item.is-incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+        }
+        .match-item-right select.is-correct {
+            border-color: #34d399 !important;
+        }
+        .match-item-right select.is-incorrect {
+            border-color: #ef4444 !important;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <header class="container mx-auto flex justify-between items-center   bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10  logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
+            </ul>
+            <!-- <a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a>
+            <a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a> -->
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <!-- Секція теми уроку -->
+        <section class="text-center mb-8">
+            <h1 class="text-lg text-slate-600 mt-2 break-words">Тема 5: «Алгоритми та програми». Урок № 39. (До § 28)</h1>
+            <h1 class="text-3xlooo md:text-4xl font-bold text-slate-900 break-words  theme-text">Організація діалогу з користувачем</h1>
+            <h2 class="text-lg text-slate-600 mt-2 break-words">Інтерактивний план-конспект уроку для 8 класу НУШ</h2>
+        </section>
+
+
+        <!-- Секція "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання" -->
+        <section>
+            <!-- Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання". -->
+            <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+                <nav id="tabs" class="flex flex-wrap justify-center gap-2 sm:gap-4">
+                    <button data-tab="about" class="tab-btn active text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Про урок</button>
+                    <button data-tab="theory" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Теоретичний блок</button>
+                    <button data-tab="practice" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Практичний блок</button>
+                    <button data-tab="check" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Перевірка знань</button>
+                    <button data-tab="homework" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Домашнє завдання</button>
+                </nav>
+            </div>
+
+            <!-- Про урок -->
+            <div id="about-content" class="tab-content active">
+                <div class="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Lesson Goal -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-teal-600 break-words break-all">🎯 Мета уроку</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Освітня:</b> ознайомити учнів з різними способами організації діалогу з користувачем у програмах з графічним інтерфейсом, навчити використовувати віджети `Entry`, `Button` та метод `grid()`, а також виводити інформаційні повідомлення.</li>
+                            <li class="break-words"><b>Розвивальна:</b> розвивати логічне мислення, навички розробки інтерфейсу користувача, вміння застосовувати отримані знання для створення інтерактивних програм, що ефективно взаємодіють з користувачем.</li>
+                            <li class="break-words"><b>Виховна:</b> виховувати акуратність та уважність при роботі з елементами інтерфейсу, критичне ставлення до розробки програмного забезпечення, що забезпечує зрозумілу та зручну взаємодію.</li>
+                        </ul>
+                    </div>
+                    <!-- Expected Outcomes -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-teal-600 break-words break-all">✅ Очікувані результати</h3>
+                        <p class="mb-2 text-gray-600">Після уроку учні зможуть:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Використовувати віджет `Entry` для введення та виведення текстових даних.</li>
+                            <li class="break-words">Отримувати значення з полів `Entry` за допомогою методу `get()`.</li>
+                            <li class="break-words">Вставляти текст у поля `Entry` за допомогою методів `insert(index, str)` та `delete(first, last)`.</li>
+                            <li class="break-words">Використовувати менеджер геометрії `grid()` для розміщення віджетів у сітці.</li>
+                            <li class="break-words">Виводити інформаційні повідомлення за допомогою модуля `messagebox`.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-bold mb-3 text-teal-600 break-words">📊 Групи результатів (НУШ)</h3>
+                        <p class="text-gray-600 mb-4 break-words">Візуалізація важливості груп результатів для цього уроку.</p>
+                        <div class="chart-container relative h-64 w-full max-w-md mx-auto">
+                            <canvas id="resultsChart"></canvas>
+                        </div>
+                        <p class="text-gray-600 mb-4 break-words text-group-result"><i>Учень / учениця:</i></p>
+                        <ul>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР1 – працює з інформацією, даними, моделями;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР2 – створює інформаційні продукти;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР3 – працює в цифровому середовищі;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР4 – безпечно та відповідально працює з інформаційними технологіями.</p></li>
+                        </ul>
+                    </div>
+                    <!-- Lesson Type & Equipment -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-teal-600 break-words">📚 Тип уроку</h3>
+                        <p class="text-gray-700 break-words">Урок вивчення нового матеріалу з елементами практичної роботи.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-teal-600 break-words">💻 Обладнання та ПЗ</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Персональні комп'ютери з встановленим Python та бібліотекою `tkinter`.</li>
+                            <li class="break-words">Проєктор або інтерактивна дошка.</li>
+                            <li class="break-words">Середовище розробки (IDLE, VS Code).</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-teal-600 break-words">🔗 Міжпредметні зв'язки</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Математика (обчислення, квадрат числа).</li>
+                            <li class="break-words">Дизайн (інтерфейс користувача).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Теоретичний блок -->
+            <div id="theory-content" class="tab-content   mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">
+                <!-- ВАРІАНТ № 2, початок -->
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-teal-500 mb-4 heading-underline break-words  title-review">ПОВТОРЮЄМО</h2>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">Актуалізація опорних знань</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2">
+                        <li class="break-words">Який метод використовується для зміни кольору фону вікна програми (`root`)?</li>
+                        <li class="break-words">Як можна змінити розмір шрифту віджета `Label` під час виконання програми?</li>
+                        <li class="break-words">Що роблять параметри `side = TOP` та `fill = X` при використанні методу `pack()`?</li>
+                        <li class="break-words">Який код змінить текст віджета `label_text` на "Новий текст"?</li>
+                        <li class="break-words">Яке значення `side` слід використати для розміщення віджета внизу вікна?</li>
+                        <li class="break-words">Чи змінюється висота кнопок з `fill=X` при зміні розміру вікна? Поясніть.</li>
+                    </ol>
+                    <img src="./images/img-tema5-07.webp" alt="Знак питання" class="rounded-lg shadow-md" width="200">
+                </div>
+                
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 176-177)</a></i></p>
+                </div>
+                <!-- ВАРІАНТ № 2, кінець -->
+
+                <!-- <hr class="my-8 border-gray-200">
+
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-teal-500 mb-4 heading-underline break-words title-review">ВИВЧАЄМО НОВЕ</h2>
+                </div>
+                <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all mb-6">Організація діалогу з користувачем у `tkinter`</h2>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <p class="break-words">У консольному режимі ми вже користувалися для введення й виведення даних функціями `input()` і `print()`. </p>
+                        <ul class="list-disc list-inside ml-4 space-y-2">
+                            <li class="break-words">Функція `input()` призначена для введення даних із клавіатури: `змінна = input(<підказка>)`</li>
+                            <li class="break-words">Функція `print()` потрібна, щоб вивести текст у вікно консолі: `print(<рядок виведення>)`</li>
+                        </ul>
+                        <p class="break-words">Розглянемо елементи керування, призначені для введення й виведення даних у програмах з графічним інтерфейсом. Віджет **Label** дозволяє виводити текстові повідомлення. Але програма має надавати користувачеві / користувачці можливість вводити дані. Це можна зробити за допомогою віджетів класу **Entry**.</p>
+                    </div>
+                    <img src="http://googleusercontent.com/file_content/2" alt="Дівчинка з ноутбуком" class="rounded-lg shadow-md mt-4 md:mt-0" width="200">
+                </div>
+
+                <h3 class="text-xl font-bold mb-4 text-gray-800 break-words">Клас Entry</h3>
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <p class="break-words">Компонент **Entry** — це поле для введення тексту, також його можна використовувати і для виведення.</p>
+                        <h4 class="text-lg font-semibold mb-2 text-gray-800 break-words">Синтаксис створення об'єкта класу Entry такий:</h4>
+                        <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto"><code>змінна = Entry([батьківський_віджет, ][властивість = значення])</code></pre>
+                        <p class="break-words">Для налаштування вигляду віджета Entry слід задати значення властивостей, спільних із віджетами класів Button і Label: наприклад ширина в висота в знакомісцях (`width`, `height`), колір фону та символів (`bg`, `fg`), параметри шрифту (`font`).</p>
+                        <p class="break-words">Створімо об'єкт Entry із такими значеннями властивостей:</p>
+                        <ul class="list-disc list-inside ml-4 space-y-2">
+                            <li class="break-words">ширина текстового поля — $14$ знакомісць;</li>
+                            <li class="break-words">параметри шрифту — Arial, $18$ кегль.</li>
+                        </ul>
+                        <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto"><code>entry1 = Entry(root, width = 14, font = 'Arial 18')</code></pre>
+                    </div>
+                    <img src="http://googleusercontent.com/file_content/0" alt="Створення об'єкта Entry" class="rounded-lg shadow-md mt-4 md:mt-0" width="200">
+                </div>
+
+                <h3 class="text-xl font-bold mb-4 text-gray-800 break-words">Методи Entry</h3>
+                <p class="text-gray-700 mb-6">Які дії може виконувати елемент Entry у відповідь на певні події? Поміркуймо разом.</p>
+
+                <div class="overflow-x-auto mb-8">
+                    <table class="min-w-full bg-white rounded-lg shadow-md">
+                        <thead>
+                            <tr class="bg-teal-500 text-white">
+                                <th class="py-2 px-4 text-left">Метод</th>
+                                <th class="py-2 px-4 text-left">Призначення</th>
+                                <th class="py-2 px-4 text-left">Приклад виклику</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-200">
+                                <td class="py-2 px-4">`get()`</td>
+                                <td class="py-2 px-4">Отримати значення, що міститься в текстовому полі</td>
+                                <td class="py-2 px-4">`a = int(entry1.get())`</td>
+                            </tr>
+                            <tr class="border-b border-gray-200">
+                                <td class="py-2 px-4">`insert(index, str)`</td>
+                                <td class="py-2 px-4">Ввести в текстове поле рядок `str`, починаючи зі знакомісця з номером `index`</td>
+                                <td class="py-2 px-4">`entry1.insert(0, X)`</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4">`delete(first, last)`</td>
+                                <td class="py-2 px-4">Вилучити символи, починаючи зі знакомісця з номером `first` до знакомісця з номером `last` (нумерація символів з 0)</td>
+                                <td class="py-2 px-4">Щоб вилучити весь текст, як другий параметр потрібно вказати `END`: `entry1.delete(0, END)`</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <p class="break-words">Уведемо число до поля `entry1` і виведемо квадрат цього числа до поля `entry2` (рис. 28.1). Зчитування значення з текстового поля, віднесення до квадрата й виведення результату в поле `entry2` виконує функція `kvadrat()` — обробник події Натискання клавіші Enter.</p>
+                        <h4 class="text-lg font-semibold mb-2 text-gray-800 break-words">Приклад коду:</h4>
+                        <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto"><code>from tkinter import*
+def kvadrat(event):
+    a = float(entry1.get())
+    entry2.delete(0, END)
+    entry2.insert(0, str(a**2))
+
+root = Tk()
+Label(root, text = 'a = ', font = 'Arial 18').place(x = 10, y = 10)
+entry1 = Entry(root, width = 8, font = 'Arial 18')
+entry1.place(x = 80, y = 10)
+Label(root, text = 'b = ', font = 'Arial 18').place(x = 10, y = 50)
+entry2 = Entry(root, width = 8, font = 'Arial 18')
+entry2.place(x = 80, y = 50)
+entry1.bind('&lt;Return&gt;', kvadrat)
+root.mainloop()</code></pre>
+                        <p class="break-words">Метод `bind('&lt;Return&gt;', kvadrat)` прив'язує функцію `kvadrat` до події натискання клавіші Enter (`&lt;Return&gt;`) у віджеті `entry1`.</p>
+                    </div>
+                    <img src="./images/image_53e69a.jpg" alt="Приклад вікна з обчисленням квадрату числа" class="rounded-lg shadow-md mt-4 md:mt-0" width="250">
+                </div>
+
+                <hr class="my-8 border-gray-200">
+
+                <h3 class="text-xl font-bold mb-4 text-gray-800 break-words">Метод `grid()`</h3>
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <p class="break-words">Вам уже відомі методи `pack()` і `place()`, призначені для розміщення віджетів у вікні. Якщо у вікні потрібно в певному порядку розмістити кілька віджетів, то швидко та правильно зробити це допоможе метод **grid()** (англ. сітка). Цей пакувальник розміщує віджети в клітинках уявної таблиці.</p>
+                        <p class="break-words">Адреса кожної клітинки таблиці складається з номера рядка `row` і номера стовпця `column`.</p>
+                        <p class="break-words">Нумерація в рядках і стовпцях починається з нуля. Клітинки можна об'єднувати як по вертикалі, так і по горизонталі.</p>
+                        <h4 class="text-lg font-semibold mb-2 text-gray-800 break-words">Атрибути методу `grid()` мають такий зміст:</h4>
+                        <ul class="list-disc list-inside ml-4 space-y-2">
+                            <li class="break-words">`row` — номера рядка й стовпця відповідно;</li>
+                            <li class="break-words">`padx`, `pady` — ширина (в пікселях) вільного місця навколо віджета по горизонталі й по вертикалі відповідно;</li>
+                            <li class="break-words">`columnspan`, `rowspan` — об'єднання декількох клітинок у рядку або стовпці відповідно.</li>
+                        </ul>
+                        <p class="break-words">Пронумеруємо уявні рядки й стовпці (Рис. 28.2).</p>
+                        <img src="./images/image_53e6f6.jpg" alt="Таблиця з рядками і стовпцями для grid" class="rounded-lg shadow-md mt-4 md:mt-0" width="250">
+                        <p class="break-words">Наведене розташування віджетів забезпечить фрагмент коду:</p>
+                        <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto"><code>Label(text = 'Множники')grid(row = 0, column = 0, padx = 5, pady = 5)
+entry1 = Entry(width = 12)
+entry1.grid(row = 0, column = 1, padx = 5, pady = 5)
+entry2 = Entry(width = 12)
+entry2.grid(row = 0, column = 2, padx = 5, pady = 5)
+Label(text = 'Добуток')grid(row = 1, column = 0, padx = 5, pady = 5)
+entry3 = Entry()
+entry3.grid(row = 1, column = 1, columnspan = 2, padx = 5, pady = 5)</code></pre>
+                    </div>
+                    <div class="space-y-4 text-gray-700">
+                        <p class="break-words">Уведемо арифметичний вираз до поля `об’єкта entry1` і виведемо значення виразу до поля `об’єкта entry2` (рис. 28.3). Для обчислення значення виразу використовується функція `eval()`, яка обробляє рядок клавіатурних символів так само, як і оболонка консолі Python.</p>
+                        <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto"><code>from tkinter import*
+def btn_click():
+    s = entry1.get()
+    a = eval(s)
+    entry2.delete(0, END)
+    entry2.insert(0, str(a))
+
+root = Tk()
+Label(text = 'Уведіть вираз:').grid(row = 0, column = 0)
+entry1 = Entry(width = 20)
+entry1.grid(row = 0, column = 1)
+btn = Button(root, text = 'Обчислити значення виразу', command = btn_click)
+btn.grid(row = 0, column = 2, columnspan = 2)
+Label(text = 'Результат:').grid(row = 1, column = 0)
+entry2 = Entry(width = 20)
+entry2.grid(row = 1, column = 1)
+root.mainloop()</code></pre>
+                        <img src="./images/image_53e739.jpg" alt="Приклад вікна з обчисленням виразу" class="rounded-lg shadow-md mt-4 md:mt-0" width="250">
+                        <p class="break-words">Виклик методу `grid()` (а також `pack()` і `place()`) можна записати в одному рядку з викликом конструктора тоді, коли в програмі не потрібно звертатися до цього об’єкта.</p>
+                        <p class="break-words">Отже, перевагами табличного способу розміщення є гнучкість та зручність під час розробки складного інтерфейсу.</p>
+                        <div class="flex items-center space-x-4">
+                            <img src="./images/image_b88a07.jpg" alt="Адель Голдберг" class="rounded-full shadow-md w-20 h-20 object-cover">
+                            <p class="break-words">**Адель Голдберг** (рис. 28.4) — американська вчена в галузі інформатики, відома своєю роботою в галузі об'єктно-орієнтованого програмування й графічних інтерфейсів та розробкою мови програмування Smalltalk.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-8 border-gray-200">
+
+                <h3 class="text-xl font-bold mb-4 text-gray-800 break-words">Вікно повідомлень</h3>
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <p class="break-words">Іноді виникає потреба вивести певне повідомлення про роботу програми в діалоговому вікні, не створюючи спеціального віджета. Пакетом `tkinter` містить модуль **messagebox**, який надає доступ до вікон повідомлень.</p>
+                        <ul class="list-disc list-inside ml-4 space-y-2">
+                            <li class="break-words">Модуль `messagebox` потрібно імпортувати додатково: <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto"><code>from tkinter import messagebox</code></pre></li>
+                            <li class="break-words">Від вибраного методу залежить вигляд піктограми у вікні повідомлення (Рис. 28.5). Для генерації вікна повідомлень із кнопкою ОК цей модуль надає такі методи:</li>
+                            <li class="break-words">`messagebox.showinfo()` — створює вікно для відображення деякої інформації;</li>
+                            <li class="break-words">`messagebox.showerror()` — створює вікно з повідомленням про помилку;</li>
+                            <li class="break-words">`messagebox.showwarning()` — створює вікно для відображення попередження.</li>
+                        </ul>
+                        <h4 class="text-lg font-semibold mb-2 text-gray-800 break-words">Синтаксис виклику методу:</h4>
+                        <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto"><code>messagebox.showinfo(заголовок, Текст)</code></pre>
+                        <p class="break-words">Створімо вікно повідомлення інформаційного характеру (рис. 28.6):</p>
+                        <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto"><code>messagebox.showinfo('Інформація', 'Обчислення закінчено')</code></pre>
+                        <img src="./images/image_53e739.jpg" alt="Приклади вікон повідомлень" class="rounded-lg shadow-md mt-4 md:mt-0" width="250">
+                        <p class="break-words">Напишемо обробник події Натискання на кнопку, в якому з полів `об’єктів entry1` і `entry2` класу `Entry` зчитуються значення для змінних `a` і `b`; якщо `b = 0` (рис. 28.7), з’являється вікно з повідомленням про помилку (рис. 28.8), інакше — з’являється вікно зі значенням `a/b`.</p>
+                        <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto"><code>def bi_click():
+    a=float(entry1.get())
+    b=float(entry2.get())
+    if b == 0:
+        messagebox.showerror('Помилка', 'На 0 ділити не можна!')
+    else:
+        messagebox.showinfo('Відповідь', str(a/b))</code></pre>
+                        <p class="break-words">Отже, віджети для обміну інформацією та вікна повідомлень дають змогу в програмі з графічним інтерфейсом організувати діалог людини з комп’ютером.</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 178-183)</a></i></p>
+                </div>
+                 -->
+            </div>
+            
+
+            <!-- Практичний блок -->
+            <div id="practice-content" class="tab-content">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-6 text-center text-teal-600 break-words">Практичний блок уроку</h3>
+
+                    <!-- 1. Multiple Choice (Radio Buttons) -->
+                    <div class="exercise-section">
+                        <h2>1. Множинний вибір (Радіокнопки)</h2>
+                        <div class="question-text">
+                            Який віджет використовується для введення та виведення текстових даних у `tkinter`?
+                        </div>
+                        <form id="radioForm">
+                            <label class="option-label">
+                                <input type="radio" name="videoProgram" value="Label"> Label
+                            </label>
+                            <label class="option-label">
+                                <input type="radio" name="videoProgram" value="Entry"> Entry
+                            </label>
+                            <label class="option-label">
+                                <input type="radio" name="videoProgram" value="Button"> Button
+                            </label>
+                            <div class="button-group">
+                                <button type="button" class="submit-button" onclick="checkRadio()">Перевірити</button>
+                                <button type="button" class="reset-button" onclick="resetRadio()">Скинути</button>
+                            </div>
+                            <div id="radioResult" class="result-message hidden"></div>
+                        </form>
+                    </div>
+
+                    <!-- 2. Fill in the Blanks -->
+                    <div class="exercise-section fill-in-the-blanks">
+                        <h2>2. Заповнення пропусків</h2>
+                        <p>
+                            <span class="question-text">Заповніть пропуски:</span><br>
+                            <br>
+                            <span class="segment">Для отримання значення з текстового поля `Entry` використовується метод </span>
+                            <input type="text" id="blank1" placeholder="Ваша відповідь">.
+                        </p>
+                        <div class="button-group">
+                            <button type="button" class="submit-button" onclick="checkBlanks()">Перевірити</button>
+                            <button type="button" class="reset-button" onclick="resetBlanks()">Скинути</button>
+                        </div>
+                        <div id="blanksResult" class="result-message hidden"></div>
+                    </div>
+
+                    <!-- 3. Matching -->
+                    <div class="exercise-section">
+                        <h2>3. Зіставлення</h2>
+                        <div class="question-text">Зіставте методи `Entry` з їхнім призначенням.</div>
+                        <form id="matchingForm">
+                            <div class="match-item">
+                                <div class="match-item-left">Призначення: Отримати значення з текстового поля.</div>
+                                <div class="match-item-right">
+                                    <select id="match1">
+                                        <option value="">Оберіть...</option>
+                                        <option value="get">get()</option>
+                                        <option value="delete">delete(first, last)</option>
+                                        <option value="insert">insert(index, str)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="match-item">
+                                <div class="match-item-left">Призначення: Видалити символи з текстового поля.</div>
+                                <div class="match-item-right">
+                                    <select id="match2">
+                                        <option value="">Оберіть...</option>
+                                        <option value="get">get()</option>
+                                        <option value="delete">delete(first, last)</option>
+                                        <option value="insert">insert(index, str)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="match-item">
+                                <div class="match-item-left">Призначення: Вставити рядок у текстове поле.</div>
+                                <div class="match-item-right">
+                                    <select id="match3">
+                                        <option value="">Оберіть...</option>
+                                        <option value="get">get()</option>
+                                        <option value="delete">delete(first, last)</option>
+                                        <option value="insert">insert(index, str)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="button-group">
+                                <button type="button" class="submit-button" onclick="checkMatching()">Перевірити</button>
+                                <button type="button" class="reset-button" onclick="resetMatching()">Скинути</button>
+                            </div>
+                            <div id="matchingResult" class="result-message hidden"></div>
+                        </form>
+                    </div>
+
+                    <!-- 4. Multiple Choice (Checkboxes) -->
+                    <div class="exercise-section">
+                        <h2>4. Множинний вибір (Чекбокси)</h2>
+                        <div class="question-text">
+                            Які переваги надає менеджер геометрії `grid()`? (Оберіть кілька варіантів)
+                        </div>
+                        <form id="checkboxForm">
+                            <label class="option-label">
+                                <input type="checkbox" name="videoSources" value="гнучкість"> Гнучкість у розміщенні віджетів
+                            </label>
+                            <label class="option-label">
+                                <input type="checkbox" name="videoSources" value="зручність"> Зручність при розробці складного інтерфейсу
+                            </label>
+                            <label class="option-label">
+                                <input type="checkbox" name="videoSources" value="розміщення"> Призначений тільки для розміщення однієї кнопки
+                            </label>
+                            <label class="option-label">
+                                <input type="checkbox" name="videoSources" value="обєднання"> Дозволяє об'єднувати клітинки (rowspan, columnspan)
+                            </label>
+                            <div class="button-group">
+                                <button type="button" class="submit-button" onclick="checkCheckboxes()">Перевірити</button>
+                                <button type="button" class="reset-button" onclick="resetCheckboxes()">Скинути</button>
+                            </div>
+                            <div id="checkboxResult" class="result-message hidden"></div>
+                        </form>
+                    </div>
+                   
+                </div>                
+            </div>
+
+            <!-- Перевірка знань -->
+            <!-- Вручну треба змінювати лише ті значення minimum-height (min-h-[300px]), які потрібно, і треба використовувати медіа-адаптацію (стилі тут на сторінці в тезі <style>)-->
+                <!-- Тут grid -->
+            <div id="check-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-6 text-center text-teal-600 break-words">Перевірка знань</h3>
+                <p class="text-center text-gray-600 mb-8 break-words">Натисніть на картку, щоб побачити відповідь.</p>
+                <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-teal-100 p-6 rounded-xl shadow-md break-words">1. Які функції використовуються для введення/виведення даних у консольному режимі Python?</div>
+                        <div class="flip-card-back bg-teal-200 p-6 rounded-xl shadow-md break-words">Функції `input()` та `print()`.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-teal-100 p-6 rounded-xl shadow-md break-words">2. Який віджет `tkinter` дозволяє користувачеві вводити текстові дані?</div>
+                        <div class="flip-card-back bg-teal-200 p-6 rounded-xl shadow-md break-words">Віджет класу `Entry`.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-teal-100 p-6 rounded-xl shadow-md break-words">3. Для чого призначений метод `delete(first, last)` об'єкта `Entry`?</div>
+                        <div class="flip-card-back bg-teal-200 p-6 rounded-xl shadow-md break-words">Для вилучення символів з текстового поля `Entry` від позиції `first` до `last`.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-teal-100 p-6 rounded-xl shadow-md break-words">4. Що означають параметри `row` і `column` у методі `grid()`?</div>
+                        <div class="flip-card-back bg-teal-200 p-6 rounded-xl shadow-md break-words">Вони вказують номер рядка та стовпця відповідно, де буде розміщено віджет у сітці.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-teal-100 p-6 rounded-xl shadow-md break-words">5. Який модуль використовується для створення вікон повідомлень у `tkinter`?</div>
+                            <div class="flip-card-back bg-teal-200 p-6 rounded-xl shadow-md break-words">Модуль `messagebox`.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-teal-100 p-6 rounded-xl shadow-md break-words">6. Для чого використовується функція `eval()` при обробці виразів?</div>
+                            <div class="flip-card-back bg-teal-200 p-6 rounded-xl shadow-md break-words">Вона обчислює значення арифметичного виразу, поданого у вигляді рядка.</div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 183)</a></i></p>
+                </div>
+            </div>
+         
+
+            <!-- Домашнє завдання -->
+            <div id="homework-content" class="tab-content   bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-teal-600 break-words">Домашнє завдання</h3>                    
+                <!--  -->
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <div>
+                            <p class="break-words break-all"><b>1. Теоретична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li class="break-words break-all">Опрацювати § 28 (стор. 178-184).</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><b>2. Практична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Виконати завдання із прикладу № 2 (стор. 181).</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p><b>3. Завдання за бажанням (для закріплення):</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Інтерактивна платформа IZZI (8 клас) до § 28: <a href="https://ua.izzi.digital/DOS/1183864/1262442.html" target="_blank" class="text-blue-600 hover:underline break-words break-all block">https://ua.izzi.digital/DOS/1183864/1262442.html</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="./images/img08.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!--  -->
+            </div>
+        </section>
+
+
+        <!-- Додаткові матеріали -->
+        <!-- Additional Materials Section -->
+        <section class="bg-white p-6 rounded-xl shadow-md mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-teal-600 break-words">Додаткові матеріали</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li class="break-words"><a href="https://sites.google.com/view/lga84-9/tehnika_bezpeky" target="_blank" class="text-blue-600 hover:underline">Техніка безпеки</a></li>
+
+                <li class="break-words"><a href="https://drive.google.com/file/d/1C9_KEF981LvokY0GWNOhUXb7rJKJUUbM/view" target="_blank" class="text-blue-600 hover:underline">Оцінювання учнів та учениць на уроках інформатики</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу</a> (§ 28, стор. 178-184)</li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">Інтерактивна платформа IZZI (8 клас)</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до § 28: <a href="https://ua.izzi.digital/DOS/1183864/1262442.html" target="_blank" class="text-blue-600 hover:underline">https://ua.izzi.digital/DOS/1183864/1262442.html</a></li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm   bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>           
+        </ul>
+    </footer>    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Початок:
+            // Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання".
+            const tabs = document.getElementById('tabs');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            tabs.addEventListener('click', (e) => {
+                // Ensure the click target is a BUTTON (tab button)
+                if (e.target.tagName === 'BUTTON') {
+                    const tab = e.target.dataset.tab;
+
+                    // Remove 'active' class from all buttons and add to the clicked one
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Hide all tab contents and show the corresponding one
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Use === for strict comparison
+                        if (content.id === `${tab}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                }
+            });
+            // Кінець.
+
+
+            // Початок:
+            // ГРУПИ РЕЗУЛЬТАТІВ.
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            // 1. Створення об'єкту-мапи для відповідності значень і кольорів
+            // Тут вручну можна поміняти значення background й border
+            const colorMap = {
+                1: {
+                    background: '#cffafe', // text-teal-100
+                    border: '#99f6e4'      // text-teal-200
+                },
+                2: {
+                    background: '#99f6e4', // text-teal-200
+                    border: '#5eead4'       // text-teal-300
+                },
+                3: {
+                    background: '#5eead4',  // text-teal-300
+                    border: '#2dd4bf'        // text-teal-400
+                },
+                4: {
+                    background: '#2dd4bf',   // text-teal-400
+                    border: '#14b8a6'      // text-teal-500
+                }
+            };
+
+            // Дані, які можна змінювати вручну
+            const chartData = [2, 4, 3, 2];
+
+            // 2. Генерація масивів кольорів на основі даних
+            const backgroundColors = chartData.map(value => colorMap[value].background);
+            const borderColors = chartData.map(value => colorMap[value].border);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ГР1', 'ГР2', 'ГР3', 'ГР4'],
+                    datasets: [{
+                        label: 'Важливість',
+                        data: chartData, // Використовуємо змінну
+                        backgroundColor: backgroundColors, // Використовуємо згенерований масив
+                        borderColor: borderColors, // Використовуємо згенерований масив
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const labels = ['', 'Важлива', 'Дуже важлива', 'Найважливіша'];
+                                    return labels[value] || '';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.parsed.y;
+                                    const importanceLabels = {4: 'Найважливіша', 3: 'Дуже важлива', 2: 'Важлива', 1: 'Найменш важлива'};
+                                    label += importanceLabels[value] || '';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // Кінець. ГРУПИ РЕЗУЛЬТАТІВ.
+
+
+            // Початок.
+            // ПОВОРОТ КАРТОК "Перевірка знань"
+            const flipCards = document.querySelectorAll('.flip-card');
+            flipCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+            // Кінець. ПОВОРОТ КАРТОК.
+
+        });
+    </script>
+
+    <!-- Скрипт для Практичного блоку -->
+    <script>
+        // Функція для відображення повідомлень
+        function displayResult(elementId, isCorrect, message) {
+            const resultElement = document.getElementById(elementId);
+            resultElement.classList.remove('hidden', 'correct', 'incorrect', 'partial');
+            if (isCorrect === true) {
+                resultElement.classList.add('correct');
+            } else if (isCorrect === false) {
+                resultElement.classList.add('incorrect');
+            } else { // Partial
+                resultElement.classList.add('partial');
+            }
+            resultElement.textContent = message;
+        }
+
+        // Функція для очищення підсвічування для радіокнопок/чекбоксів
+        function clearOptionHighlight(formId) {
+            document.querySelectorAll(`#${formId} .option-label`).forEach(label => {
+                label.classList.remove('is-correct', 'is-incorrect');
+            });
+        }
+
+        // Функція для очищення підсвічування для полів введення
+        function clearInputHighlight(inputIds) {
+            inputIds.forEach(id => {
+                document.getElementById(id).classList.remove('is-correct', 'is-incorrect');
+            });
+        }
+
+        // Функція для очищення підсвічування для зіставлення
+        function clearMatchingHighlight() {
+            document.querySelectorAll('#matchingForm .match-item').forEach(item => {
+                item.classList.remove('is-correct', 'is-incorrect');
+            });
+            document.querySelectorAll('#matchingForm select').forEach(select => {
+                select.classList.remove('is-correct', 'is-incorrect');
+            });
+        }
+
+        
+        // Вправа №1 +
+        function checkRadio() {
+            clearOptionHighlight('radioForm'); // очищає підсвітку в межах форми №1
+            const selectedOption = document.querySelector('#radioForm input[name="videoProgram"]:checked');
+
+            if (!selectedOption) {
+                displayResult('radioResult', false, 'Будь ласка, оберіть відповідь.');
+                return;
+            }
+
+            const label = selectedOption.closest('.option-label');
+            if (selectedOption.value === 'Entry') {
+                displayResult('radioResult', true, 'Правильно! Віджет Entry призначений спеціально для введення та редагування однорядкового тексту користувачем. Віджет Label використовується для виведення статичного тексту, а Button — для створення кнопок.');
+                label.classList.add('is-correct');
+            } else {
+                displayResult('radioResult', false, 'Неправильно. Спробуйте ще раз.');
+                label.classList.add('is-incorrect');
+                // підсвітити правильний варіант
+                document
+                .querySelector('#radioForm input[name="videoProgram"][value="101"]')
+                .closest('.option-label')
+                .classList.add('is-correct');
+            }
+        }
+
+        function resetRadio() {
+            document.querySelectorAll('#radioForm input[name="videoProgram"]').forEach(r => r.checked = false);
+            clearOptionHighlight('radioForm');
+            const res = document.getElementById('radioResult');
+            res.classList.add('hidden');
+            res.textContent = '';
+        }
+
+        
+        // Вправа № 2 +
+        // Функція для перевірки відповідей на заповнення пропусків
+        function checkBlanks() {
+            // Очистити попереднє підсвічування
+            const blank1Input = document.getElementById('blank1');
+            blank1Input.classList.remove('is-correct', 'is-incorrect');
+
+            const blank1 = blank1Input.value.trim().toLowerCase();
+            const correctBlank1 = ['.get()', 'get()', '.get', 'get'];
+
+            let isCorrect = false;
+
+            if (correctBlank1.includes(blank1)) {
+                isCorrect = true;
+                blank1Input.classList.add('is-correct');
+            } else {
+                blank1Input.classList.add('is-incorrect');
+            }
+
+            const resultMessageElement = document.getElementById('blanksResult');
+            resultMessageElement.classList.remove('hidden');
+
+            if (isCorrect) {
+                resultMessageElement.textContent = 'Правильно! Метод .get() є основним для отримання поточного вмісту (значення) з віджета Entry. Наприклад, якщо у вас є віджет my_entry, ви можете отримати його текст за допомогою my_entry.get().';
+                resultMessageElement.style.color = 'green';
+            } else {
+                resultMessageElement.textContent = 'Неправильно. Спробуйте ще раз.';
+                resultMessageElement.style.color = 'red';
+            }
+        }
+    
+        // Функція для скидання заповнення пропусків
+        function resetBlanks() {
+            const blank1Input = document.getElementById('blank1');
+            blank1Input.value = '';
+            blank1Input.classList.remove('is-correct', 'is-incorrect');
+
+            const resultMessageElement = document.getElementById('blanksResult');
+            resultMessageElement.classList.add('hidden');
+            resultMessageElement.textContent = '';
+        }
+
+        // Допоміжна функція, яка використовується
+        function clearInputHighlight(ids) {
+            ids.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.classList.remove('is-correct', 'is-incorrect');
+                }
+            });
+        }
+
+
+        // Вправа № 3 +
+        // Функція для перевірки відповідей на зіставлення
+        function checkMatching() {
+            clearMatchingHighlight(); // Очистити попереднє підсвічування
+            const answers = {
+                match1: 'get', // 1. get() — Призначення: Отримати значення з текстового поля.
+                match2: 'delete', // 2. delete(first, last) — Призначення: Видалити символи з текстового поля.
+                match3: 'insert' // 3. insert(index, str) — Призначення: Вставити рядок у текстове поле.
+            };
+
+            let correctCount = 0;
+            let totalMatches = Object.keys(answers).length;
+
+            let allAnswered = true;
+            for (let i = 1; i <= totalMatches; i++) {
+                const selectElement = document.getElementById(`match${i}`);
+                const matchItem = selectElement.closest('.match-item');
+
+                if (selectElement.value === '') {
+                    allAnswered = false;
+                    // Don't highlight if not answered, but indicate missing answers overall
+                } else if (selectElement.value === answers[`match${i}`]) {
+                    correctCount++;
+                    matchItem.classList.add('is-correct');
+                    selectElement.classList.add('is-correct');
+                } else {
+                    matchItem.classList.add('is-incorrect');
+                    selectElement.classList.add('is-incorrect');
+                }
+            }
+
+            if (!allAnswered) {
+                displayResult('matchingResult', false, 'Будь ласка, оберіть відповіді для всіх зіставлень.');
+                return;
+            }
+
+
+            if (correctCount === totalMatches) {
+                displayResult('matchingResult', true, 'Правильно! Всі зіставлення правильні.');
+            } else if (correctCount > 0) {
+                displayResult('matchingResult', null, `Частково правильно. Ви правильно зіставили ${correctCount} з ${totalMatches} пунктів. Спробуйте ще раз.`);
+            } else {
+                displayResult('matchingResult', false, 'Неправильно. Спробуйте ще раз.');
+            }
+        }
+
+        // Функція для скидання зіставлення
+        function resetMatching() {
+            for (let i = 1; i <= 3; i++) { // Changed to 3 to match the number of matching items
+                document.getElementById(`match${i}`).value = '';
+            }
+            clearMatchingHighlight();
+            document.getElementById('matchingResult').classList.add('hidden');
+            document.getElementById('matchingResult').textContent = '';
+        }
+
+
+        // Вправа № 4 +
+        // Функція для перевірки відповідей на множинний вибір (чекбокси)
+        function checkCheckboxes() {
+            clearOptionHighlight('checkboxForm'); // Очистити попереднє підсвічування
+            const checkboxes = document.querySelectorAll('input[name="videoSources"]');
+            const selectedCheckboxes = document.querySelectorAll('input[name="videoSources"]:checked');
+            const correctAnswers = ['гнучкість', 'зручність', 'обєднання'];
+            let correctCount = 0;
+            let totalSelected = selectedCheckboxes.length;
+
+            if (totalSelected === 0) {
+                displayResult('checkboxResult', false, 'Будь ласка, оберіть відповіді.');
+                return;
+            }
+
+            checkboxes.forEach(checkbox => {
+                const label = checkbox.closest('.option-label');
+                if (correctAnswers.includes(checkbox.value)) {
+                    if (checkbox.checked) {
+                        correctCount++;
+                        label.classList.add('is-correct');
+                    } else {
+                        label.classList.add('is-correct'); // Highlight correct but unselected
+                    }
+                } else {
+                    if (checkbox.checked) {
+                        label.classList.add('is-incorrect'); // Highlight incorrect and selected
+                    }
+                }
+            });
+
+            if (correctCount === correctAnswers.length && totalSelected === correctAnswers.length) {
+                displayResult('checkboxResult', true, 'Правильно! Менеджер геометрії grid() розміщує віджети у вигляді сітки (таблиці), що робить його ідеальним для створення складних і структурованих інтерфейсів. Він дозволяє точно контролювати розташування кожного елемента, а також об\'єднувати клітинки за допомогою параметрів rowspan та columnspan, що значно розширює його можливості порівняно з іншими менеджерами.');
+            } else if (correctCount > 0 || totalSelected > correctAnswers.length) {
+                 displayResult('checkboxResult', null, `Частково правильно. Ви обрали правильних відповідей: ${correctCount}. Спробуйте ще раз.`);
+            }
+            else {
+                displayResult('checkboxResult', false, 'Неправильно. Спробуйте ще раз.');
+            }
+        }
+
+        // Функція для скидання чекбоксів
+        function resetCheckboxes() {
+            document.querySelectorAll('input[name="videoSources"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            clearOptionHighlight('checkboxForm');
+            document.getElementById('checkboxResult').classList.add('hidden');
+            document.getElementById('checkboxResult').textContent = '';
+        }
+
+    </script>
+</body>
+</html>

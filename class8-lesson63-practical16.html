@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: 8 клас</title>
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Тіло документа */
+        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
+
+        /* Стилі для навігації в меню */
+        .logo-main { display: none; }
+        .main-title-text { width: 140px; text-align: center; }
+        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
+        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
+        @media screen and (min-width: 768px) {
+            .main-title-text { width: auto; }
+            .main-navigation { display: inline; width: auto; }
+        }
+
+        /* main стилі */
+        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
+        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
+        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
+        .source-text { padding: 8px; }
+        @media screen and (min-width: 300px) {
+            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
+            .text-2xlooo { font-size: 1.25rem; }
+        }
+        @media screen and (min-width: 480px) {
+            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
+            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
+            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
+        }
+
+        /* Стилі для "Про урок" */
+        /* Групи результатів */
+        .text-group-result { padding-top: 16px; }
+
+        /* Style to hide inactive tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Style to tab content */
+        .tab-btn.active { 
+            color: #db2777;                /* text-pink-600 */
+            border-bottom-color: #db2777;  /* text-pink-600 */
+            background-color: #fce7f3;     /* text-pink-100 */
+        }
+        .tab-btn { 
+            transition: color 0.3s, 
+            border-color 0.3s, 
+            background-color 0.3s; 
+            border-bottom: 2px solid transparent;
+        }
+
+        /* Styles for flip cards */
+        .flip-card {
+            background-color: transparent;
+            width: 100%; /* Make cards responsive to grid column width */
+            height: 200px; /* Fixed height for consistency, adjust as needed */
+            perspective: 1000px; /* 3D effect */
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left; /* Adjust text alignment as needed */
+            overflow-wrap: break-word; /* break-words */
+            /*word-break: break-all;*/ /* break-all */
+        }
+
+        .flip-card-front {
+            color: #4b5563; /* text-gray-700 */
+        }
+
+        .flip-card-back {
+            color: #4b5563; /* text-gray-700 */
+            transform: rotateY(180deg);
+        }
+
+        /* Responsive adjustments for min-height */
+        @media (min-width: 768px) { /* md breakpoint */
+            .flip-card.min-h-md {
+                min-height: 250px; /* Example, adjust as needed for medium screens */
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .flip-card.min-h-lg {
+                min-height: 200px; /* Example, adjust as needed for large screens */
+            }
+        }
+
+    </style>
+
+    <!-- Стилі для практичного блоку -->
+    <style>
+        /* Styles for Practical Block */
+        .quiz-container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 1.5rem;
+        }
+        .question-title {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 700; /* font-bold */
+            margin-bottom: 1.5rem;
+            color: #db2777; /* text-pink-600 */
+        }
+        .question-text {
+            font-size: 1.125rem; /* text-lg */
+            margin-bottom: 1rem;
+            color: #374151; /* text-gray-700 */
+        }
+        .option-label {
+            display: block;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #4b5563; /* text-gray-700 */
+        }
+        .option-label input[type="radio"],
+        .option-label input[type="checkbox"] {
+            margin-right: 0.75rem;
+            transform: scale(1.2); /* Make radio/checkbox larger */
+        }
+        .check-button, .reset-button {
+            background-color: #db2777; /* bg-pink-600 */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: 600;
+            margin-top: 1.5rem;
+        }
+        .check-button:hover, .reset-button:hover {
+            background-color: #c026d3; /* bg-pink-700 */
+        }
+        .feedback {
+            margin-top: 1rem;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .feedback.correct {
+            color: #10b981; /* text-green-500 */
+        }
+        .feedback.incorrect {
+            color: #ef4444; /* text-red-500 */
+        }
+
+        /* Fill-in-the-blanks specific styles */
+        .fill-in-the-blanks-container input[type="text"] {
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            border-radius: 0.375rem; /* rounded-md */
+            padding: 0.5rem 0.75rem;
+            font-size: 1rem;
+            width: 120px;
+            margin: 0 0.25rem;
+        }
+        .fill-in-the-blanks-container input[type="text"]:focus {
+            outline: none;
+            border-color: #db2777; /* border-pink-600 */
+            box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.25);
+        }
+
+        /* Matching exercise specific styles */
+        .matching-pair {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            background-color: #f9fafb; /* bg-gray-50 */
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb; /* border-gray-200 */
+        }
+        .matching-pair .term {
+            font-weight: 500;
+            color: #374151; /* text-gray-700 */
+            flex: 1;
+            padding-right: 1rem;
+        }
+        .matching-pair select {
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            border-radius: 0.375rem; /* rounded-md */
+            padding: 0.5rem;
+            font-size: 1rem;
+            color: #4b5563; /* text-gray-700 */
+            background-color: white;
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="container mx-auto flex justify-between items-center   bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10  logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
+            </ul>
+            <!-- <a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a>
+            <a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a> -->
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <!-- Секція теми уроку -->
+        <section class="text-center mb-8">
+            <h1 class="text-lg text-slate-600 mt-2 break-words">Практикум з використання інформаційних технологій. Урок № 63. (До ПР16)</h1>
+            <h1 class="text-3xlooo md:text-4xl font-bold text-slate-900 break-words  theme-text">Практична робота № 16. «Розробка застосунку «Піаніно»»</h1>
+            <h2 class="text-lg text-slate-600 mt-2 break-words">Інтерактивний план-конспект уроку для 8 класу НУШ</h2>
+        </section>
+
+
+        <!-- Секція "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання" -->
+        <section>
+            <!-- Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання". -->
+            <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+                <nav id="tabs" class="flex flex-wrap justify-center gap-2 sm:gap-4">
+                    <button data-tab="about" class="tab-btn active text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Про урок</button>
+                    <button data-tab="theory" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Теоретичний блок</button>
+                    <button data-tab="practice" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Практичний блок</button>
+                    <button data-tab="check" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Перевірка знань</button>
+                    <button data-tab="homework" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Домашнє завдання</button>
+                </nav>
+            </div>
+
+            <!-- Про урок -->
+            <div id="about-content" class="tab-content active">
+                <div class="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Lesson Goal -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-pink-600 break-words break-all">🎯 Мета уроку</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Освітня:</b> узагальнити та систематизувати знання учнів про розробку застосунків, зокрема з використанням бібліотек для роботи з графікою та звуком; закріпити навички програмування, створення інтерфейсу та обробки подій.</li>
+                            <li class="break-words"><b>Розвивальна:</b> розвивати логічне мислення, вміння аналізувати та створювати програмний код, формувати навички розробки інтерактивних застосунків з графічним та звуковим оформленням.</li>
+                            <li class="break-words"><b>Виховна:</b> виховувати уважність, відповідальність, самостійність та точність при роботі з програмним кодом, а також творчий підхід до розробки застосунків.</li>
+                        </ul>
+                    </div>
+                    <!-- Expected Outcomes -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-pink-600 break-words break-all">✅ Очікувані результати</h3>
+                        <p class="mb-2 text-gray-600">Після уроку учні зможуть:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Створювати вікна та полотна для графічного інтерфейсу в Python.</li>
+                            <li class="break-words">Малювати графічні об’єкти (клавіші піаніно) на полотні.</li>
+                            <li class="break-words">Прив’язувати події (натискання клавіш миші) до графічних об’єктів.</li>
+                            <li class="break-words">Відтворювати звуки при натисканні на клавіші.</li>
+                            <li class="break-words">Створювати анімації, використовуючи послідовність зображень (кадрів).</li>
+                            <li class="break-words">Розробляти простий інтерактивний застосунок "Піаніно" в середовищі програмування Python.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-bold mb-3 text-pink-600 break-words">📊 Групи результатів (НУШ)</h3>
+                        <p class="text-gray-600 mb-4 break-words">Візуалізація важливості груп результатів для цього уроку.</p>
+                        <div class="chart-container relative h-64 w-full max-w-md mx-auto">
+                            <canvas id="resultsChart"></canvas>
+                        </div>
+                        <p class="text-gray-600 mb-4 break-words text-group-result"><i>Учень / учениця:</i></p>
+                        <ul>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР1 – працює з інформацією, даними, моделями;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР2 – створює інформаційні продукти;</p></li>
+                            <li class="break-words"><p class="text-600 mb-4">ГР3 – працює в цифровому середовищі;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР4 – безпечно та відповідально працює з інформаційними технологіями.</p></li>
+                        </ul>
+                    </div>
+                    <!-- Lesson Type & Equipment -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-pink-600 break-words">📚 Тип уроку</h3>
+                        <p class="text-gray-700 break-words">Урок розробки застосунку, поєднання теоретичних знань з практичним програмуванням.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-pink-600 break-words">💻 Обладнання та ПЗ</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Комп'ютери із середовищем програмування Python.</li>
+                            <li class="break-words">Папки notes (файли формату MP3 зі звуками нот) та frames (файли формату PNG із кадрами анімації).</li>
+                            <li class="break-words">Проєктор або інтерактивна дошка.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-pink-600 break-words">🔗 Міжпредметні зв'язки</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Музичне мистецтво (ноти, мелодії, звуки піаніно).</li>
+                            <li class="break-words">Образотворче мистецтво (графічний інтерфейс, анімація).</li>
+                            <li class="break-words">Фізика (поняття звуку, частоти).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Теоретичний блок -->
+            <div id="theory-content" class="tab-content   mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">
+                <!-- ВАРІАНТ № 2, початок -->
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-pink-500 mb-4 heading-underline break-words  title-review">ПОВТОРЮЄМО</h2>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">Актуалізація опорних знань</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2">
+                        <li class="break-words">Що таке "графічний інтерфейс користувача (GUI)" і для чого він використовується?</li>
+                        <li class="break-words">Які основні елементи графічного інтерфейсу користувача (GUI) ви знаєте?</li>
+                        <li class="break-words">Як у Python можна створити вікно та полотно для малювання?</li>
+                        <li class="break-words">Що таке "подія" в програмуванні і як її обробляти?</li>
+                        <li class="break-words">Як можна відтворити звуковий файл у Python?</li>
+                        <li class="break-words">Які формати файлів використовуються для зберігання звуку та зображень?</li>
+                    </ol>
+                    <img src="./images/img-tema5-03.webp" alt="Знак питання" class="rounded-lg shadow-md" width="200">
+                </div>
+                
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. ###)</a></i></p>
+                </div>
+                <!-- ВАРІАНТ № 2, кінець -->
+
+                <!-- <hr class="my-8 border-gray-300">
+
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-pink-500 mb-4 heading-underline break-words title-review">ПРАКТИЧНА РОБОТА № 16</h2>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-2xlooo font-bold text-gray-800 mb-4 break-words">«Розробка застосунку «Піаніно»»</h3>
+                    <p class="text-gray-700 mb-4 break-words">Завдання: розробити застосунок «Піаніно». У правій частині вікна має виводитись анімаційний фрагмент, а при натисканні на «клавіші» — відтворюватися звуки.</p>
+                    
+                    <h4 class="text-xl font-semibold text-gray-800 mb-3 break-words">Теоретичні відомості:</h4>
+                    <ul class="list-disc list-inside text-gray-700 text-lg space-y-2 mb-4">
+                        <li class="break-words">Один і той самий обробник події може викликати декілька різних об’єктів. З’ясуймо, як зробити, щоб результат виклику для кожного об’єкта був іншим. Наприклад, щоб клацання на різних прямокутниках відтворювало різні звуки.</li>
+                        <li class="break-words">Під час виклику обробника в нього передається значення (позначимо його event). Воно містить опис події, зокрема й ідентифікатор об’єкта, який спричинив виклик. Дізнатися ідентифікатор об’єкта можна так: `event.widget.find_withtag("current")[0]`</li>
+                        <li class="break-words">Тут ідентифікатор об’єкта збережено в змінній `key_id`. Його можна використати для подальшого оновлення події.</li>
+                    </ul>
+                    
+                    <h4 class="text-xl font-semibold text-gray-800 mb-3 break-words">Хід роботи:</h4>
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2 mb-4">
+                        <li class="break-words">Під час роботи за комп'ютером дотримуйтеся правил безпеки.</li>
+                        <li class="break-words">В IDLE виберіть команду **File → New File**.</li>
+                        <li class="break-words">Запрограмуйте створення вікна програми (назва об’єкта `root`) із заголовком Піаніно і полотном `canvas` шириною 670 і висотою 230 пікселів.</li>
+                        <li class="break-words">Підготуйте дані та структури даних для малювання клавіш:
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>порожні списки, які буде сформовано пізніше: `keys = []` (для ідентифікаторів клавіш) та `sounds = []` (для імен файлів з відповідними клавішам звуками).</li>
+                            </ul>
+                        </li>
+                        <li class="break-words">Створіть функцію для опрацювання натискання клавіші: `def on_click(event):`</li>
+                        <li class="break-words">Отримайте ідентифікатор натиснутої клавіші: `key_id = event.widget.find_withtag("current")[0]`</li>
+                        <li class="break-words">За ідентифікатором знаходимо ім’я файлу й відтворюємо звук: `playsound(sounds[keys.index(key_id)])`</li>
+                        <li class="break-words">Створіть функцію для малювання прямокутників відповідного кольору та налаштування його для відтворення звуку при клацанні: `def PianoKey(x, y, color, soundfile):`
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>`if color == "black": w, h = 40, 140` (розміри чорної клавіші)</li>
+                                <li>`else: w, h = 50, 200` (розміри білої клавіші)</li>
+                                <li>`key_id = canvas.create_rectangle(x, y, x+w, y+h, fill = color)` (створення прямокутника)</li>
+                                <li>`keys.append(key_id)` (додавання ідентифікатора клавіші до списку `keys`)</li>
+                                <li>`sounds.append(soundfile)` (додавання імені файлу зі звуком до списку `sounds`)</li>
+                                <li>`canvas.tag_bind(key_id, '<1>', on_click)` (прив'язка функції `on_click` до події кліку на клавіші)</li>
+                            </ul>
+                        </li>
+                        <li class="break-words">Для перевірки створеного коду додайте до основної програми команди: `PianoKey(15, 15, 'white', 'do.mp3')` (пробний виклик для однієї клавіші) та `root.mainloop()`.</li>
+                        <li class="break-words">Збережіть програму у файлі Практична робота 16 у папці, що містить папки `notes` і `frames`. При клацанні прямокутника має звучати нота `до`.</li>
+                        <li class="break-words">Завершіть розробку програми «Піаніно» з викликом списків пар параметрів білих клавіш:
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>координат `x` і `y` лівих верхніх кутів клавіш на полотні (координати `y` — однакові): `coords = [15, 70, 125, 180, 235, 290, 345, 400]`</li>
+                                <li>список імен файлів зі звуками: `sIst = ['do.mp3', 're.mp3', 'mi.mp3', 'fa.mp3', 'sol.mp3', 'la.mp3', 'si.mp3', 'do2.mp3']`</li>
+                            </ul>
+                        </li>
+                        <li class="break-words">Запишіть цикл для малювання клавіш, описаних у списках `coords` і `sIst` (від `англ. sound list` — список звуків): `for key in range(len(coords)): PianoKey(coords[key], 15, 'white' if key < 8 else 'black', '/notes/'+sIst[key])`</li>
+                        <li class="break-words">Перевірте роботу програми.</li>
+                        <li class="break-words">У вікні має з’явитися рядок білих клавіш, кожна з яких «звучить», якщо її натиснути. Поясніть, як виконується цей цикл.</li>
+                        <li class="break-words">Доповніть список координат чорних клавіш (47, 102, 212, 267, 322), а список `sIst` — іменами відповідних файлів (`do-d.mp3`, `mi-b.mp3`, `fa-d.mp3`, `sol-d.mp3`, `si-b.mp3`). Перевірте роботу програми.</li>
+                        <li class="break-words">Створіть список імен файлів із кадрами анімації з папки `frames` (допишіть імена шести графічних файлів): `pIst = ['f01.png', 'f02.png', 'f03.png', '...', 'f24.png', 'f25.png']` та `pfld = '/frames/'` (шлях до папки з зображеннями).</li>
+                        <li class="break-words">Запрограмуйте читання графічних даних у список `frms`: `frms = []` (читаємо дані зображень із файлів) та `for name in pIst: frms.append(PhotoImage(file = pfld+name))` (у список `frms`).</li>
+                        <li class="break-words">Доповніть на полотні зображення на основі графічних даних першого кадру: `cur_frame = 0` (номер поточного кадру) та `img = canvas.create_image(560, 115, image = frms[cur_frame])`.</li>
+                        <li class="break-words">Створіть функцію, яка неперервно виводитиме кадри анімації з інтервалом 100 мс: `def show_video():`
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>`global cur_frame`</li>
+                                <li>`cur_frame = (cur_frame+1)%len(frms)` (зміна малюнка)</li>
+                                <li>`canvas.itemconfig(img, image = frms[cur_frame])` (оновлення зображення полотна)</li>
+                                <li>`root.update()`</li>
+                                <li>`root.after(100, show_video)` (повторний виклик `show_video` через 100 мс)</li>
+                            </ul>
+                        </li>
+                        <li class="break-words">Додайте до програми виклик функції: `show_video()`.</li>
+                        <li class="break-words">Випробуйте роботу програми, спробуйте зіграти мелодію. Які особливості роботи програми ви помітили? Запропонуйте варіанти вдосконалення програми, спробуйте їх реалізувати.</li>
+                        <li class="break-words">Зробіть висновок: які можливості відкриває виникнення способів кодування та зберігання звуку й відео.</li>
+                    </ol>
+                </div> -->
+
+            </div>
+            
+
+            <!-- Практичний блок -->
+            <div id="practice-content" class="tab-content">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-6 text-center text-pink-600 break-words">Практичний блок уроку</h3>
+
+                    <!-- Множинний вибір (радіокнопки) -->
+                    <div class="quiz-container">
+                        <h4 class="question-title">Питання 1: Множинний вибір (радіокнопки)</h4>
+                        <p class="question-text">Яка функція в Python відповідає за відтворення звукових файлів у даній практичній роботі?</p>
+                        <div id="radio-question-1-pr16">
+                            <label class="option-label"><input type="radio" name="q1_pr16" value="create_rectangle"> create_rectangle</label>
+                            <label class="option-label"><input type="radio" name="q1_pr16" value="playsound"> playsound</label>
+                            <label class="option-label"><input type="radio" name="q1_pr16" value="tag_bind"> tag_bind</label>
+                            <label class="option-label"><input type="radio" name="q1_pr16" value="update"> update</label>
+                        </div>
+                        <button class="check-button" onclick="checkRadioQuestionPr16(1)">Перевірити</button>
+                        <p id="feedback-radio-1-pr16" class="feedback"></p>
+                    </div>
+
+                    <!-- Множинний вибір (чекбокси) -->
+                    <div class="quiz-container">
+                        <h4 class="question-title">Питання 2: Множинний вибір (чекбокси)</h4>
+                        <p class="question-text">Які типи файлів використовуються для звуку та анімації в застосунку "Піаніно"?</p>
+                        <div id="checkbox-question-2-pr16">
+                            <label class="option-label"><input type="checkbox" name="q2_pr16" value="mp3"> MP3</label>
+                            <label class="option-label"><input type="checkbox" name="q2_pr16" value="png"> PNG</label>
+                            <label class="option-label"><input type="checkbox" name="q2_pr16" value="txt"> TXT</label>
+                            <label class="option-label"><input type="checkbox" name="q2_pr16" value="jpg"> JPG</label>
+                        </div>
+                        <button class="check-button" onclick="checkCheckboxQuestionPr16(2)">Перевірити</button>
+                        <p id="feedback-checkbox-2-pr16" class="feedback"></p>
+                    </div>
+
+                    <!-- Заповнення пропусків -->
+                    <div class="quiz-container">
+                        <h4 class="question-title">Питання 3: Заповнення пропусків</h4>
+                        
+                        <div class="fill-in-the-blanks-container text-gray-700">
+                            Для ідентифікації натиснутої клавіші використовується змінна <input type="text" id="blank3_pr16_1" placeholder="...">, а для її прив'язки до події кліку – метод <input type="text" id="blank3_pr16_2" placeholder="...">.
+
+                            <br><br>
+                            <p><i>(Підказка: key_id, tag_bind.)</i></p>
+                        </div>
+                        <button class="check-button" onclick="checkFillInBlanksPr16(3)">Перевірити</button>
+                        <p id="feedback-fill-in-blanks-3-pr16" class="feedback"></p>
+                    </div>
+
+                    <!-- Зіставлення -->
+                    <div class="quiz-container">
+                        <h4 class="question-title">Питання 4: Зіставлення</h4>
+                        <p class="question-text">Зіставте елементи коду з їхнім призначенням:</p>
+                        <div id="matching-question-4-pr16">
+                            <div class="matching-pair">
+                                <span class="term">canvas.create_rectangle</span>
+                                <select id="match-q4_pr16-1">
+                                    <option value="">Виберіть...</option>
+                                    <option value="create_rect">Створення прямокутника на полотні</option>
+                                    <option value="play_sound">Відтворення звуку</option>
+                                    <option value="bind_event">Прив'язка події</option>
+                                    <option value="update_display">Оновлення відображення</option>
+                                </select>
+                            </div>
+                            <div class="matching-pair">
+                                <span class="term">canvas.tag_bind</span>
+                                <select id="match-q4_pr16-2">
+                                    <option value="">Виберіть...</option>
+                                    <option value="create_rect">Створення прямокутника на полотні</option>
+                                    <option value="play_sound">Відтворення звуку</option>
+                                    <option value="bind_event">Прив'язка події</option>
+                                    <option value="update_display">Оновлення відображення</option>
+                                </select>
+                            </div>
+                            <div class="matching-pair">
+                                <span class="term">playsound</span>
+                                <select id="match-q4_pr16-3">
+                                    <option value="">Виберіть...</option>
+                                    <option value="create_rect">Створення прямокутника на полотні</option>
+                                    <option value="play_sound">Відтворення звуку</option>
+                                    <option value="bind_event">Прив'язка події</option>
+                                    <option value="update_display">Оновлення відображення</option>
+                                </select>
+                            </div>
+                            <div class="matching-pair">
+                                <span class="term">root.update</span>
+                                <select id="match-q4_pr16-4">
+                                    <option value="">Виберіть...</option>
+                                    <option value="create_rect">Створення прямокутника на полотні</option>
+                                    <option value="play_sound">Відтворення звуку</option>
+                                    <option value="bind_event">Прив'язка події</option>
+                                    <option value="update_display">Оновлення відображення</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="check-button" onclick="checkMatchingPr16(4)">Перевірити</button>
+                        <p id="feedback-matching-4-pr16" class="feedback"></p>
+                    </div>
+
+                    <h4 class="text-xl font-semibold mt-8 mb-3 text-gray-800 break-words">Додаткові завдання (за бажанням)</h4>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 mb-4">
+                        <li class="break-words">Додайте можливість записувати та відтворювати зіграні мелодії.</li>
+                        <li class="break-words">Розширте діапазон піаніно, додавши більше октав.</li>
+                        <li class="break-words">Створіть графічний інтерфейс для вибору різних інструментів (гітара, барабани тощо).</li>
+                        <li class="break-words">Реалізуйте візуальний ефект "натискання" клавіші (зміна кольору або зменшення розміру) при кліку.</li>
+                    </ul>
+
+                </div>                
+            </div>
+
+            <!-- Перевірка знань -->
+            <!-- Вручну треба змінювати лише ті значення minimum-height (min-h-[300px]), які потрібно, і треба використовувати медіа-адаптацію (стилі тут на сторінці в тезі <style>)-->
+                <!-- Тут grid -->
+            <div id="check-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-6 text-center text-pink-600 break-words">Перевірка знань</h3>
+                <p class="text-center text-gray-600 mb-8 break-words">Натисніть на картку, щоб побачити відповідь.</p>
+                <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-pink-100 p-6 rounded-xl shadow-md break-words">1. Яку роль відіграє функція `on_click(event)` у програмі "Піаніно"?</div>
+                        <div class="flip-card-back bg-pink-200 p-6 rounded-xl shadow-md break-words">Функція `on_click(event)` обробляє подію натискання на клавішу піаніно, визначає, яка саме клавіша була натиснута, та відтворює відповідний звуковий файл.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-pink-100 p-6 rounded-xl shadow-md break-words">2. Як програма відрізняє білі та чорні клавіші при малюванні?</div>
+                        <div class="flip-card-back bg-pink-200 p-6 rounded-xl shadow-md break-words">Програма використовує умовну перевірку <br>(`if color == "black"`) для визначення розмірів (ширини та висоти) і кольору клавіші, малюючи чорні клавіші меншими та темнішими.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-pink-100 p-6 rounded-xl shadow-md break-words">3. Для чого використовується цикл <br>`for key in range(len(coords))` ?</div>
+                        <div class="flip-card-back bg-pink-200 p-6 rounded-xl shadow-md break-words">Цей цикл призначений для послідовного малювання всіх білих клавіш піаніно, використовуючи координати та відповідні звукові файли зі списків `coords` і `sIst`.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-pink-100 p-6 rounded-xl shadow-md break-words">4. Як реалізується анімація в правій частині вікна?</div>
+                        <div class="flip-card-back bg-pink-200 p-6 rounded-xl shadow-md break-words">Анімація реалізується за допомогою функції `show_video()`, яка через певний інтервал часу (100 мс) змінює поточний кадр зображення (`cur_frame`) та оновлює його на полотні.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-pink-100 p-6 rounded-xl shadow-md break-words">5. Які переваги має використання окремих папок для звуків і кадрів анімації?</div>
+                            <div class="flip-card-back bg-pink-200 p-6 rounded-xl shadow-md break-words">Це забезпечує кращу організацію проєкту, спрощує доступ до файлів, робить код більш читабельним та дозволяє легко замінювати або додавати нові звуки чи анімаційні кадри.</div>
+                        </div>
+                    </li>
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-pink-100 p-6 rounded-xl shadow-md break-words">6. Які можливості відкриває виникнення способів кодування та зберігання звуку й відео?</div>
+                            <div class="flip-card-back bg-pink-200 p-6 rounded-xl shadow-md break-words">Це відкриває широкі можливості для створення мультимедійних застосунків, ігор, освітніх програм, художніх проєктів, дозволяючи інтегрувати інтерактивні елементи та покращувати користувацький досвід.</div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 254-257)</a></i></p>
+                </div>
+            </div>
+         
+
+            <!-- Домашнє завдання -->
+            <div id="homework-content" class="tab-content   bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-pink-600 break-words">Домашнє завдання</h3>                    
+                <!--  -->
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <div>
+                            <p><b>1. Практична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Виконати практичну роботу № 16 (стор. 254-257).</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p><b>2. Завдання за бажанням (для закріплення):</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Інтерактивна платформа IZZI (8 клас) до практичної роботи № 16: <a href="https://ua.izzi.digital/DOS/1183864/1346664.html" target="_blank" class="text-blue-600 hover:underline break-words break-all block">https://ua.izzi.digital/DOS/1183864/1346664.html</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="./images/img08.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!--  -->
+            </div>
+        </section>
+
+
+        <!-- Додаткові матеріали -->
+        <!-- Additional Materials Section -->
+        <section class="bg-white p-6 rounded-xl shadow-md mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-pink-600 break-words">Додаткові матеріали</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li class="break-words"><a href="https://sites.google.com/view/lga84-9/tehnika_bezpeky" target="_blank" class="text-blue-600 hover:underline">Техніка безпеки</a></li>
+
+                <li class="break-words"><a href="https://drive.google.com/file/d/1C9_KEF981LvokY0GWNOhUXb7rJKJUUbM/view" target="_blank" class="text-blue-600 hover:underline">Оцінювання учнів та учениць на уроках інформатики</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу</a> (ПР16, стор. 254-257)</li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">Інтерактивна платформа IZZI (8 клас)</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до практичної роботи № 16: <a href="https://ua.izzi.digital/DOS/1183864/1346664.html" target="_blank" class="text-blue-600 hover:underline break-words2">https://ua.izzi.digital/DOS/1183864/1346664.html</a></li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm   bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>           
+        </ul>
+    </footer>    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Початок:
+            // Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання".
+            const tabs = document.getElementById('tabs');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            tabs.addEventListener('click', (e) => {
+                // Ensure the click target is a BUTTON (tab button)
+                if (e.target.tagName === 'BUTTON') {
+                    const tab = e.target.dataset.tab;
+
+                    // Remove 'active' class from all buttons and add to the clicked one
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Hide all tab contents and show the corresponding one
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Use === for strict comparison
+                        if (content.id === `${tab}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                }
+            });
+            // Кінець.
+
+
+            // Початок:
+            // ГРУПИ РЕЗУЛЬТАТІВ.
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            // 1. Створення об'єкту-мапи для відповідності значень і кольорів
+            // Тут вручну можна поміняти значення background й border
+            const colorMap = {
+                1: {
+                    background: '#fce7f3', // text-pink-100
+                    border: '#fbcfe8'      // text-pink-200
+                },
+                2: {
+                    background: '#fbcfe8', // text-pink-200
+                    border: '#f9a8d4'       // text-pink-300
+                },
+                3: {
+                    background: '#f9a8d4',  // text-pink-300
+                    border: '#f472b6'        // text-pink-400
+                },
+                4: {
+                    background: '#f472b6',   // text-pink-400
+                    border: '#ec4899'      // text-pink-500
+                }
+            };
+
+            // Дані, які можна змінювати вручну
+            const chartData = [2, 4, 3, 2];
+
+            // 2. Генерація масивів кольорів на основі даних
+            const backgroundColors = chartData.map(value => colorMap[value].background);
+            const borderColors = chartData.map(value => colorMap[value].border);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ГР1', 'ГР2', 'ГР3', 'ГР4'],
+                    datasets: [{
+                        label: 'Важливість',
+                        data: chartData, // Використовуємо змінну
+                        backgroundColor: backgroundColors, // Використовуємо згенерований масив
+                        borderColor: borderColors, // Використовуємо згенерований масив
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const labels = ['', 'Важлива', 'Дуже важлива', 'Найважливіша'];
+                                    return labels[value] || '';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.parsed.y;
+                                    const importanceLabels = {4: 'Найважливіша', 3: 'Дуже важлива', 2: 'Важлива', 1: 'Найменш важлива'};
+                                    label += importanceLabels[value] || '';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // Кінець. ГРУПИ РЕЗУЛЬТАТІВ.
+
+
+            // Початок.
+            // ПОВОРОТ КАРТОК "Перевірка знань"
+            const flipCards = document.querySelectorAll('.flip-card');
+            flipCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+            // Кінець. ПОВОРОТ КАРТОК.
+
+        });
+    </script>
+
+    <!-- Скрипт для практичного блоку -->
+    <script>
+        // Practical Block - Quiz functions for PR16
+            function checkRadioQuestionPr16(questionNumber) {
+                const radios = document.querySelectorAll(`#radio-question-${questionNumber}-pr16 input[name="q${questionNumber}_pr16"]`);
+                let selectedValue = null;
+                radios.forEach(radio => {
+                    if (radio.checked) {
+                        selectedValue = radio.value;
+                    }
+                });
+
+                const feedbackElement = document.getElementById(`feedback-radio-${questionNumber}-pr16`);
+                if (questionNumber === 1) {
+                    if (selectedValue === 'playsound') {
+                        feedbackElement.textContent = 'Правильно! 👍';
+                        feedbackElement.classList.remove('incorrect');
+                        feedbackElement.classList.add('correct');
+                    } else {
+                        feedbackElement.textContent = 'Неправильно. Спробуйте ще раз. 😔';
+                        feedbackElement.classList.remove('correct');
+                        feedbackElement.classList.add('incorrect');
+                    }
+                }
+            }
+
+            function checkCheckboxQuestionPr16(questionNumber) {
+                const checkboxes = document.querySelectorAll(`#checkbox-question-${questionNumber}-pr16 input[name="q${questionNumber}_pr16"]`);
+                const selectedValues = [];
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        selectedValues.push(checkbox.value);
+                    }
+                });
+
+                const feedbackElement = document.getElementById(`feedback-checkbox-${questionNumber}-pr16`);
+                if (questionNumber === 2) {
+                    const correctAnswers = ['mp3', 'png'];
+                    const isCorrect = selectedValues.length === correctAnswers.length &&
+                                      correctAnswers.every(answer => selectedValues.includes(answer));
+
+                    if (isCorrect) {
+                        feedbackElement.textContent = 'Правильно! 👍';
+                        feedbackElement.classList.remove('incorrect');
+                        feedbackElement.classList.add('correct');
+                    } else {
+                        feedbackElement.textContent = 'Неправильно. Перевірте всі правильні варіанти. 😔';
+                        feedbackElement.classList.remove('correct');
+                        feedbackElement.classList.add('incorrect');
+                    }
+                }
+            }
+
+            function checkFillInBlanksPr16(questionNumber) {
+                const blank1 = document.getElementById('blank3_pr16_1').value.trim().toLowerCase();
+                const blank2 = document.getElementById('blank3_pr16_2').value.trim().toLowerCase();
+
+                const feedbackElement = document.getElementById(`feedback-fill-in-blanks-${questionNumber}-pr16`);
+                
+                const expected1 = 'key_id';
+                const expected2 = 'tag_bind'; 
+
+                let isCorrect = true;
+                if (blank1 !== expected1) { 
+                    isCorrect = false;
+                }
+                if (blank2 !== expected2) { 
+                    isCorrect = false;
+                }
+
+                if (isCorrect) {
+                    feedbackElement.textContent = 'Правильно! 👍';
+                    feedbackElement.classList.remove('incorrect');
+                    feedbackElement.classList.add('correct');
+                } else {
+                    feedbackElement.textContent = 'Неправильно. Перевірте ваші відповіді. 😔';
+                    feedbackElement.classList.remove('correct');
+                    feedbackElement.classList.add('incorrect');
+                }
+            }
+
+            function checkMatchingPr16(questionNumber) {
+                const match1 = document.getElementById('match-q4_pr16-1').value;
+                const match2 = document.getElementById('match-q4_pr16-2').value;
+                const match3 = document.getElementById('match-q4_pr16-3').value;
+                const match4 = document.getElementById('match-q4_pr16-4').value;
+
+                const feedbackElement = document.getElementById(`feedback-matching-${questionNumber}-pr16`);
+                let isCorrect = true;
+
+                if (match1 !== 'create_rect') isCorrect = false;
+                if (match2 !== 'bind_event') isCorrect = false;
+                if (match3 !== 'play_sound') isCorrect = false;
+                if (match4 !== 'update_display') isCorrect = false;
+
+                if (isCorrect) {
+                    feedbackElement.textContent = 'Правильно! 👍';
+                    feedbackElement.classList.remove('incorrect');
+                    feedbackElement.classList.add('correct');
+                } else {
+                    feedbackElement.textContent = 'Неправильно. Спробуйте ще раз. 😔';
+                    feedbackElement.classList.remove('correct');
+                    feedbackElement.classList.add('incorrect');
+                }
+            }
+    </script>
+
+</body>
+</html>

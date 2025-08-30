@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: 8 клас</title>
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Тіло документа */
+        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
+
+        /* Стилі для навігації в меню */
+        .logo-main { display: none; }
+        .main-title-text { width: 140px; text-align: center; }
+        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
+        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
+        @media screen and (min-width: 768px) {
+            .main-title-text { width: auto; }
+            .main-navigation { display: inline; width: auto; }
+        }
+
+        /* main стилі */
+        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
+        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
+        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
+        .source-text { padding: 8px; }
+        @media screen and (min-width: 300px) {
+            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
+            .text-2xlooo { font-size: 1.25rem; }
+        }
+        @media screen and (min-width: 480px) {
+            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
+            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
+            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
+        }
+
+        /* Стилі для "Про урок" */
+        /* Групи результатів */
+        .text-group-result { padding-top: 16px; }
+
+        /* Style to hide inactive tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Style to tab content */
+        .tab-btn.active { 
+            color: #d97706;                /* text-amber-600 */
+            border-bottom-color: #d97706;  /* text-amber-600 */
+            background-color: #fef3c7;     /* text-amber-100 */
+        }
+        .tab-btn { 
+            transition: color 0.3s, 
+            border-color 0.3s, 
+            background-color 0.3s; 
+            border-bottom: 2px solid transparent;
+        }
+
+        /* Styles for flip cards */
+        .flip-card {
+            background-color: transparent;
+            width: 100%; /* Make cards responsive to grid column width */
+            height: 200px; /* Fixed height for consistency, adjust as needed */
+            perspective: 1000px; /* 3D effect */
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left; /* Adjust text alignment as needed */
+            overflow-wrap: break-word; /* break-words */
+            /*word-break: break-all;*/ /* break-all */
+        }
+
+        .flip-card-front {
+            color: #4b5563; /* text-gray-700 */
+        }
+
+        .flip-card-back {
+            color: #4b5563; /* text-gray-700 */
+            transform: rotateY(180deg);
+        }
+
+        /* Responsive adjustments for min-height */
+        @media (min-width: 768px) { /* md breakpoint */
+            .flip-card.min-h-md {
+                min-height: 250px; /* Example, adjust as needed for medium screens */
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .flip-card.min-h-lg {
+                min-height: 200px; /* Example, adjust as needed for large screens */
+            }
+        }
+
+                
+        /* Стилі для практичного блоку */
+        .exercise-section {
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background-color: #f9fafb;
+            border-radius: 0.75rem;
+            border: 1px solid #e5e7eb;
+        }
+        .question-text {
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            color: #4b5563;
+            cursor: pointer;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s, border-color 0.2s;
+            border: 1px solid transparent; /* Додано для візуального ефекту підсвічування */
+        }
+        .option-label:hover {
+            background-color: #eff6ff;
+        }
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin-right: 0.75rem;
+            transform: scale(1.2);
+            accent-color: #3b82f6;
+        }
+        .fill-in-the-blanks p {
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            color: #1f2937;
+        }
+        .fill-in-the-blanks input[type="text"] {
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 1rem;
+            color: #1f2937;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            width: auto; /* Allow input to size naturally */
+            min-width: 100px; /* Minimum width for visibility */
+            vertical-align: middle;
+            margin: 0 0.25rem;
+        }
+        .fill-in-the-blanks input[type="text"]:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+        .match-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            background-color: #e0f2fe;
+            border-radius: 0.75rem;
+            border: 1px solid #93c5fd;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .match-item-left {
+            font-weight: 500;
+            color: #1e40af;
+            font-size: 1.05rem;
+            flex: 1;
+        }
+        .match-item-right select {
+            border: 1px solid #93c5fd;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 1rem;
+            color: #1e40af;
+            background-color: #ffffff;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .match-item-right select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .submit-button, .reset-button {
+            padding: 0.75rem 2rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #ffffff;
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .submit-button {
+            background-color: #2563eb;
+        }
+        .submit-button:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+        .submit-button:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .reset-button {
+            background-color: #6b7280;
+        }
+        .reset-button:hover {
+            background-color: #4b5563;
+            transform: translateY(-2px);
+        }
+        .reset-button:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .result-message {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .result-message.correct {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .result-message.incorrect {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        .result-message.partial {
+            background-color: #fffbeb;
+            color: #92400e;
+        }
+        .error-message {
+            color: #ef4444;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        /* Styles for highlighting correct/incorrect answers */
+        .is-correct {
+            background-color: #d1fae5 !important;
+            border-color: #34d399 !important;
+        }
+        .is-incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+        }
+        .fill-in-the-blanks input.is-correct {
+            border-color: #34d399 !important;
+            box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.25) !important;
+        }
+        .fill-in-the-blanks input.is-incorrect {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25) !important;
+        }
+        .match-item.is-correct {
+            background-color: #d1fae5 !important;
+            border-color: #34d399 !important;
+        }
+        .match-item.is-incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+        }
+        .match-item-right select.is-correct {
+            border-color: #34d399 !important;
+        }
+        .match-item-right select.is-incorrect {
+            border-color: #ef4444 !important;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="container mx-auto flex justify-between items-center   bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10  logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
+            </ul>
+            <!-- <a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a>
+            <a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a> -->
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <!-- Секція теми уроку -->
+        <section class="text-center mb-8">
+            <h1 class="text-lg text-slate-600 mt-2 break-words">Тема 5: «Алгоритми та програми». Урок № 34. (До § 25)</h1>
+            <h1 class="text-3xlooo md:text-4xl font-bold text-slate-900 break-words  theme-text">Налагодження програмного коду</h1>
+            <h2 class="text-lg text-slate-600 mt-2 break-words">Інтерактивний план-конспект уроку для 8 класу НУШ</h2>
+        </section>
+
+
+        <!-- Секція "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання" -->
+        <section>
+            <!-- Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання". -->
+            <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+                <nav id="tabs" class="flex flex-wrap justify-center gap-2 sm:gap-4">
+                    <button data-tab="about" class="tab-btn active text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Про урок</button>
+                    <button data-tab="theory" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Теоретичний блок</button>
+                    <button data-tab="practice" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Практичний блок</button>
+                    <button data-tab="check" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Перевірка знань</button>
+                    <button data-tab="homework" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Домашнє завдання</button>
+                </nav>
+            </div>
+
+            <!-- Про урок -->
+            <div id="about-content" class="tab-content active">
+                <div class="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Lesson Goal -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-amber-600 break-words break-all">🎯 Мета уроку</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Освітня:</b> ознайомити учнів з поняттям налагодження програмного коду, основними типами помилок (синтаксичні, часу виконання, логічні) та методами їх виправлення.</li>
+                            <li class="break-words"><b>Розвивальна:</b> розвивати навички виявлення та виправлення помилок у програмах Python, логічне мислення, вміння аналізувати програмний код.</li>
+                            <li class="break-words"><b>Виховна:</b> виховувати уважність, терпіння, посидючість та відповідальність при роботі з програмами, формувати вміння працювати над помилками.</li>
+                        </ul>
+                    </div>
+                    <!-- Expected Outcomes -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-amber-600 break-words break-all">✅ Очікувані результати</h3>
+                        <p class="mb-2 text-gray-600">Після уроку учні зможуть:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Розрізняти синтаксичні, логічні помилки та помилки часу виконання.</li>
+                            <li class="break-words">Виправляти синтаксичні помилки за допомогою повідомлень інтерпретатора Python.</li>
+                            <li class="break-words">Використовувати блоки `try-except` для перехоплення винятків.</li>
+                            <li class="break-words">Застосовувати тестування програм для виявлення логічних помилок.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-bold mb-3 text-amber-600 break-words">📊 Групи результатів (НУШ)</h3>
+                        <p class="text-gray-600 mb-4 break-words">Візуалізація важливості груп результатів для цього уроку.</p>
+                        <div class="chart-container relative h-64 w-full max-w-md mx-auto">
+                            <canvas id="resultsChart"></canvas>
+                        </div>
+                        <p class="text-gray-600 mb-4 break-words text-group-result"><i>Учень / учениця:</i></p>
+                        <ul>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР1 – працює з інформацією, даними, моделями;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР2 – створює інформаційні продукти;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР3 – працює в цифровому середовищі;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР4 – безпечно та відповідально працює з інформаційними технологіями.</p></li>
+                        </ul>
+                    </div>
+                    <!-- Lesson Type & Equipment -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-amber-600 break-words">📚 Тип уроку</h3>
+                        <p class="text-gray-700 break-words">Урок вивчення нового матеріалу з елементами практичної роботи та вирішення проблем.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-amber-600 break-words">💻 Обладнання та ПЗ</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Персональні комп'ютери.</li>
+                            <li class="break-words">Середовище програмування IDLE (Python).</li>
+                            <li class="break-words">Проєктор або інтерактивна дошка.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-amber-600 break-words">🔗 Міжпредметні зв'язки</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Математика (логіка, обчислення).</li>
+                            <li class="break-words">Англійська мова (читання помилок та термінології).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Теоретичний блок -->
+            <div id="theory-content" class="tab-content   mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">
+                <!-- ВАРІАНТ № 2, початок -->
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-amber-500 mb-4 heading-underline break-words  title-review">ПОВТОРЮЄМО</h2>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">Актуалізація опорних знань</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2">
+                        <li class="break-words">Що таке мова програмування?</li>
+                        <li class="break-words">Назвіть три основні складові будь-якої мови програмування.</li>
+                        <li class="break-words">В чому різниця між мовами низького та високого рівня?</li>
+                        <li class="break-words">Яке призначення трансляторів?</li>
+                        <li class="break-words">Поясніть відмінність між інтерпретатором та компілятором.</li>
+                        <li class="break-words">Назвіть декілька парадигм програмування.</li>
+                    </ol>
+                    <img src="./images/img-tema5-02.webp" alt="Знак питання" class="rounded-lg shadow-md" width="200">
+                </div>
+                
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 151-154)</a></i></p>
+                </div>
+                <!-- ВАРІАНТ № 2, кінець -->
+
+                <!-- <hr class="my-8 border-gray-200">
+
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-amber-500 mb-4 heading-underline break-words title-review">НОВИЙ МАТЕРІАЛ</h2>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">25. НАЛАГОДЖЕННЯ ПРОГРАМНОГО КОДУ</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="md:w-3/4 text-gray-700 text-lg">
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Розробка програм, як і будь-яка інша діяльність людини, не обходиться без помилок. Розуміння класифікації помилок і способів їх виправлення є важливою навичкою для програміста.</p>
+                        <p class="mb-4 break-words">Помилки в програмах бувають різних типів:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700 mb-4">
+                            <li class="break-words">**синтаксичні помилки** (англ. *syntax error*);</li>
+                            <li class="break-words">**помилки часу виконання** (англ. *run-time error*);</li>
+                            <li class="break-words">**логічні (алгоритмічні) помилки**.</li>
+                        </ul>
+                        <p class="mb-4 break-words">Процес усунення помилок називають **налагодженням програмного коду**. Інтерпретатор Python виявляє два типи помилок — синтаксичні помилки і винятки (виняткові ситуації).</p>
+                        
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Виправлення синтаксичних помилок</h4>
+                        <p class="mb-4 break-words">**Синтаксичною** називають помилку, що виникає, коли порушено правила запису команд, наприклад, назву змінної почали з цифри або коли забули поставити двокрапку перед початком блока коду. Інтерпретатор Python не може зчитувати або виконувати код, у якому є синтаксичні помилки.</p>
+                        <div class="flex justify-center my-6">
+                            <img src="./images/image_aa67df.jpg" alt="Приклад синтаксичної помилки в Python" class="rounded-lg shadow-md max-w-full h-auto">
+                        </div>
+                        <p class="mb-4 break-words">У команді введення не вистачає лапок після текстової константи. Під час спроби виконати програму з’являється повідомлення про помилку, місце помилки виділяється червоним кольором (Рис. 25.1).</p>
+                        <p class="mb-4 break-words">У вікні консолі спробуємо ввести команду присвоювання, де порушено правила створення назви змінної (Рис. 25.2).</p>
+                        <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto"><code>>>>2x = 3
+SyntaxError: invalid decimal literal
+>>>|</code></pre>
+                        <p class="text-gray-600 text-sm italic mb-4">Рис. 25.2</p>
+
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Винятки</h4>
+                        <p class="mb-4 break-words">Програма може бути правильно написана з точки зору синтаксису, але вона припиняє роботу через якусь помилку.</p>
+                        <p class="mb-4 break-words">Помилку, яка не є синтаксичною і спричиняє аварійне припинення виконання програми, називають **винятком**.</p>
+                        <p class="mb-4 break-words">Після запуску програми на виконання у вікні консолі буде виведено номер рядка коду, в якому виявлено помилку, команду, яка спричинила аварійне припинення виконання програми, тип винятку та опис помилки.</p>
+                        <p class="mb-4 break-words">Розглянемо причини виникнення винятків на прикладі:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700 mb-4">
+                            <li class="break-words">Виняток `NameError` виникає під час спроби використати змінну, якій не було присвоєно значення (Рис. 25.3).</li>
+                            <div class="flex justify-center my-6">
+                                <img src="./images/image_aa67df.jpg" alt="Приклад винятку NameError" class="rounded-lg shadow-md max-w-full h-auto">
+                            </div>
+                            <li class="break-words">Виняток `ZeroDivisionError` виникає, якщо в програмі трапилася спроба ділення на нуль (Рис. 25.5).</li>
+                            <div class="flex justify-center my-6">
+                                <img src="./images/image_aa6804.jpg" alt="Приклад винятку ZeroDivisionError" class="rounded-lg shadow-md max-w-full h-auto">
+                            </div>
+                            <li class="break-words">Виняток `ValueError` виникає, якщо спробувати виконати команду `a = int("Hi")`, оскільки рядок "Ні" не можна перетворити на ціле число (Рис. 25.6).</li>
+                            <div class="flex justify-center my-6">
+                                <img src="./images/image_aa6804.jpg" alt="Приклад винятку ValueError" class="rounded-lg shadow-md max-w-full h-auto">
+                            </div>
+                            <li class="break-words">Виняток `TypeError` виникає, якщо спробувати виконати команду `a = 10+"3"`, оскільки числа і рядки належать до різних типів даних (Рис. 25.7).</li>
+                            <div class="flex justify-center my-6">
+                                <img src="./images/image_aa6804.jpg" alt="Приклад винятку TypeError" class="rounded-lg shadow-md max-w-full h-auto">
+                            </div>
+                        </ul>
+
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Перехоплення винятків</h4>
+                        <p class="mb-4 break-words">Команда `try-except` використовується для обробки винятків, які можуть виникнути під час виконання програми. Вона дає змогу продовжити виконання програми навіть після виникнення помилки, замість того щоб аварійно її завершити.</p>
+                        <p class="mb-4 break-words">**Синтаксис неповнoї команди `try-except`:**</p>
+                        <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto"><code>try:
+    &lt;блок коду, у якому перехоплюється виняток>
+except &lt;назва винятку, який перехоплюється>:
+    &lt;блок коду, який виконується в разі виникнення винятку>
+</code></pre>
+                        <p class="mb-4 break-words">На Рис. 25.8 проілюстровано перехоплення винятку «Ділення на нуль».</p>
+                        <div class="flex justify-center my-6">
+                            <img src="./images/image_aa6804.jpg" alt="Приклад перехоплення винятку ZeroDivisionError" class="rounded-lg shadow-md max-w-full h-auto">
+                        </div>
+                        <p class="mb-4 break-words">Результат виконання команди, якщо `a = 5, b = 4` наведено на рис. 25.9, якщо `a = 5, b = 0` — на рис. 25.10.</p>
+                        <div class="flex justify-center my-6 space-x-4">
+                            <img src="./images/image_aa6804.jpg" alt="Результат try-except: a=5, b=4" class="rounded-lg shadow-md" width="300">
+                            <img src="./images/image_aa6804.jpg" alt="Результат try-except: a=5, b=0" class="rounded-lg shadow-md" width="300">
+                        </div>
+                        <p class="mb-4 break-words">У блоці `except` можна не вказувати конкретний тип винятку. У такому разі перехоплюватимуться винятки майже всіх типів (Рис. 25.11).</p>
+                        <div class="flex justify-center my-6">
+                            <img src="./images/image_aa683f.jpg" alt="Перехоплення всіх типів винятків" class="rounded-lg shadow-md max-w-full h-auto">
+                        </div>
+                        <p class="mb-4 break-words">Отже, у блоці `try` ви пишете код, який може спричинити помилку. Якщо під час виконання цього коду виникає виняток, програма виконує команди блока `except`.</p>
+
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Логічні помилки</h4>
+                        <p class="mb-4 break-words">Найскладніше виявити та виправити **логічні помилки**, тобто помилки, яких припустилися під час розроблення алгоритму. Навіть якщо програма успішно опрацьована інтерпретатором, результат її виконання може виявитися хибним. Якщо ви, бажаючи збільшити число `a` на `1`, замість `a = a+1` випадково напишете `a = a+2`, то інтерпретатор не виявить помилки, адже синтаксично ця команда цілком правильна, але результат роботи програми буде неправильним.</p>
+                        <p class="mb-4 break-words">Для виявлення логічних помилок програму потрібно перевірити за допомогою **тестів** — наборів вхідних даних і відповідних їм результатів, і виправити виявлені помилки. Тестовий набір даних допомагає перевірити програму на різних вхідних даних, щоб упевнитися, що вона працює коректно в усіх можливих ситуаціях. Тестування полягає в порівнянні результатів зі зразком. Часто розробники спричиняють недоліки математичної моделі та помилки в алгоритмі.</p>
+                        <p class="mb-4 break-words">Вам потрібно виконати тестування програми для пошуку кореня лінійного рівняння вигляду $ax+b=c$.</p>
+                        <div class="flex justify-center my-6">
+                            <img src="./images/image_aa683f.jpg" alt="Тестові набори для розв'язування лінійних рівнянь" class="rounded-lg shadow-md max-w-full h-auto">
+                        </div>
+                    </div>
+                    <div class="md:w-1/4 flex justify-center md:justify-start">
+                        
+                    </div>
+                </div>
+                
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 158-163)</a></i></p>
+                </div> -->
+                
+            </div>
+            
+
+            <!-- Практичний блок -->
+            <div id="practice-content" class="tab-content">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-6 text-center text-amber-600 break-words">Практичний блок уроку</h3>
+                    
+                    <!-- 1. Multiple Choice (Radio Buttons) -->
+                    <div class="exercise-section">
+                        <h2>1. Множинний вибір (Радіокнопки)</h2>
+                        <div class="question-text">
+                            Який тип помилки виникає, коли порушено правила запису команд (наприклад, пропущено двокрапку)?
+                        </div>
+                        <form id="radioForm">
+                            <label class="option-label">
+                                <input type="radio" name="videoProgram" value="Синтаксична"> Синтаксична
+                            </label>
+                            <label class="option-label">
+                                <input type="radio" name="videoProgram" value="Логічна"> Логічна
+                            </label>
+                            <label class="option-label">
+                                <input type="radio" name="videoProgram" value="Часу виконання"> Часу виконання
+                            </label>
+                            <div class="button-group">
+                                <button type="button" class="submit-button" onclick="checkRadio()">Перевірити</button>
+                                <button type="button" class="reset-button" onclick="resetRadio()">Скинути</button>
+                            </div>
+                            <div id="radioResult" class="result-message hidden"></div>
+                        </form>
+                    </div>
+
+                    <!-- 2. Fill in the Blanks -->
+                    <div class="exercise-section fill-in-the-blanks">
+                        <h2>2. Заповнення пропусків</h2>
+                        <p>
+                            <span class="question-text">Заповніть пропуски:</span><br>
+                            <br>
+                            <span class="segment">Процес усунення помилок у програмі називається </span>
+                            <input type="text" id="blank1" placeholder="Ваша відповідь">.
+                        </p>
+                        <div class="button-group">
+                            <button type="button" class="submit-button" onclick="checkBlanks()">Перевірити</button>
+                            <button type="button" class="reset-button" onclick="resetBlanks()">Скинути</button>
+                        </div>
+                        <div id="blanksResult" class="result-message hidden"></div>
+                    </div>
+
+                    <!-- 3. Matching -->
+                    <div class="exercise-section">
+                        <h2>3. Зіставлення</h2>
+                        <div class="question-text">Зіставте винятки Python з причинами їх виникнення..</div>
+                        <form id="matchingForm">
+                            <div class="match-item">
+                                <div class="match-item-left">Спроба використати змінну без присвоєння значення.</div>
+                                <div class="match-item-right">
+                                    <select id="match1">
+                                        <option value="">Оберіть...</option>
+                                        <option value="ZeroDivisionError">ZeroDivisionError</option>
+                                        <option value="ValueError">ValueError</option>
+                                        <option value="NameError">NameError</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="match-item">
+                                <div class="match-item-left">Ділення числа на нуль.</div>
+                                <div class="match-item-right">
+                                    <select id="match2">
+                                        <option value="">Оберіть...</option>
+                                        <option value="ZeroDivisionError">ZeroDivisionError</option>
+                                        <option value="ValueError">ValueError</option>
+                                        <option value="NameError">NameError</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="match-item">
+                                <div class="match-item-left">Неможливість перетворення рядка на число.</div>
+                                <div class="match-item-right">
+                                    <select id="match3">
+                                        <option value="">Оберіть...</option>
+                                        <option value="ZeroDivisionError">ZeroDivisionError</option>
+                                        <option value="ValueError">ValueError</option>
+                                        <option value="NameError">NameError</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="button-group">
+                                <button type="button" class="submit-button" onclick="checkMatching()">Перевірити</button>
+                                <button type="button" class="reset-button" onclick="resetMatching()">Скинути</button>
+                            </div>
+                            <div id="matchingResult" class="result-message hidden"></div>
+                        </form>
+                    </div>
+
+                    <!-- 4. Multiple Choice (Checkboxes) -->
+                    <div class="exercise-section">
+                        <h2>4. Множинний вибір (Чекбокси)</h2>
+                        <div class="question-text">
+                            Які особливості характерні для логічних помилок? (Оберіть кілька варіантів)
+                        </div>
+                        <form id="checkboxForm">
+                            <label class="option-label">
+                                <input type="checkbox" name="videoSources" value="Програма запускається, але видає хибний результат"> Програма запускається, але видає хибний результат
+                            </label>
+                            <label class="option-label">
+                                <input type="checkbox" name="videoSources" value="Інтерпретатор одразу повідомляє про них"> Інтерпретатор одразу повідомляє про них
+                            </label>
+                            <label class="option-label">
+                                <input type="checkbox" name="videoSources" value="Виникають через неправильно розроблений алгоритм"> Виникають через неправильно розроблений алгоритм
+                            </label>
+                            <label class="option-label">
+                                <input type="checkbox" name="videoSources" value="Завжди призводять до аварійного завершення програми"> Завжди призводять до аварійного завершення програми
+                            </label>
+                            <div class="button-group">
+                                <button type="button" class="submit-button" onclick="checkCheckboxes()">Перевірити</button>
+                                <button type="button" class="reset-button" onclick="resetCheckboxes()">Скинути</button>
+                            </div>
+                            <div id="checkboxResult" class="result-message hidden"></div>
+                        </form>
+                    </div>
+
+                    <!-- 5. Multiple Choice (Radio Buttons) -->
+                    <div class="exercise-section">
+                        <h2>5. Множинний вибір (Радіокнопки)</h2>
+                        <div class="question-text">
+                            Розгляньте наступний фрагмент коду Python:
+                        </div>
+                        <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto"><code>try:
+    result = 10 / 0
+    print(result)
+except ZeroDivisionError:
+    print("Ділення на нуль неможливе!")
+</code></pre>
+                            </code></pre>
+                        <div class="question-text">
+                            Який результат буде виведено на екран?
+                        </div>
+                        <form id="radioForm5">
+                            <label class="option-label">
+                                <input type="radio" name="videoProgram5" value="Виникне помилка і програма завершиться"> Виникне помилка і програма завершиться
+                            </label>
+                            <label class="option-label">
+                                <input type="radio" name="videoProgram5" value="Ділення на нуль неможливе!"> Ділення на нуль неможливе!
+                            </label>
+                            <label class="option-label">
+                                <input type="radio" name="videoProgram5" value="0.0"> 0.0 
+                            </label>
+                            <div class="button-group">
+                                <button type="button" class="submit-button" onclick="checkRadio5()">Перевірити</button>
+                                <button type="button" class="reset-button" onclick="resetRadio5()">Скинути</button>
+                            </div>
+                            <div id="radioResult5" class="result-message hidden"></div>
+                        </form>
+                    </div>
+
+
+                </div>                
+            </div>
+
+            <!-- Перевірка знань -->
+            <!-- Вручну треба змінювати лише ті значення minimum-height (min-h-[300px]), які потрібно, і треба використовувати медіа-адаптацію (стилі тут на сторінці в тезі <style>)-->
+                <!-- Тут grid -->
+            <div id="check-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-6 text-center text-amber-600 break-words">Перевірка знань</h3>
+                <p class="text-center text-gray-600 mb-8 break-words">Натисніть на картку, щоб побачити відповідь.</p>
+                <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-amber-100 p-6 rounded-xl shadow-md break-words">1. Що називають налагодженням програмного коду?</div>
+                        <div class="flip-card-back bg-amber-200 p-6 rounded-xl shadow-md break-words">Процес усунення помилок у програмі.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-amber-100 p-6 rounded-xl shadow-md break-words">2. Які основні типи помилок виникають у програмах?</div>
+                        <div class="flip-card-back bg-amber-200 p-6 rounded-xl shadow-md break-words">Синтаксичні помилки, помилки часу виконання (винятки), логічні (алгоритмічні) помилки.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-amber-100 p-6 rounded-xl shadow-md break-words">3. Що таке синтаксична помилка?</div>
+                        <div class="flip-card-back bg-amber-200 p-6 rounded-xl shadow-md break-words">Помилка, що виникає, коли порушено правила запису команд.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-amber-100 p-6 rounded-xl shadow-md break-words">4. Які команди використовують для перехоплення винятків у Python?</div>
+                            <div class="flip-card-back bg-amber-200 p-6 rounded-xl shadow-md break-words">Конструкція `try-except`.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-amber-100 p-6 rounded-xl shadow-md break-words">5. Чим відрізняються логічні помилки від синтаксичних та винятків?</div>
+                            <div class="flip-card-back bg-amber-200 p-6 rounded-xl shadow-md break-words">Логічні помилки не зупиняють виконання програми, але призводять до неправильного результату, тоді як синтаксичні та винятки призводять до її зупинки.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-amber-100 p-6 rounded-xl shadow-md break-words">6. Як виявляти логічні помилки в програмі?</div>
+                            <div class="flip-card-back bg-amber-200 p-6 rounded-xl shadow-md break-words">За допомогою тестування — порівняння результатів виконання програми з очікуваними (зразковими).</div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 158-163)</a></i></p>
+                </div>
+            </div>
+         
+
+            <!-- Домашнє завдання -->
+            <div id="homework-content" class="tab-content   bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-amber-600 break-words">Домашнє завдання</h3>                    
+                <!--  -->
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <div>
+                            <p class="break-words break-all"><b>1. Теоретична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li class="break-words break-all">Опрацювати § 25 (стор. 158-164).</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><b>2. Практична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Виконати вправу № 25 (стор. 164).</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p><b>3. Завдання за бажанням (для закріплення):</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Інтерактивна платформа IZZI (8 клас) до § 25: <a href="https://ua.izzi.digital/DOS/1183864/1262919.html" target="_blank" class="text-blue-600 hover:underline break-words break-all block">https://ua.izzi.digital/DOS/1183864/1262919.html</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="./images/img08.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!--  -->
+            </div>
+        </section>
+
+
+        <!-- Додаткові матеріали -->
+        <!-- Additional Materials Section -->
+        <section class="bg-white p-6 rounded-xl shadow-md mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-amber-600 break-words">Додаткові матеріали</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li class="break-words"><a href="https://sites.google.com/view/lga84-9/tehnika_bezpeky" target="_blank" class="text-blue-600 hover:underline">Техніка безпеки</a></li>
+
+                <li class="break-words"><a href="https://drive.google.com/file/d/1C9_KEF981LvokY0GWNOhUXb7rJKJUUbM/view" target="_blank" class="text-blue-600 hover:underline">Оцінювання учнів та учениць на уроках інформатики</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу</a> (§ 25, стор. 158-164)</li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">Інтерактивна платформа IZZI (8 клас)</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до § 25: <a href="https://ua.izzi.digital/DOS/1183864/1262919.html" target="_blank" class="text-blue-600 hover:underline">https://ua.izzi.digital/DOS/1183864/1262919.html</a></li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm   bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>           
+        </ul>
+    </footer>    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Початок:
+            // Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання".
+            const tabs = document.getElementById('tabs');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            tabs.addEventListener('click', (e) => {
+                // Ensure the click target is a BUTTON (tab button)
+                if (e.target.tagName === 'BUTTON') {
+                    const tab = e.target.dataset.tab;
+
+                    // Remove 'active' class from all buttons and add to the clicked one
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Hide all tab contents and show the corresponding one
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Use === for strict comparison
+                        if (content.id === `${tab}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                }
+            });
+            // Кінець.
+
+
+            // Початок:
+            // ГРУПИ РЕЗУЛЬТАТІВ.
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            // 1. Створення об'єкту-мапи для відповідності значень і кольорів
+            // Тут вручну можна поміняти значення background й border
+            const colorMap = {
+                1: {
+                    background: '#fef3c7', // text-amber-100
+                    border: '#fde68a'      // text-amber-200
+                },
+                2: {
+                    background: '#fde68a', // text-amber-200
+                    border: '#fcd34d'       // text-amber-300
+                },
+                3: {
+                    background: '#fcd34d',  // text-amber-300
+                    border: '#fbbf24'        // text-amber-400
+                },
+                4: {
+                    background: '#fbbf24',   // text-amber-400
+                    border: '#f59e0b'      // text-amber-500
+                }
+            };
+
+            // Дані, які можна змінювати вручну
+            const chartData = [3, 4, 2, 2];
+
+            // 2. Генерація масивів кольорів на основі даних
+            const backgroundColors = chartData.map(value => colorMap[value].background);
+            const borderColors = chartData.map(value => colorMap[value].border);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ГР1', 'ГР2', 'ГР3', 'ГР4'],
+                    datasets: [{
+                        label: 'Важливість',
+                        data: chartData, // Використовуємо змінну
+                        backgroundColor: backgroundColors, // Використовуємо згенерований масив
+                        borderColor: borderColors, // Використовуємо згенерований масив
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const labels = ['', 'Важлива', 'Дуже важлива', 'Найважливіша'];
+                                    return labels[value] || '';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.parsed.y;
+                                    const importanceLabels = {4: 'Найважливіша', 3: 'Дуже важлива', 2: 'Важлива', 1: 'Найменш важлива'};
+                                    label += importanceLabels[value] || '';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // Кінець. ГРУПИ РЕЗУЛЬТАТІВ.
+
+
+            // Початок.
+            // ПОВОРОТ КАРТОК "Перевірка знань"
+            const flipCards = document.querySelectorAll('.flip-card');
+            flipCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+            // Кінець. ПОВОРОТ КАРТОК.
+
+        });
+    </script>
+
+
+    <!-- Скрипт для Практичного блоку -->
+    <script>
+        // Функція для відображення повідомлень
+        function displayResult(elementId, isCorrect, message) {
+            const resultElement = document.getElementById(elementId);
+            resultElement.classList.remove('hidden', 'correct', 'incorrect', 'partial');
+            if (isCorrect === true) {
+                resultElement.classList.add('correct');
+            } else if (isCorrect === false) {
+                resultElement.classList.add('incorrect');
+            } else { // Partial
+                resultElement.classList.add('partial');
+            }
+            resultElement.textContent = message;
+        }
+
+        // Функція для очищення підсвічування для радіокнопок/чекбоксів
+        function clearOptionHighlight(formId) {
+            document.querySelectorAll(`#${formId} .option-label`).forEach(label => {
+                label.classList.remove('is-correct', 'is-incorrect');
+            });
+        }
+
+        // Функція для очищення підсвічування для полів введення
+        function clearInputHighlight(inputIds) {
+            inputIds.forEach(id => {
+                document.getElementById(id).classList.remove('is-correct', 'is-incorrect');
+            });
+        }
+
+        // Функція для очищення підсвічування для зіставлення
+        function clearMatchingHighlight() {
+            document.querySelectorAll('#matchingForm .match-item').forEach(item => {
+                item.classList.remove('is-correct', 'is-incorrect');
+            });
+            document.querySelectorAll('#matchingForm select').forEach(select => {
+                select.classList.remove('is-correct', 'is-incorrect');
+            });
+        }
+
+        
+        // Вправа №1
+        function checkRadio() {
+            clearOptionHighlight('radioForm'); // очищає підсвітку в межах форми №1
+            const selectedOption = document.querySelector('#radioForm input[name="videoProgram"]:checked');
+
+            if (!selectedOption) {
+                displayResult('radioResult', false, 'Будь ласка, оберіть відповідь.');
+                return;
+            }
+
+            const label = selectedOption.closest('.option-label');
+            if (selectedOption.value === 'Синтаксична') {
+                displayResult('radioResult', true, 'Правильно! Синтаксична помилка виникає, коли код не відповідає граматичним правилам мови програмування. Інтерпретатор не може зрозуміти структуру коду, що призводить до помилки.');
+                label.classList.add('is-correct');
+            } else {
+                displayResult('radioResult', false, 'Неправильно. Спробуйте ще раз.');
+                label.classList.add('is-incorrect');
+                // підсвітити правильний варіант
+                document
+                .querySelector('#radioForm input[name="videoProgram"][value="101"]')
+                .closest('.option-label')
+                .classList.add('is-correct');
+            }
+        }
+
+        function resetRadio() {
+            document.querySelectorAll('#radioForm input[name="videoProgram"]').forEach(r => r.checked = false);
+            clearOptionHighlight('radioForm');
+            const res = document.getElementById('radioResult');
+            res.classList.add('hidden');
+            res.textContent = '';
+        }
+
+        // Вправа №5
+        function checkRadio5() {
+            clearOptionHighlight('radioForm5'); // очищає підсвітку в межах форми №5
+            const selectedOption = document.querySelector('#radioForm5 input[name="videoProgram5"]:checked');
+
+            if (!selectedOption) {
+                displayResult('radioResult5', false, 'Будь ласка, оберіть відповідь.');
+                return;
+            }
+
+            const label = selectedOption.closest('.option-label');
+            if (selectedOption.value === 'Ділення на нуль неможливе!') {
+                displayResult('radioResult5', true, 'Правильно! У даному коді, операція 10 / 0 у блоці try викликає виняток ZeroDivisionError. Програма перехоплює цей виняток у блоці except і виконує код всередині нього, що призводить до виведення на екран повідомлення');
+                label.classList.add('is-correct');
+            } else {
+                displayResult('radioResult5', false, 'Неправильно. Спробуйте ще раз.');
+                label.classList.add('is-incorrect');
+                // підсвітити правильний варіант
+                document
+                .querySelector('#radioForm5 input[name="videoProgram5"][value="WAV"]')
+                .closest('.option-label')
+                .classList.add('is-correct');
+            }
+        }
+
+        function resetRadio5() {
+            document.querySelectorAll('#radioForm5 input[name="videoProgram5"]').forEach(r => r.checked = false);
+            clearOptionHighlight('radioForm5');
+            const res = document.getElementById('radioResult5');
+            res.classList.add('hidden');
+            res.textContent = '';
+        }
+
+
+        // Вправа № 2
+        // Функція для перевірки відповідей на заповнення пропусків
+        function checkBlanks() {
+            // Очистити попереднє підсвічування
+            const blank1Input = document.getElementById('blank1');
+            blank1Input.classList.remove('is-correct', 'is-incorrect');
+
+            const blank1 = blank1Input.value.trim().toLowerCase();
+            const correctBlank1 = ['налагодженням', 'налагодження'];
+
+            let isCorrect = false;
+
+            if (correctBlank1.includes(blank1)) {
+                isCorrect = true;
+                blank1Input.classList.add('is-correct');
+            } else {
+                blank1Input.classList.add('is-incorrect');
+            }
+
+            const resultMessageElement = document.getElementById('blanksResult');
+            resultMessageElement.classList.remove('hidden');
+
+            if (isCorrect) {
+                resultMessageElement.textContent = 'Правильно! Налагодження — це систематичний процес виявлення та виправлення помилок у програмному забезпеченні, що допомагає програмі працювати правильно.';
+                resultMessageElement.style.color = 'green';
+            } else {
+                resultMessageElement.textContent = 'Неправильно. Спробуйте ще раз.';
+                resultMessageElement.style.color = 'red';
+            }
+        }
+    
+        // Функція для скидання заповнення пропусків
+        function resetBlanks() {
+            const blank1Input = document.getElementById('blank1');
+            blank1Input.value = '';
+            blank1Input.classList.remove('is-correct', 'is-incorrect');
+
+            const resultMessageElement = document.getElementById('blanksResult');
+            resultMessageElement.classList.add('hidden');
+            resultMessageElement.textContent = '';
+        }
+
+        // Допоміжна функція, яка використовується
+        function clearInputHighlight(ids) {
+            ids.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.classList.remove('is-correct', 'is-incorrect');
+                }
+            });
+        }
+
+
+        // Вправа № 3
+        // Функція для перевірки відповідей на зіставлення
+        function checkMatching() {
+            clearMatchingHighlight(); // Очистити попереднє підсвічування
+            const answers = {
+                match1: 'NameError', // 1. NameError — Спроба використати змінну без присвоєння значення.
+                match2: 'ZeroDivisionError', // 2. ZeroDivisionError — Ділення числа на нуль.
+                match3: 'ValueError' // 3. ValueError — Неможливість перетворення рядка на число..
+            };
+
+            let correctCount = 0;
+            let totalMatches = Object.keys(answers).length;
+
+            let allAnswered = true;
+            for (let i = 1; i <= totalMatches; i++) {
+                const selectElement = document.getElementById(`match${i}`);
+                const matchItem = selectElement.closest('.match-item');
+
+                if (selectElement.value === '') {
+                    allAnswered = false;
+                    // Don't highlight if not answered, but indicate missing answers overall
+                } else if (selectElement.value === answers[`match${i}`]) {
+                    correctCount++;
+                    matchItem.classList.add('is-correct');
+                    selectElement.classList.add('is-correct');
+                } else {
+                    matchItem.classList.add('is-incorrect');
+                    selectElement.classList.add('is-incorrect');
+                }
+            }
+
+            if (!allAnswered) {
+                displayResult('matchingResult', false, 'Будь ласка, оберіть відповіді для всіх зіставлень.');
+                return;
+            }
+
+
+            if (correctCount === totalMatches) {
+                displayResult('matchingResult', true, 'Правильно! Всі зіставлення правильні.');
+            } else if (correctCount > 0) {
+                displayResult('matchingResult', null, `Частково правильно. Ви правильно зіставили ${correctCount} з ${totalMatches} пунктів. Спробуйте ще раз.`);
+            } else {
+                displayResult('matchingResult', false, 'Неправильно. Спробуйте ще раз.');
+            }
+        }
+
+        // Функція для скидання зіставлення
+        function resetMatching() {
+            for (let i = 1; i <= 3; i++) { // Changed to 3 to match the number of matching items
+                document.getElementById(`match${i}`).value = '';
+            }
+            clearMatchingHighlight();
+            document.getElementById('matchingResult').classList.add('hidden');
+            document.getElementById('matchingResult').textContent = '';
+        }
+
+
+        // Вправа № 4
+        // Функція для перевірки відповідей на множинний вибір (чекбокси)
+        function checkCheckboxes() {
+            clearOptionHighlight('checkboxForm'); // Очистити попереднє підсвічування
+            const checkboxes = document.querySelectorAll('input[name="videoSources"]');
+            const selectedCheckboxes = document.querySelectorAll('input[name="videoSources"]:checked');
+            const correctAnswers = ['Програма запускається, але видає хибний результат', 'Виникають через неправильно розроблений алгоритм'];
+            let correctCount = 0;
+            let totalSelected = selectedCheckboxes.length;
+
+            if (totalSelected === 0) {
+                displayResult('checkboxResult', false, 'Будь ласка, оберіть відповіді.');
+                return;
+            }
+
+            checkboxes.forEach(checkbox => {
+                const label = checkbox.closest('.option-label');
+                if (correctAnswers.includes(checkbox.value)) {
+                    if (checkbox.checked) {
+                        correctCount++;
+                        label.classList.add('is-correct');
+                    } else {
+                        label.classList.add('is-correct'); // Highlight correct but unselected
+                    }
+                } else {
+                    if (checkbox.checked) {
+                        label.classList.add('is-incorrect'); // Highlight incorrect and selected
+                    }
+                }
+            });
+
+            if (correctCount === correctAnswers.length && totalSelected === correctAnswers.length) {
+                displayResult('checkboxResult', true, 'Правильно! Логічні помилки відрізняються від інших тим, що вони не спричиняють збою програми. Код працює, але виконує неправильні операції через помилки в самій логіці програми, що призводить до несподіваного або неправильного результату.');
+            } else if (correctCount > 0 || totalSelected > correctAnswers.length) {
+                 displayResult('checkboxResult', null, `Частково правильно. Ви обрали правильних відповідей: ${correctCount}. Спробуйте ще раз.`);
+            }
+            else {
+                displayResult('checkboxResult', false, 'Неправильно. Спробуйте ще раз.');
+            }
+        }
+
+        // Функція для скидання чекбоксів
+        function resetCheckboxes() {
+            document.querySelectorAll('input[name="videoSources"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            clearOptionHighlight('checkboxForm');
+            document.getElementById('checkboxResult').classList.add('hidden');
+            document.getElementById('checkboxResult').textContent = '';
+        }
+
+    </script>
+
+</body>
+</html>

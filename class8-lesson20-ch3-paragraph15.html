@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: 8 клас</title>
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Тіло документа */
+        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
+
+        /* Стилі для навігації в меню */
+        .logo-main { display: none; }
+        .main-title-text { width: 140px; text-align: center; }
+        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
+        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
+        @media screen and (min-width: 768px) {
+            .main-title-text { width: auto; }
+            .main-navigation { display: inline; width: auto; }
+        }
+
+        /* main стилі */
+        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
+        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
+        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
+        .source-text { padding: 8px; }
+        @media screen and (min-width: 300px) {
+            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
+            .text-2xlooo { font-size: 1.25rem; }
+        }
+        @media screen and (min-width: 480px) {
+            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
+            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
+            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
+        }
+
+        /* Стилі для "Про урок" */
+        /* Групи результатів */
+        .text-group-result { padding-top: 16px; }
+
+        /* Style to hide inactive tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Style to tab content */
+        .tab-btn.active { 
+            color: #65a30d;             /* text-lime-600 */
+            border-bottom-color: #65a30d;  /* text-lime-600 */
+            background-color: #f7fee7;     /* text-lime-100 */
+        }
+        .tab-btn { 
+            transition: color 0.3s, 
+            border-color 0.3s, 
+            background-color 0.3s; 
+            border-bottom: 2px solid transparent;
+        }
+
+        /* Styles for flip cards */
+        .flip-card {
+            background-color: transparent;
+            width: 100%; /* Make cards responsive to grid column width */
+            height: 200px; /* Fixed height for consistency, adjust as needed */
+            perspective: 1000px; /* 3D effect */
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left; /* Adjust text alignment as needed */
+            overflow-wrap: break-word; /* break-words */
+            /*word-break: break-all;*/ /* break-all */
+        }
+
+        .flip-card-front {
+            color: #4b5563; /* text-gray-700 */
+        }
+
+        .flip-card-back {
+            color: #4b5563; /* text-gray-700 */
+            transform: rotateY(180deg);
+        }
+
+        /* Responsive adjustments for min-height */
+        @media (min-width: 768px) { /* md breakpoint */
+            .flip-card.min-h-md {
+                min-height: 250px; /* Example, adjust as needed for medium screens */
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .flip-card.min-h-lg {
+                min-height: 200px; /* Example, adjust as needed for large screens */
+            }
+        }
+
+        /* Styles for general buttons */
+        .check-button, .reset-button {
+            background-color: #84cc16; /* Lime-500 */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .reset-button {
+            background-color: #EF4444; /* Red */
+            margin-left: 10px;
+        }
+
+        .check-button:hover {
+            background-color: #65a30d; /* Lime-600 */
+        }
+
+        .reset-button:hover {
+            background-color: #DC2626; /* Darker Red */
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .feedback.correct {
+            color: #10B981; /* Green */
+        }
+        .feedback.incorrect {
+            color: #EF4444; /* Red */
+        }
+
+        /* Multiple choice / Checkbox exercise styles */
+        .mc-container {
+            background-color: #fffafa; /* Light background */
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .mc-option {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border: 1px solid #a3e635; /* Lime-300 */
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .mc-option:hover {
+            background-color: #f7fee7; /* Lime-100 */
+        }
+
+        .mc-option input[type="radio"], .mc-option input[type="checkbox"] {
+            margin-right: 10px;
+            accent-color: #84cc16; /* Lime accent */
+            cursor: pointer;
+        }
+
+        .mc-option.correct {
+            background-color: #d1fae5; /* Light green */
+            border-color: #10B981; /* Green border */
+            color: #047857;
+        }
+
+        .mc-option.incorrect {
+            background-color: #fee2e2; /* Light red */
+            border-color: #EF4444; /* Red border */
+            color: #b91c1c;
+        }
+
+        /* Matching exercise styles */
+        .matching-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .matching-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .matching-item {
+            background-color: #f7fee7; /* Lime-100 */
+            border: 1px solid #e5ff8b; /* Lime-200 */
+            padding: 10px;
+            border-radius: 5px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #65a30d; /* Darker lime text */
+        }
+
+        .matching-target {
+            background-color: #fff;
+            border: 1px dashed #ccc;
+            min-height: 50px;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .matching-item.draggable {
+            cursor: grab;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+        .matching-item.dragging {
+            opacity: 0.7;
+        }
+        .matching-target.drag-over {
+            background-color: #f7fee7; /* Lighter lime on drag over */
+        }
+        .matched-item {
+            background-color: #c8e6c9; /* Green for matched */
+            border-color: #a5d6a7;
+            color: #388e3c;
+        }
+
+        .text-lime-600 { color: #65a30d; }
+        .text-lime-500 { color: #84cc16; }
+        .bg-lime-100 { background-color: #f7fee7; }
+        .bg-lime-200 { background-color: #e5ff8b; }
+    </style>
+</head>
+<body>
+
+    <header class="container mx-auto flex justify-between items-center bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10 logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <!-- Секція теми уроку -->
+        <section class="text-center mb-8">
+            <h1 class="text-lg text-slate-600 mt-2 break-words">Тема 3: «Опрацювання текстових даних». Урок № 20. (До § 15)</h1>
+            <h1 class="text-3xlooo md:text-4xl font-bold text-slate-900 break-words theme-text">Структура документа. Колонтитули. Гіперпосилання</h1>
+            <h2 class="text-lg text-slate-600 mt-2 break-words">Інтерактивний план-конспект уроку для 8 класу НУШ</h2>
+        </section>
+
+
+        <!-- Секція "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання" -->
+        <section>
+            <!-- Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання". -->
+            <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+                <nav id="tabs" class="flex flex-wrap justify-center gap-2 sm:gap-4">
+                    <button data-tab="about" class="tab-btn active text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300 break-words break-all">Про урок</button>
+                    <button data-tab="theory" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300 break-words break-all">Теоретичний блок</button>
+                    <button data-tab="practice" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300 break-words break-all">Практичний блок</button>
+                    <button data-tab="check" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300 break-words break-all">Перевірка знань</button>
+                    <button data-tab="homework" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300 break-words break-all">Домашнє завдання</button>
+                </nav>
+            </div>
+
+            <!-- Про урок -->
+            <div id="about-content" class="tab-content active">
+                <div class="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Lesson Goal -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words break-all">🎯 Мета уроку</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Освітня:</b> Ознайомити учнів з поняттями структури документа, колонтитулів та гіперпосилань, навчити їх використовувати ці елементи для ефективної організації інформації.</li>
+                            <li class="break-words"><b>Розвивальна:</b> Розвивати навички роботи з текстовими процесорами для створення складних документів, логічне мислення та вміння організовувати інформацію для легшого сприйняття.</li>
+                            <li class="break-words"><b>Виховна:</b> Виховувати акуратність, системність у роботі та відповідальне ставлення до створення професійно оформлених документів.</li>
+                        </ul>
+                    </div>
+                    <!-- Expected Outcomes -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words break-all">✅ Очікувані результати</h3>
+                        <p class="mb-2 text-gray-600">Після уроку учні зможуть:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">називати та характеризувати структурні елементи документа;</li>
+                            <li class="break-words">використовувати стилі для оформлення документів;</li>
+                            <li class="break-words">розбивати документ на розділи та працювати з ними;</li>
+                            <li class="break-words">створювати та редагувати колонтитули;</li>
+                            <li class="break-words">вставляти та використовувати гіперпосилання.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words">📊 Групи результатів (НУШ)</h3>
+                        <p class="text-gray-600 mb-4 break-words">Візуалізація важливості груп результатів для цього уроку.</p>
+                        <div class="chart-container relative h-64 w-full max-w-md mx-auto">
+                            <canvas id="resultsChart"></canvas>
+                        </div>
+                        <p class="text-gray-600 mb-4 break-words text-group-result"><i>Учень / учениця:</i></p>
+                        <ul>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР1 – працює з інформацією, даними, моделями;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР2 – створює інформаційні продукти;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР3 – працює в цифровому середовищі;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР4 – безпечно та відповідально працює з інформаційними технологіями.</p></li>
+                        </ul>
+                    </div>
+                    <!-- Lesson Type & Equipment -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words">📚 Тип уроку</h3>
+                        <p class="text-gray-700 break-words">Урок формування компетентностей та застосування знань на практиці.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words">💻 Обладнання та ПЗ</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Персональні комп’ютери, підключені до мережі Інтернет.</li>
+                            <li class="break-words">Підручник «Інформатика 8 клас» О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов.</li>
+                            <li class="break-words">Текстовий процесор (MS Word або LibreOffice Writer).</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words">🔗 Міжпредметні зв'язки</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Українська мова:</b> Робота з текстом, стилістичне оформлення, логічна побудова.</li>
+                            <li class="break-words"><b>Математика:</b> Організація великих документів (наукові роботи, реферати).</li>
+                            <li class="break-words"><b>Історія:</b> Використання гіперпосилань для посилань на джерела інформації.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Теоретичний блок -->
+            <div id="theory-content" class="tab-content mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">
+                <!-- ВАРІАНТ № 2, початок -->
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-lime-500 mb-4 heading-underline break-words title-review">ПОВТОРЮЄМО</h2>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">Актуалізація опорних знань</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2">
+                        <li class="break-words">Які основні типи об'єктів ми використали у практичній роботі?</li>
+                        <li class="break-words">Для чого потрібно задавати формат обтікання зображення текстом?</li>
+                        <li class="break-words">Як можна змінити розмір зображення пропорційно?</li>
+                        <li class="break-words">Де знаходяться інструменти для роботи з таблицями та їх форматуванням?</li>
+                        <li class="break-words">Навіщо у текстовому документі використовують нумеровані списки?</li>
+                        <li class="break-words">Чи можна поєднувати об'єкти різних типів в одному текстовому документі?</li>
+                    </ol>
+                    <img src="./images/img-tema3-5.webp" alt="Знак питання" class="rounded-lg shadow-md" width="200">
+                </div>
+                
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 83-84)</a></i></p>
+                </div>
+                <!-- ВАРІАНТ № 2, кінець -->
+
+                <!-- <hr class="my-8 border-gray-200">
+
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-lime-500 mb-4 heading-underline break-words title-review">НОВИЙ МАТЕРІАЛ</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="md:w-1/4 flex justify-center md:justify-start mb-6 md:mb-0">
+                        <img src="./images/image_25633c.jpg" alt="Структура документа" class="rounded-lg shadow-md" width="300">
+                    </div>
+                    <div class="md:w-3/4 text-gray-700 text-lg">
+                        <h4 class="text-xl font-bold mb-3 text-gray-800 break-words">§ 15. Структура документа. Колонтитули. Гіперпосилання</h4>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Для оформлення великих за обсягом документів важлива строго впорядкованість розміщення розділів, заголовків, означень. </p>
+                        <h5 class="text-lg font-bold mb-3 text-gray-800">Структурні елементи документа</h5>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Під оформленням документа розуміють структуру: зовнішню (параметри сторінок, поля тощо) і внутрішню (заголовки, підписи тощо). </p>
+                        <div class="bg-lime-50 border-l-4 border-lime-500 p-4 rounded-lg shadow-md my-4">
+                            <p class="text-gray-800 break-words"><b>Структура документа</b> — ієрархічна схема розміщення складових текстового документа.</p>
+                        </div>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Складні документи розбивають на частини, розділи, параграфи та інші структурні елементи, відформатовані з дотриманням певних правил (рис. 15.1). Розгляньмо таблицю, наведену на рис. 15.1, б.</p>
+                        <div class="flex justify-center my-4">
+                            <img src="./images/image_25633c.jpg" alt="Рис. 15.1 Структура документа" class="rounded-lg shadow-md max-w-full h-auto" width="600">
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md mb-4">
+                                <thead>
+                                    <tr class="bg-lime-100 text-lime-700">
+                                        <th class="py-2 px-4 border-b">Елемент</th>
+                                        <th class="py-2 px-4 border-b">Опис</th>
+                                        <th class="py-2 px-4 border-b">Форматування</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="py-2 px-4 border-b text-center">Заголовок</td>
+                                        <td class="py-2 px-4 border-b text-center">Назва документа або його частини. Заголовки розподіляють за рівнями. Чим більший заголовок описує заголовок, тим вищий його рівень.</td>
+                                        <td class="py-2 px-4 border-b text-center">Накреслення жирне, міжрядковий інтервал щільний, основна частина. Заголовки вищого рівня оформляються вагоміше за нижчий (більші символи тощо)</td>
+                                    </tr>
+                                    <tr class="bg-gray-50">
+                                        <td class="py-2 px-4 border-b text-center">Підпис (або Автор)</td>
+                                        <td class="py-2 px-4 border-b text-center">Супровідна інформація до назви розділу або цитати</td>
+                                        <td class="py-2 px-4 border-b text-center">Шрифт менш помітний, ніж заголовок, або цитата. Зазвичай накреслення — курсив</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 px-4 border-b text-center">Основний текст, цитати, адреси, посилання на інші документи, виноски</td>
+                                        <td class="py-2 px-4 border-b text-center">Найбільша частина інформації</td>
+                                        <td class="py-2 px-4 border-b text-center">Шрифт нещільний і нефригідний, легкий для сприйняття. Виділена частина основного тексту. Зазвичай накреслення курсивів</td>
+                                    </tr>
+                                    <tr class="bg-gray-50">
+                                        <td class="py-2 px-4 border-b text-center">Важлива інформація</td>
+                                        <td class="py-2 px-4 border-b text-center">Означення, висновки, попередження, інша інформація, що потребує уваги</td>
+                                        <td class="py-2 px-4 border-b text-center">Шрифт більший і/або щільніший порівняно з основним текстом</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 px-4 border-b text-center">Виноски, примітки, пояснення тощо</td>
+                                        <td class="py-2 px-4 border-b text-center">Додаткова інформація</td>
+                                        <td class="py-2 px-4 border-b text-center">Шрифт дрібніший порівняно з основним текстом</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-8 border-gray-200">
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="md:w-1/4 flex justify-center md:justify-start mb-6 md:mb-0">
+                        <img src="./images/image_2565eb.jpg" alt="Стильове оформлення документа" class="rounded-lg shadow-md" width="300">
+                    </div>
+                    <div class="md:w-3/4 text-gray-700 text-lg">
+                        <h5 class="text-lg font-bold mb-3 text-gray-800">Стильове оформлення документа</h5>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Форматування складних документів займає багато часу. Щоб прискорити цей процес, застосовують стильове оформлення.</p>
+                        <div class="bg-lime-50 border-l-4 border-lime-500 p-4 rounded-lg shadow-md my-4">
+                            <p class="text-gray-800 break-words"><b>Стиль</b> — це іменована сукупність параметрів форматування об’єктів документа, які визначають його зовнішній вигляд.</p>
+                        </div>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Щоб задати стильове оформлення об’єкта, слід вибрати стиль на вкладці **Основне** в групі **Стилі** (рис. 15.2) або створити власний.</p>
+                        <div class="flex justify-center my-4">
+                            <img src="./images/image_2565eb.jpg" alt="Рис. 15.2. Застосування стилю" class="rounded-lg shadow-md max-w-full h-auto" width="600">
+                        </div>
+                        <h5 class="text-lg font-bold mb-3 text-gray-800">Шаблони документів</h5>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;У випадку, коли потрібно створювати документи зі схожою структурою, доречно скористатися заздалегідь підготовленими та збереженими шаблонами документів.</p>
+                        <div class="bg-lime-50 border-l-4 border-lime-500 p-4 rounded-lg shadow-md my-4">
+                            <p class="text-gray-800 break-words"><b>Шаблон</b> — це документ, що зберігається у файлі особливого формату та використовується як основа для створення нових документів.</p>
+                        </div>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;У текстовому процесорі файли шаблонів мають розширення **.dotx (.dot)**. Якщо користувач вирішить зберегти як шаблон документ, оформлений на власний розсуд, то слід відкрити вкладку **Файл**, зазначити місце збереження, назву і тип файлу — **Шаблон Word (*.dotx)**. Після цього з’являється можливість створити новий документ на основі шаблону.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Збережений шаблон (на відміну від файлу документа) буде захищений від випадкових змін доти, доки користувач не збереже інший документ як шаблон із таким самим іменем.</p>
+                        <div class="bg-lime-50 border-l-4 border-lime-500 p-4 rounded-lg shadow-md my-4">
+                            <p class="text-gray-800 break-words">Новий документ у текстовому процесорі створюється на основі шаблону **Normal.dotx**.</p>
+                        </div>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;За наявності доступу до інтернету Word дозволяє шукати й використовувати різні шаблони документів. Щоб скористатися онлайн-шаблоном для зверхового вчителя/вчительки), потрібно на вкладці **Файл** вибрати команду **Створити**, тематику онлайн-шаблонів і певний шаблон.</p>
+                    </div>
+                </div>
+
+                <hr class="my-8 border-gray-200">
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="md:w-1/4 flex justify-center md:justify-start mb-6 md:mb-0">
+                        <img src="./images/image_256627.jpg" alt="Розділи документа" class="rounded-lg shadow-md" width="300">
+                    </div>
+                    <div class="md:w-3/4 text-gray-700 text-lg">
+                        <h5 class="text-lg font-bold mb-3 text-gray-800">Розділи</h5>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Коли для сторінок, які містяться в різних частинах документа, слід установити різні формати, документ потрібно поділити на розділи (рис. 15.3).</p>
+                        <div class="bg-lime-50 border-l-4 border-lime-500 p-4 rounded-lg shadow-md my-4">
+                            <p class="text-gray-800 break-words"><b>Розділ</b> — структурна складова текстового документа, яка завершується недрукованим символом **розриву розділу**.</p>
+                        </div>
+                        <div class="flex justify-center my-4">
+                            <img src="./images/image_256627.jpg" alt="Рис. 15.3. Розділи" class="rounded-lg shadow-md max-w-full h-auto" width="200">
+                        </div>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;За відсутності розділів Word розглядає документ як один розділ із однаковим налаштуванням форматів сторінок всього документа.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Розрив розділу зазначає місце, після якого можна задати нові параметри розмітків сторінки, притаманні лише цьому розділу. Для вставлення розриву розділу потрібно вибрати на вкладці **Розмітка сторінки** в групі **Параметри сторінки** елемент **Розриви** та вибрати потрібний тип розриву розділу. Тепер у документі для окремих розділів можна встановити різні налаштування, наприклад, розміри та орієнтацію сторінки, ширину полів тощо.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Для видалення розриву розділу потрібно на вкладці **Основне** увімкнути кнопку <img src="https://placehold.co/20x20/84cc16/FFFFFF?text=¶" alt="Символ абзацу" class="inline-block align-middle"> — **Відобразити всі знаки**. Розриви розділів будуть показані подвійними пунктирними лініями, які можна видалити, скориставшись клавішами Delete або Backspace.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;У разі вилучення розриву розділу видаляється форматування розділу, який містився перед розривом. Його текст стане частиною наступного розділу та набуде його формату.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Упорядковувати складові (частини, розділи, параграфи) текстового документа та великого обсягу (рис. 15.4), наприклад підручника з інформатики, більш зручно в режимі структури документа.</p>
+                        <div class="flex justify-center my-4">
+                            <img src="./images/image_256627.jpg" alt="Рис. 15.4. Упорядковування складових документа" class="rounded-lg shadow-md max-w-full h-auto" width="400">
+                        </div>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Режим структури дозволяє приховувати основний текст і побачити лише заголовки розділів, параграфів тощо. Можна змінювати рівень заголовків, переміщувати параграфи та розділи тощо. Щоб увімкнути цей режим, потрібно на вкладці **Вигляд** у групі **Подання** вибрати команду **Структура** (рис. 15.5).</p>
+                        <div class="flex justify-center my-4">
+                            <img src="./images/image_256627.jpg" alt="Рис. 15.5. Режим структури документа" class="rounded-lg shadow-md max-w-full h-auto" width="600">
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-8 border-gray-200">
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="md:w-1/4 flex justify-center md:justify-start mb-6 md:mb-0">
+                        <img src="./images/image_256680.jpg" alt="Колонтитули" class="rounded-lg shadow-md" width="300">
+                    </div>
+                    <div class="md:w-3/4 text-gray-700 text-lg">
+                        <h5 class="text-lg font-bold mb-3 text-gray-800">Колонтитули</h5>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Додаткова інформація може міститися в колонтитулах.</p>
+                        <div class="bg-lime-50 border-l-4 border-lime-500 p-4 rounded-lg shadow-md my-4">
+                            <p class="text-gray-800 break-words"><b>Колонтитули</b> — це текст або зображення, які розміщуються у верхній (верхній колонтитул) або нижній (нижній колонтитул) частині сторінок документа.</p>
+                        </div>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Інформація, подана в колонтитулі, відображається на всіх сторінках документа або сторінках одного чи кількох розділів. Він може містити назву документа, номер сторінки, дату або іншу інформацію, яка повторюється на кожній сторінці.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Для вставлення колонтитула необхідно:</p>
+                        <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2 mb-4">
+                            <li class="break-words">на вкладці **Вставлення** в групі **Колонтитули** вибрати відповідну команду: **Верхній колонтитул**, **Нижній колонтитул**, **Номер сторінки**;</li>
+                            <li class="break-words">у полі введення колонтитула ввести його текст або на вкладці **Конструктор (Знаряддя для колонтитулів)** у групі **Вставлення** вибрати потрібний інструмент;</li>
+                            <li class="break-words">налаштувати відображення колонтитулів інструментами вкладки **Конструктор (Знаряддя для колонтитулів)** (рис. 15.6).</li>
+                        </ol>
+                        <div class="flex justify-center my-4">
+                            <img src="./images/image_256680.jpg" alt="Рис. 15.6. Вкладка Конструктор (Знаряддя для колонтитулів)" class="rounded-lg shadow-md max-w-full h-auto" width="600">
+                        </div>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Для повернення до основного текстового документа на цьому полі слід натиснути кнопку <img src="https://placehold.co/20x20/84cc16/FFFFFF?text=X" alt="Символ X" class="inline-block align-middle"> на вкладці **Конструктор (Знаряддя для колонтитулів)** (див. рис. 15.6).</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Для вилучення колонтитула треба на ньому двічі клацнути, виділити його вміст і натиснути клавішу Delete або скористатися відповідними інструментами групи **Колонтитули** вкладки **Конструктор (Знаряддя для колонтитулів)**.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Створений колонтитул можна застосувати до всього документа, до парних чи непарних сторінок або до першої сторінки. Вибрати область застосування створеного колонтитула можна в групі **Параметри** вкладки **Конструктор (Знаряддя для колонтитулів)** (див. рис. 15.6).</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Щоб створити різні колонтитули для певних частин документа, потрібно:</p>
+                        <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2 mb-4">
+                            <li class="break-words">розбити текст на розділи; двічі клацнути на верхньому (або нижньому) полі потрібного розділу;</li>
+                            <li class="break-words">на вкладці **Конструктор (Знаряддя для колонтитулів)** в групі **Навігація** вимкнути кнопку <img src="https://placehold.co/20x20/84cc16/FFFFFF?text=→" alt="Символ стрілки" class="inline-block align-middle"> **Як у попередньому**;</li>
+                            <li class="break-words">увести потрібний вміст колонтитула;</li>
+                            <li class="break-words">подвійним клацанням перейти до основного тексту документа.</li>
+                        </ol>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Після розбиття на розділи можна змінювати вміст окремих колонтитулів, і це не впливатиме на колонтитули інших розділів документа.</p>
+                        <div class="bg-lime-50 border-l-4 border-lime-500 p-4 rounded-lg shadow-md my-4">
+                            <p class="text-gray-800 break-words">Попередниками сучасних колонтитулів були примітки на полях стародавніх манускриптів, які переписувачі книг залишали для того, щоб читацька аудиторія могла досить легко знайти потрібну інформацію або розуміти контекст.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-8 border-gray-200">
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="md:w-1/4 flex justify-center md:justify-start mb-6 md:mb-0">
+                        <img src="./images/image_2566c1.jpg" alt="Гіперпосилання" class="rounded-lg shadow-md" width="300">
+                    </div>
+                    <div class="md:w-3/4 text-gray-700 text-lg">
+                        <h5 class="text-lg font-bold mb-3 text-gray-800">Гіперпосилання</h5>
+                        <div class="bg-lime-50 border-l-4 border-lime-500 p-4 rounded-lg shadow-md my-4">
+                            <p class="text-gray-800 break-words"><b>Посилання (гіперпосилання)</b> — об’єкт документа, клацання на якому здійснюється перехід у певне місце документа або до іншого файлу на комп’ютері або в інтернеті.</p>
+                        </div>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Для створення посилання (гіперпосилання) потрібно:</p>
+                        <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2 mb-4">
+                            <li class="break-words">виділити фрагмент тексту або графічний об’єкт;</li>
+                            <li class="break-words">на вкладці **Вставлення** (група **Посилання**) вибрати інструмент **Гіперпосилання** (рис. 15.7);</li>
+                            <li class="break-words">зазначити, на який саме об’єкт створюється посилання.</li>
+                        </ol>
+                        <div class="flex justify-center my-4">
+                            <img src="./images/image_2566c1.jpg" alt="Рис. 15.7. Створення гіперпосилання" class="rounded-lg shadow-md max-w-full h-auto" width="600">
+                        </div>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Посилання можна створити або змінити командою контекстного меню виділеного об’єкта **Гіперпосилання**. Щоб створити посилання на певне місце, у тексті документа слід створити закладку; щоб перейти за посиланням, — натиснути його лівою кнопкою миші, утримуючи натиснутою клавішу Ctrl.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Для створення закладки потрібно виділити об’єкт або встановити курсор у потрібне місце, вибрати інструмент **Закладка**, а потім увести назву нової закладки й натиснути кнопку **Додати** у вікні зі списком закладок.</p>
+                    </div>
+                </div>
+
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 85-92)</a></i></p>
+                </div> -->
+            </div>
+            
+            <!-- Практичний блок -->
+            <div id="practice-content" class="tab-content">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-4 text-lime-600 break-words">Практичний блок уроку</h3>
+
+                    <!-- Practical Work Instructions -->
+                    <!-- <div class="mb-8">
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Вправа 15. «Створення текстового документа, що містить об’єкти різних типів»</h4>
+                        <p class="text-gray-600 mb-4">**Завдання:** Створити й оформити текстовий документ із використанням різних стилів.</p>
+
+                        <h5 class="text-lg font-semibold mb-2 text-gray-800">Хід роботи:</h5>
+                        <ol class="list-decimal list-inside text-gray-700 space-y-2 mb-4">
+                            <li class="break-words">Запустіть текстовий процесор і створіть новий документ.</li>
+                            <li class="break-words">Знайдіть в інтернеті й скопіюйте одну з дій п'єси І. Карпенка-Карого «Сто тисяч» (або за вказівкою вчителя/вчительки).</li>
+                            <li class="break-words">Для основного тексту дії встановіть стиль **Звичайний**, для приміток — **Курсив**.</li>
+                            <li class="break-words">Якщо назви твору немає, введіть її на початку документа і встановіть стиль **Назва**. У кінці документа введіть ім’я і прізвище автора твору, задайте стиль **Строгий**.</li>
+                            <li class="break-words">Установіть колонтитули: верхній — із поточною датою, нижній — із номерами сторінок.</li>
+                            <li class="break-words">Зробіть назву твору посиланням на вебсторінку із ним.</li>
+                            <li class="break-words">Збережіть документ у форматі шаблону з назвою **Вправа 15**.</li>
+                            <li class="break-words">Покажіть свою роботу однокласнику/однокласниці та вчителю/вчительці.</li>
+                        </ol>
+                        <div class="flex justify-center my-6">
+                            <img src="./images/image_2566c1.jpg" alt="Зразок виконання вправи 15" class="rounded-lg shadow-md max-w-full h-auto">
+                        </div>
+                    </div>
+
+                    <hr class="my-8 border-gray-200"> -->
+
+                    <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Самооцінка: Дайте відповіді на питання, пов'язані з практичною роботою.</h4>
+                    <p class="text-gray-600 mb-4">Оберіть правильний варіант або виконайте дію.</p>
+
+                    <!-- Question 1: Multiple Choice -->
+                    <div class="mb-8 p-6 bg-white rounded-xl shadow-md">
+                        <h5 class="text-lg font-medium mb-3 text-gray-800">1. Яка основна функція колонтитулів?</h5>
+                        <div class="mc-container" id="q1-exercise">
+                            <div class="mc-option" data-correct="true">
+                                <input type="radio" id="q1-opt1" name="q1" value="Повторювана інформація на сторінках">
+                                <label for="q1-opt1">Повторювана інформація (номер сторінки, дата, назва) на кожній сторінці</label>
+                            </div>
+                            <div class="mc-option" data-correct="false">
+                                <input type="radio" id="q1-opt2" name="q1" value="Зберігання основної інформації документа">
+                                <label for="q1-opt2">Зберігання основної інформації документа</label>
+                            </div>
+                            <div class="mc-option" data-correct="false">
+                                <input type="radio" id="q1-opt3" name="q1" value="Створення закладок">
+                                <label for="q1-opt3">Створення закладок для навігації</label>
+                            </div>
+                        </div>
+                        <div class="text-center mt-6">
+                            <button class="check-button" onclick="checkQuestion('q1', false)">Перевірити відповідь</button>
+                            <button class="reset-button" onclick="resetQuestion('q1')">Скинути</button>
+                            <div id="q1-feedback" class="feedback"></div>
+                        </div>
+                    </div>
+
+                    <!-- Question 2: Multiple Choice (checkboxes) -->
+                    <div class="mb-8 p-6 bg-white rounded-xl shadow-md">
+                        <h5 class="text-lg font-medium mb-3 text-gray-800">2. Які дії ви виконували для встановлення колонтитулів у практичній роботі? (Оберіть кілька варіантів)</h5>
+                        <div class="mc-container" id="q2-exercise">
+                            <div class="mc-option" data-correct="true">
+                                <input type="checkbox" id="q2-opt1" name="q2" value="Верхній колонтитул з датою">
+                                <label for="q2-opt1">Створили верхній колонтитул із поточною датою</label>
+                            </div>
+                            <div class="mc-option" data-correct="true">
+                                <input type="checkbox" id="q2-opt2" name="q2" value="Нижній колонтитул з номерами сторінок">
+                                <label for="q2-opt2">Створили нижній колонтитул із номерами сторінок</label>
+                            </div>
+                            <div class="mc-option" data-correct="false">
+                                <input type="checkbox" id="q2-opt3" name="q2" value="Використали різні колонтитули для парних і непарних сторінок">
+                                <label for="q2-opt3">Використали різні колонтитули для парних і непарних сторінок</label>
+                            </div>
+                            <div class="mc-option" data-correct="false">
+                                <input type="checkbox" id="q2-opt4" name="q2" value="Змінили орієнтацію сторінки через колонтитули">
+                                <label for="q2-opt4">Змінили орієнтацію сторінки безпосередньо через колонтитули</label>
+                            </div>
+                        </div>
+                        <div class="text-center mt-6">
+                            <button class="check-button" onclick="checkQuestion('q2', true)">Перевірити відповідь</button>
+                            <button class="reset-button" onclick="resetQuestion('q2')">Скинути</button>
+                            <div id="q2-feedback" class="feedback"></div>
+                        </div>
+                    </div>
+
+                    <!-- Question 3: Fill-in-the-blank (simple input) -->
+                    <div class="mb-8 p-6 bg-white rounded-xl shadow-md">
+                        <h5 class="text-lg font-medium mb-3 text-gray-800">3. Розширення файлу для шаблонів документів у текстових процесорах Word зазвичай ____.</h5>
+                        <div class="mc-container" id="q3-exercise">
+                            <input type="text" id="q3-answer" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Наприклад, .docx">
+                        </div>
+                        <div class="text-center mt-6">
+                            <button class="check-button" onclick="checkTextQuestion('q3', '.dotx')">Перевірити відповідь</button>
+                            <button class="reset-button" onclick="resetQuestion('q3')">Скинути</button>
+                            <div id="q3-feedback" class="feedback"></div>
+                        </div>
+                    </div>
+
+                    <!-- Question 4: Matching -->
+                    <div class="mb-8">
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">4. Зіставте структурний елемент документа з його описом.</h4>
+                        <p class="text-gray-600 mb-4">Перетягніть тег до відповідного призначення.</p>
+                        <div class="matching-container">
+                            <div class="matching-column" id="table-tags-items-container">
+                                <!-- Items will be shuffled and appended here by JS -->
+                            </div>
+                            <div class="matching-column">
+                                <div class="matching-target" id="table-target" data-accept="item1">Об’єкт документа для переходу до іншого місця або файлу</div>
+                                <div class="matching-target" id="tr-target" data-accept="item2">Текст або зображення у верхній/нижній частині сторінки</div>
+                                <div class="matching-target" id="td-target" data-accept="item3">Структурна складова, що дозволяє задавати різні формати сторінок</div>
+                                <div class="matching-target" id="th-target" data-accept="item4">Іменована сукупність параметрів форматування об'єктів</div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-6">
+                            <button id="check-table-tags" class="check-button">Перевірити відповідь</button>
+                            <button id="reset-table-tags" class="reset-button">Скинути</button>
+                            <div id="table-tags-feedback" class="feedback mt-2"></div>
+                        </div>
+                    </div>
+                    <!-- <div class="mb-8 p-6 bg-white rounded-xl shadow-md">
+                        <h5 class="text-lg font-medium mb-3 text-gray-800">4. Зіставте структурний елемент документа з його описом.</h5>
+                        <div class="matching-container" id="q4-exercise">
+                            <div class="matching-column" id="matching-items">
+                                <div class="matching-item draggable" data-item-id="item1" draggable="true">Гіперпосилання</div>
+                                <div class="matching-item draggable" data-item-id="item2" draggable="true">Колонтитул</div>
+                                <div class="matching-item draggable" data-item-id="item3" draggable="true">Розділ</div>
+                                <div class="matching-item draggable" data-item-id="item4" draggable="true">Стиль</div>
+                            </div>
+                            <div class="matching-column" id="matching-targets">
+                                <div class="matching-target" data-target-id="target1" data-correct-item="item1">Об’єкт документа для переходу до іншого місця або файлу</div>
+                                <div class="matching-target" data-target-id="target2" data-correct-item="item2">Текст або зображення у верхній/нижній частині сторінки</div>
+                                <div class="matching-target" data-target-id="target3" data-correct-item="item3">Структурна складова, що дозволяє задавати різні формати сторінок</div>
+                                <div class="matching-target" data-target-id="target4" data-correct-item="item4">Іменована сукупність параметрів форматування об'єктів</div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-6">
+                            <button class="check-button" onclick="checkMatchingQuestion('q4')">Перевірити відповідь</button>
+                            <button class="reset-button" onclick="resetMatchingQuestion('q4')">Скинути</button>
+                            <div id="q4-feedback" class="feedback"></div>
+                        </div>
+                    </div> -->
+                </div>        
+            </div>
+
+            <!-- Перевірка знань -->
+            <div id="check-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-6 text-center text-lime-600 break-words">Перевірка знань</h3>
+                <p class="text-center text-gray-600 mb-8 break-words">Натисніть на картку, щоб побачити відповідь.</p>
+                <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <li class="flip-card min-h-md min-h-lg">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-lime-100 p-6 rounded-xl shadow-md break-words">1. Що таке **структура документа**?</div>
+                            <div class="flip-card-back bg-lime-200 p-6 rounded-xl shadow-md break-words">**Структура документа** — це ієрархічна схема розміщення складових текстового документа (заголовки, підписи, основний текст, цитати, виноски тощо).</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card min-h-md min-h-lg">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-lime-100 p-6 rounded-xl shadow-md break-words">2. Чим відрізняється **стиль** від ручного форматування?</div>
+                            <div class="flip-card-back bg-lime-200 p-6 rounded-xl shadow-md break-words">**Стиль** — це іменована сукупність параметрів форматування, що дозволяє швидко та одноманітно застосовувати зовнішній вигляд до об'єктів, на відміну від ручного форматування, яке застосовується індивідуально.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card min-h-md min-h-lg">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-lime-100 p-6 rounded-xl shadow-md break-words">3. Для чого створюються **розділи** у документі?</div>
+                            <div class="flip-card-back bg-lime-200 p-6 rounded-xl shadow-md break-words">**Розділи** створюються для того, щоб застосовувати різні параметри форматування (орієнтація, поля, колонтитули) до окремих частин документа.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card min-h-md min-h-lg">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-lime-100 p-6 rounded-xl shadow-md break-words">4. Як створити **гіперпосилання**?</div>
+                            <div class="flip-card-back bg-lime-200 p-6 rounded-xl shadow-md break-words">Для створення **гіперпосилання** потрібно виділити текст або об'єкт, перейти на вкладку **Вставлення**, вибрати "Гіперпосилання" та вказати адресу або місце призначення.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card min-h-md min-h-lg">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-lime-100 p-6 rounded-xl shadow-md break-words">5. Що таке **шаблон документа** і для чого він використовується?</div>
+                            <div class="flip-card-back bg-lime-200 p-6 rounded-xl shadow-md break-words">**Шаблон документа** — це попередньо відформатований документ з розширенням `.dotx`, який використовується як основа для створення нових документів зі схожою структурою та оформленням.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card min-h-md min-h-lg">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-lime-100 p-6 rounded-xl shadow-md break-words">6. Як повернутися до основного тексту після роботи з колонтитулами?</div>
+                            <div class="flip-card-back bg-lime-200 p-6 rounded-xl shadow-md break-words">Для повернення до основного тексту потрібно натиснути кнопку закриття колонтитулів на вкладці **Конструктор (Знаряддя для колонтитулів)** або двічі клацнути в області основного тексту.</div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 85-93)</a></i></p>
+                </div>
+            </div>
+          
+
+            <!-- Домашнє завдання -->
+            <div id="homework-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-lime-600 break-words">Домашнє завдання</h3>                 
+                <!--  -->
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <div>
+                            <p class="break-words break-all"><b>1. Теоретична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li class="break-words break-all">Опрацювати § 15 (стор. 85-93).</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><b>2. Практична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Виконати вправу № 15 (стор. 93).</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p><b>3. Завдання за бажанням (для закріплення):</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Інтерактивна платформа IZZI (8 клас) до § 15: <a href="https://ua.izzi.digital/DOS/1183864/1253550.html" target="_blank" class="text-blue-600 hover:underline break-words break-all block">https://ua.izzi.digital/DOS/1183864/1253550.html</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="./images/img08.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!--  -->
+            </div>
+        </section>
+
+
+        <!-- Додаткові матеріали -->
+        <!-- Additional Materials Section -->
+        <section class="bg-white p-6 rounded-xl shadow-md mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-lime-600 break-words">Додаткові матеріали</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li class="break-words"><a href="https://sites.google.com/view/lga84-9/tehnika_bezpeky" target="_blank" class="text-blue-600 hover:underline">Техніка безпеки</a></li>
+
+                <li class="break-words"><a href="https://drive.google.com/file/d/1C9_KEF981LvokY0GWNOhUXb7rJKJUUbM/view" target="_blank" class="text-blue-600 hover:underline">Оцінювання учнів та учениць на уроках інформатики</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу</a> (§ 15, стор. 85-93)</li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">Інтерактивна платформа IZZI (8 клас)</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до § 15: <a href="https://ua.izzi.digital/DOS/1183864/1253550.html" target="_blank" class="text-blue-600 hover:underline">https://ua.izzi.digital/DOS/1183864/1253550.html</a></li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>          
+        </ul>
+    </footer>    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Початок:
+            // Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання".
+            const tabs = document.getElementById('tabs');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            tabs.addEventListener('click', (e) => {
+                // Ensure the click target is a BUTTON (tab button)
+                if (e.target.tagName === 'BUTTON') {
+                    const tab = e.target.dataset.tab;
+
+                    // Remove 'active' class from all buttons and add to the clicked one
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Hide all tab contents and show the corresponding one
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Use === for strict comparison
+                        if (content.id === `${tab}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                }
+            });
+            // Кінець.
+
+
+            // Початок:
+            // ГРУПИ РЕЗУЛЬТАТІВ.
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            // 1. Створення об'єкту-мапи для відповідності значень і кольорів
+            // Тут вручну можна поміняти значення background й border
+            const colorMap = {
+                1: {
+                    background: '#f7fee7', // text-lime-100
+                    border: '#e5ff8b'       // text-lime-200
+                },
+                2: {
+                    background: '#e5ff8b', // text-lime-200
+                    border: '#cffc05'       // text-lime-300
+                },
+                3: {
+                    background: '#cffc05',  // text-lime-300
+                    border: '#a3e635'       // text-lime-400
+                },
+                4: {
+                    background: '#a3e635',   // text-lime-400
+                    border: '#84cc16'       // text-lime-500
+                }
+            };
+
+            // Дані, які можна змінювати вручну
+            const chartData = [4, 4, 2, 3]; // Змінено для кращого відображення відповідності темі
+
+            // 2. Генерація масивів кольорів на основі даних
+            const backgroundColors = chartData.map(value => colorMap[value].background);
+            const borderColors = chartData.map(value => colorMap[value].border);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ГР1', 'ГР2', 'ГР3', 'ГР4'],
+                    datasets: [{
+                        label: 'Важливість',
+                        data: chartData, // Використовуємо змінну
+                        backgroundColor: backgroundColors, // Використовуємо згенерований масив
+                        borderColor: borderColors, // Використовуємо згенерований масив
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const labels = ['', 'Важлива', 'Дуже важлива', 'Найважливіша'];
+                                    return labels[value] || '';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.parsed.y;
+                                    const importanceLabels = {4: 'Найважливіша', 3: 'Дуже важлива', 2: 'Важлива', 1: 'Найменш важлива'};
+                                    label += importanceLabels[value] || '';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // Кінець. ГРУПИ РЕЗУЛЬТАТІВ.
+
+
+            // Початок.
+            // ПОВОРОТ КАРТОК "Перевірка знань"
+            const flipCards = document.querySelectorAll('.flip-card');
+            flipCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+            // Кінець. ПОВОРОТ КАРТОК.
+
+            // Початок: Практичний блок - Самооцінка
+            // Функція для перевірки питання
+            window.checkQuestion = (questionId, isMultiChoice) => {
+                const options = document.querySelectorAll(`#${questionId}-exercise .mc-option input`);
+                const feedbackElement = document.getElementById(`${questionId}-feedback`);
+                let allCorrect = true;
+                let anySelected = false;
+
+                options.forEach(input => {
+                    const optionContainer = input.closest('.mc-option');
+                    const isCorrectOption = optionContainer.dataset.correct === 'true';
+
+                    optionContainer.classList.remove('correct', 'incorrect'); // Очистити попередній зворотний зв'язок
+
+                    if (input.checked) {
+                        anySelected = true;
+                        if (isCorrectOption) {
+                            optionContainer.classList.add('correct');
+                        } else {
+                            optionContainer.classList.add('incorrect');
+                            allCorrect = false;
+                        }
+                    } else { // Якщо не вибрано
+                        if (isCorrectOption && isMultiChoice) { // Для чекбоксів, якщо правильний варіант не вибрано, це неправильно
+                            optionContainer.classList.add('incorrect');
+                            allCorrect = false;
+                        }
+                    }
+                });
+
+                feedbackElement.textContent = '';
+                feedbackElement.classList.remove('correct', 'incorrect');
+
+                if (anySelected && allCorrect) {
+                    feedbackElement.textContent = 'Правильно!';
+                    feedbackElement.classList.add('correct');
+                } else if (!anySelected) {
+                    feedbackElement.textContent = 'Будь ласка, виберіть варіант(и) відповіді.';
+                    feedbackElement.classList.add('incorrect');
+                } else {
+                    feedbackElement.textContent = 'Неправильно. Спробуйте ще раз!';
+                    feedbackElement.classList.add('incorrect');
+                }
+            };
+
+            // Функція для скидання питання
+            window.resetQuestion = (questionId) => {
+                const options = document.querySelectorAll(`#${questionId}-exercise .mc-option input`);
+                const feedbackElement = document.getElementById(`${questionId}-feedback`);
+
+                options.forEach(input => {
+                    input.checked = false;
+                    const optionContainer = input.closest('.mc-option');
+                    optionContainer.classList.remove('correct', 'incorrect');
+                });
+                feedbackElement.textContent = '';
+                feedbackElement.classList.remove('correct', 'incorrect');
+            };
+
+            // Функція для перевірки текстового питання
+            window.checkTextQuestion = (questionId, correctAnswer) => {
+                const inputElement = document.getElementById(`${questionId}-answer`);
+                const feedbackElement = document.getElementById(`${questionId}-feedback`);
+                
+                feedbackElement.textContent = '';
+                feedbackElement.classList.remove('correct', 'incorrect');
+
+                if (inputElement.value.trim().toLowerCase() === correctAnswer.toLowerCase()) { // Змінено для регістронезалежного порівняння
+                    feedbackElement.textContent = 'Правильно!';
+                    feedbackElement.classList.add('correct');
+                } else if (inputElement.value.trim() === '') {
+                    feedbackElement.textContent = 'Будь ласка, введіть відповідь.';
+                    feedbackElement.classList.add('incorrect');
+                } else {
+                    feedbackElement.textContent = 'Неправильно. Спробуйте ще раз!';
+                    feedbackElement.classList.add('incorrect');
+                }
+            };
+
+
+            // Початок: Практичний блок - Вправа 4: Зіставте структурний елемент документа з його описом. (Matching)
+            const tableTagsItemsContainer = document.getElementById('table-tags-items-container');
+            const tableTagsTargets = document.querySelectorAll('#practice-content #table-tags-items-container + .matching-column .matching-target');
+            const checkTableTagsBtn = document.getElementById('check-table-tags');
+            const resetTableTagsBtn = document.getElementById('reset-table-tags');
+            const tableTagsFeedback = document.getElementById('table-tags-feedback');
+
+            let currentDraggedTableItem = null;
+
+            const initialTableTagsItemsData = [
+                { text: 'Гіперпосилання', match: 'item1' },
+                { text: 'Колонтитул', match: 'item2' },
+                { text: 'Розділ', match: 'item3' },
+                { text: 'Стиль', match: 'item4' }
+            ];
+
+            const initialTableTagsTargetsContent = Array.from(tableTagsTargets).map(target => target.innerHTML);
+            const initialTableTagsTargetsDataAccept = Array.from(tableTagsTargets).map(target => target.dataset.accept);
+
+            const shuffleArray = (array) => {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            };
+
+            const shuffleAndDisplayTableTagsItems = () => {
+                tableTagsItemsContainer.innerHTML = '';
+                const shuffledData = shuffleArray([...initialTableTagsItemsData]);
+                shuffledData.forEach(itemData => {
+                    const div = document.createElement('div');
+                    div.classList.add('matching-item', 'draggable');
+                    div.setAttribute('draggable', 'true');
+                    div.innerHTML = itemData.text; // Use innerHTML for HTML entities
+                    div.dataset.match = itemData.match;
+                    tableTagsItemsContainer.appendChild(div);
+                });
+                attachTableTagsDragListeners();
+            };
+
+            const attachTableTagsDragListeners = () => {
+                document.querySelectorAll('#table-tags-items-container .matching-item').forEach(item => {
+                    item.removeEventListener('dragstart', handleTableTagsDragStart);
+                    item.removeEventListener('dragend', handleTableTagsDragEnd);
+                    item.addEventListener('dragstart', handleTableTagsDragStart);
+                    item.addEventListener('dragend', handleTableTagsDragEnd);
+                });
+            };
+
+            const handleTableTagsDragStart = (e) => {
+                currentDraggedTableItem = e.target;
+                e.dataTransfer.setData('text/plain', e.target.dataset.match);
+                e.target.classList.add('dragging');
+            };
+
+            const handleTableTagsDragEnd = (e) => {
+                e.target.classList.remove('dragging');
+                currentDraggedTableItem = null;
+            };
+
+            tableTagsTargets.forEach(target => {
+                target.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    target.classList.add('drag-over');
+                });
+
+                target.addEventListener('dragleave', (e) => {
+                    target.classList.remove('drag-over');
+                });
+
+                target.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    target.classList.remove('drag-over');
+
+                    if (currentDraggedTableItem) {
+                        const existingDroppedItem = target.querySelector('.matching-item');
+                        if (!existingDroppedItem) {
+                            target.appendChild(currentDraggedTableItem);
+                            currentDraggedTableItem.classList.remove('draggable');
+                            currentDraggedTableItem.classList.add('matched-item');
+                        } else {
+                            tableTagsItemsContainer.appendChild(currentDraggedTableItem);
+                        }
+                    }
+                    if (currentDraggedTableItem) {
+                        currentDraggedTableItem.classList.remove('dragging');
+                    }
+                    currentDraggedTableItem = null;
+                });
+            });
+
+            checkTableTagsBtn.addEventListener('click', () => {
+                let allCorrect = true;
+                tableTagsTargets.forEach(target => {
+                    const expectedMatch = target.dataset.accept;
+                    const droppedItem = target.querySelector('.matching-item');
+
+                    if (droppedItem && droppedItem.dataset.match === expectedMatch) {
+                        target.style.borderColor = '#10B981'; // Green for correct
+                        droppedItem.style.borderColor = '#10B981';
+                    } else {
+                        allCorrect = false;
+                        target.style.borderColor = '#EF4444'; // Red for incorrect
+                        if (droppedItem) {
+                            droppedItem.style.borderColor = '#EF4444';
+                        }
+                    }
+                });
+
+                if (allCorrect) {
+                    tableTagsFeedback.textContent = 'Правильно! Усі зіставлення вірні!';
+                    tableTagsFeedback.classList.remove('incorrect');
+                    tableTagsFeedback.classList.add('correct');
+                } else {
+                    tableTagsFeedback.textContent = 'Є помилки. Спробуйте ще раз!';
+                    tableTagsFeedback.classList.remove('correct');
+                    tableTagsFeedback.classList.add('incorrect');
+                }
+            });
+
+            resetTableTagsBtn.addEventListener('click', () => {
+                tableTagsTargets.forEach((target, index) => {
+                    target.innerHTML = initialTableTagsTargetsContent[index];
+                    target.dataset.accept = initialTableTagsTargetsDataAccept[index];
+                    target.style.borderColor = '#ccc';
+                });
+
+                shuffleAndDisplayTableTagsItems();
+
+                tableTagsFeedback.textContent = '';
+                tableTagsFeedback.classList.remove('correct', 'incorrect');
+            });
+
+            shuffleAndDisplayTableTagsItems();
+            // Кінець: Практичний блок - Вправа 4 (Matching)
+
+
+            // // Функції для вправи на зіставлення
+            // let draggedItem = null;
+
+            // document.querySelectorAll('.matching-item.draggable').forEach(item => {
+            //     item.addEventListener('dragstart', (e) => {
+            //         draggedItem = e.target;
+            //         e.dataTransfer.setData('text/plain', e.target.dataset.itemId);
+            //         setTimeout(() => {
+            //             e.target.classList.add('dragging');
+            //         }, 0);
+            //     });
+
+            //     item.addEventListener('dragend', (e) => {
+            //         e.target.classList.remove('dragging');
+            //         draggedItem = null;
+            //     });
+            // });
+
+            // document.querySelectorAll('.matching-target').forEach(target => {
+            //     target.addEventListener('dragover', (e) => {
+            //         e.preventDefault();
+            //         target.classList.add('drag-over');
+            //     });
+
+            //     target.addEventListener('dragleave', (e) => {
+            //         target.classList.remove('drag-over');
+            //     });
+
+            //     target.addEventListener('drop', (e) => {
+            //         e.preventDefault();
+            //         target.classList.remove('drag-over');
+            //         const itemId = e.dataTransfer.getData('text/plain');
+            //         const item = document.querySelector(`[data-item-id="${itemId}"]`);
+
+            //         if (item && !target.hasChildNodes()) {
+            //             // Move the item to the target
+            //             target.appendChild(item);
+            //             item.classList.remove('draggable'); // Prevent dragging after dropping
+            //             item.style.position = 'static'; // Reset positioning
+            //             item.style.left = 'auto';
+            //             item.style.top = 'auto';
+            //         }
+            //     });
+            // });
+
+            // window.checkMatchingQuestion = (questionId) => {
+            //     const feedbackElement = document.getElementById(`${questionId}-feedback`);
+            //     let allCorrect = true;
+            //     let allFilled = true;
+
+            //     document.querySelectorAll(`#${questionId}-exercise .matching-target`).forEach(target => {
+            //         target.classList.remove('correct', 'incorrect');
+            //         const droppedItem = target.querySelector('.matching-item');
+            //         if (droppedItem) {
+            //             if (droppedItem.dataset.itemId === target.dataset.correctItem) {
+            //                 target.classList.add('correct', 'matched-item');
+            //             } else {
+            //                 target.classList.add('incorrect');
+            //                 allCorrect = false;
+            //             }
+            //         } else {
+            //             allFilled = false;
+            //             allCorrect = false;
+            //         }
+            //     });
+
+            //     feedbackElement.textContent = '';
+            //     feedbackElement.classList.remove('correct', 'incorrect');
+
+            //     if (allFilled && allCorrect) {
+            //         feedbackElement.textContent = 'Правильно!';
+            //         feedbackElement.classList.add('correct');
+            //     } else if (!allFilled) {
+            //         feedbackElement.textContent = 'Будь ласка, зіставте всі елементи.';
+            //         feedbackElement.classList.add('incorrect');
+            //     } else {
+            //         feedbackElement.textContent = 'Неправильно. Спробуйте ще раз!';
+            //         feedbackElement.classList.add('incorrect');
+            //     }
+            // };
+
+            // window.resetMatchingQuestion = (questionId) => {
+            //     const itemsColumn = document.getElementById('matching-items');
+            //     document.querySelectorAll(`#${questionId}-exercise .matching-target`).forEach(target => {
+            //         // Перевіряємо, чи є елемент у цільовій колонці, перш ніж переміщати його
+            //         if (target.children.length > 0) {
+            //             const item = target.children[0]; // Отримуємо перший (і єдиний) дочірній елемент
+            //             itemsColumn.appendChild(item);
+            //             item.classList.add('draggable');
+            //             item.setAttribute('draggable', 'true'); // Додано атрибут draggable
+            //             item.classList.remove('matched-item');
+            //         }
+            //         target.classList.remove('correct', 'incorrect', 'drag-over');
+            //     });
+            //     const feedbackElement = document.getElementById(`${questionId}-feedback`);
+            //     feedbackElement.textContent = '';
+            //     feedbackElement.classList.remove('correct', 'incorrect');
+            //     // Додатково перевіряємо, чи всі елементи зліва мають draggable="true"
+            //     document.querySelectorAll('.matching-item').forEach(item => {
+            //         item.setAttribute('draggable', 'true');
+            //     });
+            // };
+            // // Кінець: Практичний блок - Самооцінка
+        });
+    </script>
+</body>
+</html>

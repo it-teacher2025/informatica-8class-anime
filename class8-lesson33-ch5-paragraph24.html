@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: 8 клас</title>
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Тіло документа */
+        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
+
+        /* Стилі для навігації в меню */
+        .logo-main { display: none; }
+        .main-title-text { width: 140px; text-align: center; }
+        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
+        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
+        @media screen and (min-width: 768px) {
+            .main-title-text { width: auto; }
+            .main-navigation { display: inline; width: auto; }
+        }
+
+        /* main стилі */
+        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
+        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
+        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
+        .source-text { padding: 8px; }
+        @media screen and (min-width: 300px) {
+            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
+            .text-2xlooo { font-size: 1.25rem; }
+        }
+        @media screen and (min-width: 480px) {
+            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
+            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
+            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
+        }
+
+        /* Стилі для "Про урок" */
+        /* Групи результатів */
+        .text-group-result { padding-top: 16px; }
+
+        /* Style to hide inactive tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Style to tab content */
+        .tab-btn.active { 
+            color: rgb(245, 73, 0);                /* text-orange-600 */
+            border-bottom-color: rgb(245, 73, 0);  /* text-orange-600 */
+            background-color: rgb(255, 237, 212);     /* text-orange-100 */
+        }
+        .tab-btn { 
+            transition: color 0.3s, 
+            border-color 0.3s, 
+            background-color 0.3s; 
+            border-bottom: 2px solid transparent;
+        }
+
+        /* Styles for flip cards */
+        .flip-card {
+            background-color: transparent;
+            width: 100%; /* Make cards responsive to grid column width */
+            height: 200px; /* Fixed height for consistency, adjust as needed */
+            perspective: 1000px; /* 3D effect */
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left; /* Adjust text alignment as needed */
+            overflow-wrap: break-word; /* break-words */
+            /*word-break: break-all;*/ /* break-all */
+        }
+
+        .flip-card-front {
+            color: #4b5563; /* text-gray-700 */
+        }
+
+        .flip-card-back {
+            color: #4b5563; /* text-gray-700 */
+            transform: rotateY(180deg);
+        }
+
+        /* Responsive adjustments for min-height */
+        @media (min-width: 768px) { /* md breakpoint */
+            .flip-card.min-h-md {
+                min-height: 250px; /* Example, adjust as needed for medium screens */
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .flip-card.min-h-lg {
+                min-height: 200px; /* Example, adjust as needed for large screens */
+            }
+        }
+
+                
+        /* Стилі для практичного блоку */
+        .exercise-section {
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background-color: #f9fafb;
+            border-radius: 0.75rem;
+            border: 1px solid #e5e7eb;
+        }
+        .question-text {
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            color: #4b5563;
+            cursor: pointer;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s, border-color 0.2s;
+            border: 1px solid transparent; /* Додано для візуального ефекту підсвічування */
+        }
+        .option-label:hover {
+            background-color: #eff6ff;
+        }
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin-right: 0.75rem;
+            transform: scale(1.2);
+            accent-color: #3b82f6;
+        }
+        .fill-in-the-blanks p {
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            color: #1f2937;
+        }
+        .fill-in-the-blanks input[type="text"] {
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 1rem;
+            color: #1f2937;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            width: auto; /* Allow input to size naturally */
+            min-width: 100px; /* Minimum width for visibility */
+            vertical-align: middle;
+            margin: 0 0.25rem;
+        }
+        .fill-in-the-blanks input[type="text"]:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+        .match-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            background-color: #e0f2fe;
+            border-radius: 0.75rem;
+            border: 1px solid #93c5fd;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .match-item-left {
+            font-weight: 500;
+            color: #1e40af;
+            font-size: 1.05rem;
+            flex: 1;
+        }
+        .match-item-right select {
+            border: 1px solid #93c5fd;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 1rem;
+            color: #1e40af;
+            background-color: #ffffff;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .match-item-right select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .submit-button, .reset-button {
+            padding: 0.75rem 2rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #ffffff;
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .submit-button {
+            background-color: #2563eb;
+        }
+        .submit-button:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+        .submit-button:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .reset-button {
+            background-color: #6b7280;
+        }
+        .reset-button:hover {
+            background-color: #4b5563;
+            transform: translateY(-2px);
+        }
+        .reset-button:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .result-message {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .result-message.correct {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .result-message.incorrect {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        .result-message.partial {
+            background-color: #fffbeb;
+            color: #92400e;
+        }
+        .error-message {
+            color: #ef4444;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        /* Styles for highlighting correct/incorrect answers */
+        .is-correct {
+            background-color: #d1fae5 !important;
+            border-color: #34d399 !important;
+        }
+        .is-incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+        }
+        .fill-in-the-blanks input.is-correct {
+            border-color: #34d399 !important;
+            box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.25) !important;
+        }
+        .fill-in-the-blanks input.is-incorrect {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25) !important;
+        }
+        .match-item.is-correct {
+            background-color: #d1fae5 !important;
+            border-color: #34d399 !important;
+        }
+        .match-item.is-incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+        }
+        .match-item-right select.is-correct {
+            border-color: #34d399 !important;
+        }
+        .match-item-right select.is-incorrect {
+            border-color: #ef4444 !important;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="container mx-auto flex justify-between items-center   bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10  logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
+            </ul>
+            <!-- <a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a>
+            <a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a> -->
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <!-- Секція теми уроку -->
+        <section class="text-center mb-8">
+            <h1 class="text-lg text-slate-600 mt-2 break-words">Тема 5: «Алгоритми та програми». Урок № 33. (До § 24)</h1>
+            <h1 class="text-3xlooo md:text-4xl font-bold text-slate-900 break-words  theme-text">Сучасні мови програмування</h1>
+            <h2 class="text-lg text-slate-600 mt-2 break-words">Інтерактивний план-конспект уроку для 8 класу НУШ</h2>
+        </section>
+
+
+        <!-- Секція "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання" -->
+        <section>
+            <!-- Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання". -->
+            <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+                <nav id="tabs" class="flex flex-wrap justify-center gap-2 sm:gap-4">
+                    <button data-tab="about" class="tab-btn active text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Про урок</button>
+                    <button data-tab="theory" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Теоретичний блок</button>
+                    <button data-tab="practice" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Практичний блок</button>
+                    <button data-tab="check" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Перевірка знань</button>
+                    <button data-tab="homework" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Домашнє завдання</button>
+                </nav>
+            </div>
+
+            <!-- Про урок -->
+            <div id="about-content" class="tab-content active">
+                <div class="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Lesson Goal -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-orange-600 break-words break-all">🎯 Мета уроку</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Освітня:</b> ознайомити учнів з класифікацією мов програмування (низького, високого, надвисокого рівня), парадигмами програмування (універсальні, спеціалізовані, об'єктно-орієнтовані), а також із поняттями інтерпретатора та компілятора.</li>
+                            <li class="break-words"><b>Розвивальна:</b> розвивати логічне мислення, вміння аналізувати та порівнювати різні мови програмування, розуміти принципи їхньої роботи та сфери застосування.</li>
+                            <li class="break-words"><b>Виховна:</b> виховувати інтерес до вивчення програмування, заохочувати до самостійного пошуку інформації та розвитку навичок в ІТ.</li>
+                        </ul>
+                    </div>
+                    <!-- Expected Outcomes -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-orange-600 break-words break-all">✅ Очікувані результати</h3>
+                        <p class="mb-2 text-gray-600">Після уроку учні зможуть:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Класифікувати мови програмування за різними ознаками.</li>
+                            <li class="break-words">Наводити приклади мов низького, високого та надвисокого рівня.</li>
+                            <li class="break-words">Пояснювати різницю між інтерпретатором та компілятором.</li>
+                            <li class="break-words">Визначати парадигми програмування (наприклад, об'єктно-орієнтовані, процедурні).</li>
+                            <li class="break-words">Розуміти основні етапи перетворення програмного коду на машинний.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-bold mb-3 text-orange-600 break-words">📊 Групи результатів (НУШ)</h3>
+                        <p class="text-gray-600 mb-4 break-words">Візуалізація важливості груп результатів для цього уроку.</p>
+                        <div class="chart-container relative h-64 w-full max-w-md mx-auto">
+                            <canvas id="resultsChart"></canvas>
+                        </div>
+                        <p class="text-gray-600 mb-4 break-words text-group-result"><i>Учень / учениця:</i></p>
+                        <ul>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР1 – працює з інформацією, даними, моделями;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР2 – створює інформаційні продукти;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР3 – працює в цифровому середовищі;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР4 – безпечно та відповідально працює з інформаційними технологіями.</p></li>
+                        </ul>
+                    </div>
+                    <!-- Lesson Type & Equipment -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-orange-600 break-words">📚 Тип уроку</h3>
+                        <p class="text-gray-700 break-words">Урок вивчення нового матеріалу з елементами дискусії та практичного застосування.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-orange-600 break-words">💻 Обладнання та ПЗ</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Комп'ютери (для кожного учня або парами).</li>
+                            <li class="break-words">Проєктор або інтерактивна дошка.</li>
+                            <li class="break-words">Доступ до мережі Інтернет.</li>
+                            <li class="break-words">Середовище програмування IDLE (або онлайн-редактор Python, CodePen).</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-orange-600 break-words">🔗 Міжпредметні зв'язки</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Математика (логіка, алгоритми).</li>
+                            <li class="break-words">Англійська мова (синтаксис багатьох мов програмування).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Теоретичний блок -->
+            <div id="theory-content" class="tab-content   mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">
+
+                <!-- ВАРІАНТ № 1, початок -->
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-orange-500 mb-4 heading-underline break-words  title-review">ПОВТОРЮЄМО</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="md:w-1/4 flex justify-center md:justify-start mb-6 md:mb-0">
+                        <img src="./images/img05.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="300">
+                    </div>
+                    <div class="md:w-3/4 text-gray-700 text-lg">
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;У 7 класі ви вже опанували основи алгоритмізації та програмування мовою Python, знаєте, як цією мовою реалізувати базові алгоритмічні структури, і вмієте створювати програми з використанням розгалужень і повторень.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Також ви розширили уявлення про типи величин і алгоритми опрацювання даних різних типів.</p>
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Ви також оволоділи прийомами роботи в середовищі програмування IDLE, навчилися вести діалог в інтерактивному режимі у вікні консолі, створювати у вікні програми програмний код і зберігати його для подальшого використання.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">Актуалізація опорних знань</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2">
+                        <li class="break-words">Що таке тип величини?</li>
+                        <li class="break-words">Із якими типами даних ви працювали?</li>
+                        <li class="break-words">Які базові алгоритмічні структури використовуються при конструюванні алгоритмів?</li>
+                        <li class="break-words">Опишіть алгоритм створення програмного коду.</li>
+                        <li class="break-words">Які види вікон використовують у IDLE?</li>
+                        <li class="break-words">Які повідомлення з’являються у вікні консолі?</li>
+                    </ol>
+                    <img src="./images/img-tema5-01.webp" alt="Знак питання" class="rounded-lg shadow-md" width="200">
+                </div>
+
+                <div class="bg-orange-50 border-l-4 border-orange-500 p-6 rounded-lg shadow-md">
+                    <p class="text-gray-800 text-lg mb-4 break-words">У цьому розділі («Алгоритми та програми») ви продовжите вивчення основ програмування мовою Python і навчитеся розробляти програми з графічним інтерфейсом, створюючи об’єкти класів графічних компонентів. Ви дізнаєтеся, як задавати властивості об’єктів графічного інтерфейсу та програмувати обробку подій для них.</p>
+                </div>
+                
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 150)</a></i></p>
+                </div>
+                <!-- ВАРІАНТ № 1, кінець -->
+
+                <!-- <hr class="my-8 border-gray-200">
+
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-orange-500 mb-4 heading-underline break-words title-review">НОВИЙ МАТЕРІАЛ</h2>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">24. СУЧАСНІ МОВИ ПРОГРАМУВАННЯ</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="md:w-3/4 text-gray-700 text-lg">
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Історія створення мов програмування розпочалася в XIX ст., бурхливо розвивалася у XX — із появою ЕОМ. За цей час створено близько 9000 мов програмування та їх модифікацій.</p>
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Програма та мова програмування</h4>
+                        <p class="mb-4 break-words">**Програма** — це алгоритм, який записано мовою програмування та призначено для розв’язування певного завдання на комп’ютері. Команди в програмі (програмному коді) подаються мовою програмування.</p>
+                        <p class="mb-4 break-words">**Мова програмування** — це штучна мова, що становить систему позначень і правил для запису алгоритмів у формі, придатній для їх виконання комп’ютером.</p>
+                        <p class="mb-4 break-words">Будь-яка мова програмування має такі основні складові:</p>
+                        <div class="overflow-x-auto mb-4">
+                            <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
+                                <thead>
+                                    <tr>
+                                        <th class="py-2 px-4 border-b text-gray-700 bg-gray-50">Алфавіт мови</th>
+                                        <th class="py-2 px-4 border-b text-gray-700 bg-gray-50">Синтаксис мови</th>
+                                        <th class="py-2 px-4 border-b text-gray-700 bg-gray-50">Семантика мови</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="py-2 px-4 border-b text-gray-600">Набір символів, із яких утворюються команди та інші мовні конструкції</td>
+                                        <td class="py-2 px-4 border-b text-gray-600">Правила побудови команд, записування команд програмування</td>
+                                        <td class="py-2 px-4 border-b text-gray-600">Правила виконання команд, записування програм</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="mb-4 break-words">Під час створення програм використовуються такі символи:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700 mb-4">
+                            <li class="break-words">літери латинського алфавіту A..Z, a..z; цифри 0..9;</li>
+                            <li class="break-words">знаки арифметичних операцій, спеціальні символи: `+ - * / = < > ( ) . , ; : ' # _ ;`</li>
+                            <li class="break-words">комбінації символів: `:=, <>, <=, >=, !=, **;`</li>
+                            <li class="break-words">службові слова, що мають фіксований зміст: `and, elif, if, for, while, as, else, import` тощо.</li>
+                        </ul>
+                        <p class="mb-4 break-words">Вважають, що теоретичні основи програмування заклала британська науковиця Ада Августа Лавлейс, яка розробила перші програми для аналітичної машини Чарлза Беббіджа.</p>
+                    </div>
+                    <div class="md:w-1/4 flex justify-center md:justify-start">
+                        <img src="./images/image_9bf269.jpg" alt="Мова програмування: Алфавіт, Синтаксис, Семантика" class="rounded-lg shadow-md" width="300">
+                    </div>
+                </div>
+
+                <hr class="my-8 border-gray-200">
+
+                <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Класифікація мов програмування</h4>
+                <p class="mb-4 text-gray-700">Розглянемо розподіл мов за основними ознаками (Рис. 24.1).</p>
+                <div class="flex justify-center my-6">
+                    <img src="./images/image_9bf269.jpg" alt="Класифікація мов програмування" class="rounded-lg shadow-md max-w-full h-auto">
+                </div>
+
+                <h5 class="text-lg font-medium mb-3 text-gray-800">Розподіл за рівнем абстракції</h5>
+                <p class="mb-4 text-gray-700">&#160;&#160;&#160;&#160;**Першими** (у 40-х роках XX ст.) створено **мови низького рівня** — машинно-орієнтовані, тобто зорієнтовані на конкретні типи процесора й архітектуру комп’ютера. Наприклад, машинний код і мова асемблера. Програмування на них вимагає від програміста керування пам’яттю й апаратними ресурсами. Це як зводити будинок цеглина за цеглиною. Мови низького рівня використовуються для програмування мікроконтролерів або системного програмного забезпечення, де потрібна висока швидкість.</p>
+                <p class="mb-4 text-gray-700">&#160;&#160;&#160;&#160;**Мови високого і надвисокого рівня** нагадують людську мову: для побудови команд вони використовують звичайні слова або скорочення (зазвичай із англійської мови). Програмування на таких мовах дає можливість людині не зважати на особливості апаратних засобів, а зосередитися на логіці програми. Це як зводити будинок із готових блоків.</p>
+                <p class="mb-4 text-gray-700">&#160;&#160;&#160;&#160;Програми, розроблені мовами високого і надвисокого рівнів, можна виконувати на будь-яких комп’ютерах, для яких існують транслятори вибраної мови (про це дізнаємося далі).</p>
+                
+                <h5 class="text-lg font-medium mb-3 text-gray-800">► Розподіл за галуззю застосування</h5>
+                <p class="mb-4 text-gray-700">&#160;&#160;&#160;&#160;Мови програмування допомагають доносити інформацію до комп’ютера. **Універсальні** мови використовують для розв’язування різних завдань; **спеціалізовані** мови — для розв’язування завдань певного типу або галузі, наприклад, вебпрограмування; **езотеричні** — експериментальні, іноді створені для розваги, проте багато з них є повноцінними мовами програмування.</p>
+                <div class="flex justify-center my-6 space-x-4">
+                    <img src="./images/image_9bf2a4.jpg" alt="Логотипи мов програмування Python, C/C++, Java, Object Pascal" class="rounded-lg shadow-md" width="300">
+                    <img src="./images/image_9bf2a4.jpg" alt="Логотипи мов програмування PHP, Perl, VBScript, JavaScript" class="rounded-lg shadow-md" width="300">
+                </div>
+
+                <h5 class="text-lg font-medium mb-3 text-gray-800">► Поділ за парадигмою програмування</h5>
+                <p class="mb-4 text-gray-700">&#160;&#160;&#160;&#160;Систему ідей і понять, які визначають стиль написання комп’ютерних програм, а також як програміст уявляє роботу програми, називають **парадигмою програмування**. Парадигм існує ціла низка, а більшість мов програмування (зокрема й Python) підтримують декілька з них. Ви вже використовували елементи структурної та процедурної парадигм.</p>
+                <p class="mb-4 text-gray-700">&#160;&#160;&#160;&#160;За **структурної парадигми** програма розглядається як послідовність дій. Базовими поняттями структурного програмування є: **команда** (інструкція), що задає дію з опрацювання даних; **змінна**, якій можна присвоїти значення; **базові алгоритмічні конструкції**, які керують послідовністю виконання команд: команда з конструкція має один вхід і один вихід.</p>
+                <p class="mb-4 text-gray-700">&#160;&#160;&#160;&#160;За **процедурної парадигми** програма складається з окремих блоків команд — процедур або функцій. Це дозволяє використовувати певний фрагмент коду багато разів, записаний щойно один раз і надавши назву.</p>
+                <p class="mb-4 text-gray-700">&#160;&#160;&#160;&#160;За **об’єктно-орієнтованої парадигми** програма розглядається як сукупність об’єктів, що взаємодіють між собою. Об’єкт має набір властивостей, здатний виконувати певний набір дій над даними й може реагувати на події, які з ним відбуваються.</p>
+                <p class="mb-4 text-gray-700">&#160;&#160;&#160;&#160;За **декларативної парадигми** програма в певний спосіб описує, що потрібно отримати як результат, а не як це треба зробити. Тому декларативне програмування часто називають описовим. Так, декларативним є опис вебісторінок на HTML — теги описують, що містить сторінка й що має відображатися (заголовок, шрифт, текст, зображення), але не містять інструкції, як її слід відображати. Прикладами декларативних мов є також мова логічного програмування Prolog, мова описів запитів до баз даних SQL, мова документів XML тощо.</p>
+
+                <hr class="my-8 border-gray-200">
+
+                <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Інтерпретація та компіляція програм</h4>
+                <p class="mb-4 text-gray-700">&#160;&#160;&#160;&#160;Для перекладу програм із мов програмування високого та надвисокого рівнів на машинну мову застосовують спеціальні програми — **транслятори**. Вони поділяються на дві категорії: **інтерпретатори** й **компілятори**.</p>
+                <p class="mb-4 text-gray-700">&#160;&#160;&#160;&#160;**Інтерпретатор** перетворює невеликий фрагмент програмного коду на машинний код, який процесор одразу виконує. Далі інтерпретується наступний фрагмент програмного коду. Машинний код не зберігається для повторного виконання (Рис. 24.5).</p>
+                <div class="flex justify-center my-6">
+                    <img src="./images/image_9bf2a4.jpg" alt="Схема роботи інтерпретатора" class="rounded-lg shadow-md max-w-full h-auto">
+                </div>
+                <p class="mb-4 text-gray-700">&#160;&#160;&#160;&#160;**Компілятор** перетворює відразу всю програму на машинний код і вміщує їх у пам’ять комп’ютера, не виконуючи (Рис. 24.6). Скомпільовану програму можна зберегти для подальшого використання. Збережений результат компіляції називають **виконуваним файлом** (наприклад, із розширенням *.ехе* в ОС Windows).</p>
+                <div class="flex justify-center my-6">
+                    <img src="./images/image_9bf2e2.jpg" alt="Схема роботи компілятора" class="rounded-lg shadow-md max-w-full h-auto">
+                </div>
+                <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 151-154)</a></i></p>
+                 -->
+            </div>
+            
+
+            <!-- Практичний блок -->
+            <div id="practice-content" class="tab-content">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-6 text-center text-orange-600 break-words">Практичний блок уроку</h3>
+
+                    <!-- 1. Multiple Choice (Radio Buttons) -->
+                    <div class="exercise-section">
+                        <h2>1. Множинний вибір (Радіокнопки)</h2>
+                        <div class="question-text">
+                            Яка з перелічених мов належить до мов низького рівня?
+                        </div>
+                        <form id="radioForm">
+                            <label class="option-label">
+                                <input type="radio" name="videoProgram" value="Python"> Python
+                            </label>
+                            <label class="option-label">
+                                <input type="radio" name="videoProgram" value="Асемблер"> Асемблер
+                            </label>
+                            <label class="option-label">
+                                <input type="radio" name="videoProgram" value="JavaScript"> JavaScript
+                            </label>
+                            <div class="button-group">
+                                <button type="button" class="submit-button" onclick="checkRadio()">Перевірити</button>
+                                <button type="button" class="reset-button" onclick="resetRadio()">Скинути</button>
+                            </div>
+                            <div id="radioResult" class="result-message hidden"></div>
+                        </form>
+                    </div>
+
+                    <!-- 2. Fill in the Blanks -->
+                    <div class="exercise-section fill-in-the-blanks">
+                        <h2>2. Заповнення пропусків</h2>
+                        <p>
+                            <span class="question-text">Заповніть пропуски:</span><br>
+                            <br>
+                            <span class="segment">Програми, що перетворюють код мов високого рівня на машинний, називаються </span>
+                            <input type="text" id="blank1" placeholder="Ваша відповідь">.
+                        </p>
+                        <div class="button-group">
+                            <button type="button" class="submit-button" onclick="checkBlanks()">Перевірити</button>
+                            <button type="button" class="reset-button" onclick="resetBlanks()">Скинути</button>
+                        </div>
+                        <div id="blanksResult" class="result-message hidden"></div>
+                    </div>
+
+                    <!-- 3. Matching -->
+                    <div class="exercise-section">
+                        <h2>3. Зіставлення</h2>
+                        <div class="question-text">Зіставте парадигми програмування з їхніми характеристиками.</div>
+                        <form id="matchingForm">
+                            <div class="match-item">
+                                <div class="match-item-left">1. Програма складається з послідовності дій.</div>
+                                <div class="match-item-right">
+                                    <select id="match1">
+                                        <option value="">Оберіть...</option>
+                                        <option value="Декларативна">Декларативна</option>
+                                        <option value="ООП">Об'єктно-орієнтована</option>
+                                        <option value="Структурна">Структурна</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="match-item">
+                                <div class="match-item-left">2. Програма складається з об'єктів, що взаємодіють.</div>
+                                <div class="match-item-right">
+                                    <select id="match2">
+                                        <option value="">Оберіть...</option>
+                                        <option value="Декларативна">Декларативна</option>
+                                        <option value="ООП">Об'єктно-орієнтована</option>
+                                        <option value="Структурна">Структурна</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="match-item">
+                                <div class="match-item-left">3. Програма описує, що потрібно отримати.</div>
+                                <div class="match-item-right">
+                                    <select id="match3">
+                                        <option value="">Оберіть...</option>
+                                        <option value="Декларативна">Декларативна</option>
+                                        <option value="ООП">Об'єктно-орієнтована</option>
+                                        <option value="Структурна">Структурна</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="button-group">
+                                <button type="button" class="submit-button" onclick="checkMatching()">Перевірити</button>
+                                <button type="button" class="reset-button" onclick="resetMatching()">Скинути</button>
+                            </div>
+                            <div id="matchingResult" class="result-message hidden"></div>
+                        </form>
+                    </div>
+
+                    <!-- 4. Multiple Choice (Checkboxes) -->
+                    <div class="exercise-section">
+                        <h2>4. Множинний вибір (Чекбокси)</h2>
+                        <div class="question-text">
+                            Які типи мов програмування розрізняють за галуззю застосування? (Оберіть кілька варіантів)
+                        </div>
+                        <form id="checkboxForm">
+                            <label class="option-label">
+                                <input type="checkbox" name="videoSources" value="Універсальні"> Універсальні
+                            </label>
+                            <label class="option-label">
+                                <input type="checkbox" name="videoSources" value="Машинні"> Машинні
+                            </label>
+                            <label class="option-label">
+                                <input type="checkbox" name="videoSources" value="Спеціалізовані"> Спеціалізовані
+                            </label>
+                            <label class="option-label">
+                                <input type="checkbox" name="videoSources" value="Езотеричні"> Езотеричні
+                            </label>
+                            <div class="button-group">
+                                <button type="button" class="submit-button" onclick="checkCheckboxes()">Перевірити</button>
+                                <button type="button" class="reset-button" onclick="resetCheckboxes()">Скинути</button>
+                            </div>
+                            <div id="checkboxResult" class="result-message hidden"></div>
+                        </form>
+                    </div>
+
+                    <!-- 5. Multiple Choice (Radio Buttons) -->
+                    <div class="exercise-section">
+                        <h2>5. Множинний вибір (Радіокнопки)</h2>
+                        <div class="question-text">
+                            Розгляньте наступний фрагмент коду Python:
+                        </div>
+                        <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto"><code>a = 10
+b = 5
+if a > b:
+    print("a більше за b")
+else:
+    print("b більше або дорівнює a")
+                            </code></pre>
+                        <div class="question-text">
+                            Який результат буде виведено на екран?
+                        </div>
+                        <form id="radioForm5">
+                            <label class="option-label">
+                                <input type="radio" name="videoProgram5" value="a більше за b"> a більше за b
+                            </label>
+                            <label class="option-label">
+                                <input type="radio" name="videoProgram5" value="b більше або дорівнює a"> b більше або дорівнює a
+                            </label>
+                            <label class="option-label">
+                                <input type="radio" name="videoProgram5" value="Помилка"> Помилка 
+                            </label>
+                            <div class="button-group">
+                                <button type="button" class="submit-button" onclick="checkRadio5()">Перевірити</button>
+                                <button type="button" class="reset-button" onclick="resetRadio5()">Скинути</button>
+                            </div>
+                            <div id="radioResult5" class="result-message hidden"></div>
+                        </form>
+                    </div>
+
+                </div>                
+            </div>
+
+            <!-- Перевірка знань -->
+            <!-- Вручну треба змінювати лише ті значення minimum-height (min-h-[300px]), які потрібно, і треба використовувати медіа-адаптацію (стилі тут на сторінці в тезі <style>)-->
+                <!-- Тут grid -->
+            <div id="check-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-6 text-center text-orange-600 break-words">Перевірка знань</h3>
+                <p class="text-center text-gray-600 mb-8 break-words">Натисніть на картку, щоб побачити відповідь.</p>
+                <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-orange-100 p-6 rounded-xl shadow-md break-words">1. Що таке мова програмування?</div>
+                        <div class="flip-card-back bg-orange-200 p-6 rounded-xl shadow-md break-words">Штучна мова, що становить систему позначень і правил для запису алгоритмів у формі, придатній для їх виконання комп’ютером.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-orange-100 p-6 rounded-xl shadow-md break-words">2. Назвіть три основні складові будь-якої мови програмування.</div>
+                        <div class="flip-card-back bg-orange-200 p-6 rounded-xl shadow-md break-words">Алфавіт мови, синтаксис мови, семантика мови.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-orange-100 p-6 rounded-xl shadow-md break-words">3. В чому різниця між мовами низького та високого рівня?</div>
+                        <div class="flip-card-back bg-orange-200 p-6 rounded-xl shadow-md break-words">Мови низького рівня зорієнтовані на архітектуру комп'ютера, а мови високого рівня нагадують людську мову і зосереджені на логіці програми.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-orange-100 p-6 rounded-xl shadow-md break-words">4. Яке призначення трансляторів?</div>
+                            <div class="flip-card-back bg-orange-200 p-6 rounded-xl shadow-md break-words">Транслятори перекладають програми з мов високого та надвисокого рівнів на машинну мову, зрозумілу процесору.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-orange-100 p-6 rounded-xl shadow-md break-words">5. Поясніть відмінність між інтерпретатором та компілятором.</div>
+                            <div class="flip-card-back bg-orange-200 p-6 rounded-xl shadow-md break-words">**Інтерпретатор** перетворює та виконує код пофрагментно, не зберігаючи машинний код.<br><br>**Компілятор** перетворює всю програму на машинний код одразу та створює виконуваний файл.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-orange-100 p-6 rounded-xl shadow-md break-words">6. Назвіть декілька парадигм програмування.</div>
+                            <div class="flip-card-back bg-orange-200 p-6 rounded-xl shadow-md break-words">Структурна, процедурна, об’єктно-орієнтована, декларативна.</div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 151-154)</a></i></p>
+                </div>
+            </div>
+         
+
+            <!-- Домашнє завдання -->
+            <div id="homework-content" class="tab-content   bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-orange-600 break-words">Домашнє завдання</h3>                    
+                <!--  -->
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <div>
+                            <p class="break-words break-all"><b>1. Теоретична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li class="break-words break-all">Опрацювати § 24 (стор. 151-157).</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><b>2. Практична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Виконати вправу № 24 (стор. 157).</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p><b>3. Завдання за бажанням (для закріплення):</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Інтерактивна платформа IZZI (8 клас) до вхідного тестування до розділу № 5: <a href="https://ua.izzi.digital/DOS/1183864/1345704.html" target="_blank" class="text-blue-600 hover:underline break-words break-all block">https://ua.izzi.digital/DOS/1183864/1345704.html</a></li>
+
+                                <li>Інтерактивна платформа IZZI (8 клас) до § 24: <a href="https://ua.izzi.digital/DOS/1183864/1262922.html" target="_blank" class="text-blue-600 hover:underline break-words break-all block">https://ua.izzi.digital/DOS/1183864/1262922.html</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="./images/img08.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!--  -->
+            </div>
+        </section>
+
+
+        <!-- Додаткові матеріали -->
+        <!-- Additional Materials Section -->
+        <section class="bg-white p-6 rounded-xl shadow-md mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-orange-600 break-words">Додаткові матеріали</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li class="break-words"><a href="https://sites.google.com/view/lga84-9/tehnika_bezpeky" target="_blank" class="text-blue-600 hover:underline">Техніка безпеки</a></li>
+
+                <li class="break-words"><a href="https://drive.google.com/file/d/1C9_KEF981LvokY0GWNOhUXb7rJKJUUbM/view" target="_blank" class="text-blue-600 hover:underline">Оцінювання учнів та учениць на уроках інформатики</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу</a> (§ 24, стор. 151-157)</li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">Інтерактивна платформа IZZI (8 клас)</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до вхідного тестування до розділу № 5: <a href="https://ua.izzi.digital/DOS/1183864/1345704.html" target="_blank" class="text-blue-600 hover:underline">https://ua.izzi.digital/DOS/1183864/1345704.html</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до § 24: <a href="https://ua.izzi.digital/DOS/1183864/1262922.html" target="_blank" class="text-blue-600 hover:underline">https://ua.izzi.digital/DOS/1183864/1262922.html</a></li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm   bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>           
+        </ul>
+    </footer>    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Початок:
+            // Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання".
+            const tabs = document.getElementById('tabs');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            tabs.addEventListener('click', (e) => {
+                // Ensure the click target is a BUTTON (tab button)
+                if (e.target.tagName === 'BUTTON') {
+                    const tab = e.target.dataset.tab;
+
+                    // Remove 'active' class from all buttons and add to the clicked one
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Hide all tab contents and show the corresponding one
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Use === for strict comparison
+                        if (content.id === `${tab}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                }
+            });
+            // Кінець.
+
+
+            // Початок:
+            // ГРУПИ РЕЗУЛЬТАТІВ.
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            // 1. Створення об'єкту-мапи для відповідності значень і кольорів
+            // Тут вручну можна поміняти значення background й border
+            const colorMap = {
+                1: {
+                    background: '#ffedd4', // text-orange-100
+                    border: '#ffd6a8'      // text-orange-200
+                },
+                2: {
+                    background: '#ffd6a8', // text-orange-200
+                    border: '#ffb86a'       // text-orange-300
+                },
+                3: {
+                    background: '#ffb86a',  // text-orange-300
+                    border: '#ff8904'        // text-orange-400
+                },
+                4: {
+                    background: '#ff8904',   // text-orange-400
+                    border: '#ff6900'      // text-orange-500
+                }
+            };
+
+            // Дані, які можна змінювати вручну
+            const chartData = [4, 1, 3, 2];
+
+            // 2. Генерація масивів кольорів на основі даних
+            const backgroundColors = chartData.map(value => colorMap[value].background);
+            const borderColors = chartData.map(value => colorMap[value].border);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ГР1', 'ГР2', 'ГР3', 'ГР4'],
+                    datasets: [{
+                        label: 'Важливість',
+                        data: chartData, // Використовуємо змінну
+                        backgroundColor: backgroundColors, // Використовуємо згенерований масив
+                        borderColor: borderColors, // Використовуємо згенерований масив
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const labels = ['', 'Важлива', 'Дуже важлива', 'Найважливіша'];
+                                    return labels[value] || '';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.parsed.y;
+                                    const importanceLabels = {4: 'Найважливіша', 3: 'Дуже важлива', 2: 'Важлива', 1: 'Найменш важлива'};
+                                    label += importanceLabels[value] || '';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // Кінець. ГРУПИ РЕЗУЛЬТАТІВ.
+
+
+            // Початок.
+            // ПОВОРОТ КАРТОК "Перевірка знань"
+            const flipCards = document.querySelectorAll('.flip-card');
+            flipCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+            // Кінець. ПОВОРОТ КАРТОК.
+
+        });
+    </script>
+
+        
+    <!-- Скрипт для Практичного блоку -->
+    <script>
+        // Функція для відображення повідомлень
+        function displayResult(elementId, isCorrect, message) {
+            const resultElement = document.getElementById(elementId);
+            resultElement.classList.remove('hidden', 'correct', 'incorrect', 'partial');
+            if (isCorrect === true) {
+                resultElement.classList.add('correct');
+            } else if (isCorrect === false) {
+                resultElement.classList.add('incorrect');
+            } else { // Partial
+                resultElement.classList.add('partial');
+            }
+            resultElement.textContent = message;
+        }
+
+        // Функція для очищення підсвічування для радіокнопок/чекбоксів
+        function clearOptionHighlight(formId) {
+            document.querySelectorAll(`#${formId} .option-label`).forEach(label => {
+                label.classList.remove('is-correct', 'is-incorrect');
+            });
+        }
+
+        // Функція для очищення підсвічування для полів введення
+        function clearInputHighlight(inputIds) {
+            inputIds.forEach(id => {
+                document.getElementById(id).classList.remove('is-correct', 'is-incorrect');
+            });
+        }
+
+        // Функція для очищення підсвічування для зіставлення
+        function clearMatchingHighlight() {
+            document.querySelectorAll('#matchingForm .match-item').forEach(item => {
+                item.classList.remove('is-correct', 'is-incorrect');
+            });
+            document.querySelectorAll('#matchingForm select').forEach(select => {
+                select.classList.remove('is-correct', 'is-incorrect');
+            });
+        }
+
+        
+        // Вправа №1
+        function checkRadio() {
+            clearOptionHighlight('radioForm'); // очищає підсвітку в межах форми №1
+            const selectedOption = document.querySelector('#radioForm input[name="videoProgram"]:checked');
+
+            if (!selectedOption) {
+                displayResult('radioResult', false, 'Будь ласка, оберіть відповідь.');
+                return;
+            }
+
+            const label = selectedOption.closest('.option-label');
+            if (selectedOption.value === 'Асемблер') {
+                displayResult('radioResult', true, 'Правильно! Мови низького рівня, такі як Асемблер, є близькими до машинного коду та апаратної частини комп\'ютера. Вони вимагають від програміста детальних знань архітектури процесора. Python та JavaScript є мовами високого рівня, які значно простіші для розуміння та використання людиною.');
+                label.classList.add('is-correct');
+            } else {
+                displayResult('radioResult', false, 'Неправильно. Спробуйте ще раз.');
+                label.classList.add('is-incorrect');
+                // підсвітити правильний варіант
+                document
+                .querySelector('#radioForm input[name="videoProgram"][value="101"]')
+                .closest('.option-label')
+                .classList.add('is-correct');
+            }
+        }
+
+        function resetRadio() {
+            document.querySelectorAll('#radioForm input[name="videoProgram"]').forEach(r => r.checked = false);
+            clearOptionHighlight('radioForm');
+            const res = document.getElementById('radioResult');
+            res.classList.add('hidden');
+            res.textContent = '';
+        }
+
+        // Вправа №5
+        function checkRadio5() {
+            clearOptionHighlight('radioForm5'); // очищає підсвітку в межах форми №5
+            const selectedOption = document.querySelector('#radioForm5 input[name="videoProgram5"]:checked');
+
+            if (!selectedOption) {
+                displayResult('radioResult5', false, 'Будь ласка, оберіть відповідь.');
+                return;
+            }
+
+            const label = selectedOption.closest('.option-label');
+            if (selectedOption.value === 'a більше за b') {
+                displayResult('radioResult5', true, 'Правильно! У даному коді змінній a присвоюється значення 10, а змінній b — значення 5. Умова if a > b: (якщо 10 більше 5) є істинною, тому виконується блок коду всередині if, і на екран виводиться текст "a більше за b".');
+                label.classList.add('is-correct');
+            } else {
+                displayResult('radioResult5', false, 'Неправильно. Спробуйте ще раз.');
+                label.classList.add('is-incorrect');
+                // підсвітити правильний варіант
+                document
+                .querySelector('#radioForm5 input[name="videoProgram5"][value="WAV"]')
+                .closest('.option-label')
+                .classList.add('is-correct');
+            }
+        }
+
+        function resetRadio5() {
+            document.querySelectorAll('#radioForm5 input[name="videoProgram5"]').forEach(r => r.checked = false);
+            clearOptionHighlight('radioForm5');
+            const res = document.getElementById('radioResult5');
+            res.classList.add('hidden');
+            res.textContent = '';
+        }
+
+
+        // Вправа № 2
+        // Функція для перевірки відповідей на заповнення пропусків
+        function checkBlanks() {
+            // Очистити попереднє підсвічування
+            const blank1Input = document.getElementById('blank1');
+            blank1Input.classList.remove('is-correct', 'is-incorrect');
+
+            const blank1 = blank1Input.value.trim().toLowerCase();
+            const correctBlank1 = ['компілятори', 'компіляторами', 'компілятор'];
+
+            let isCorrect = false;
+
+            if (correctBlank1.includes(blank1)) {
+                isCorrect = true;
+                blank1Input.classList.add('is-correct');
+            } else {
+                blank1Input.classList.add('is-incorrect');
+            }
+
+            const resultMessageElement = document.getElementById('blanksResult');
+            resultMessageElement.classList.remove('hidden');
+
+            if (isCorrect) {
+                resultMessageElement.textContent = 'Правильно! Компілятор — це програма, яка перетворює весь вихідний код мови високого рівня в машинний код перед його виконанням. Інший тип програм, що виконують схожу функцію — інтерпретатори — перетворюють і виконують код по рядках.';
+                resultMessageElement.style.color = 'green';
+            } else {
+                resultMessageElement.textContent = 'Неправильно. Спробуйте ще раз.';
+                resultMessageElement.style.color = 'red';
+            }
+        }
+    
+        // Функція для скидання заповнення пропусків
+        function resetBlanks() {
+            const blank1Input = document.getElementById('blank1');
+            blank1Input.value = '';
+            blank1Input.classList.remove('is-correct', 'is-incorrect');
+
+            const resultMessageElement = document.getElementById('blanksResult');
+            resultMessageElement.classList.add('hidden');
+            resultMessageElement.textContent = '';
+        }
+
+        // Допоміжна функція, яка використовується
+        function clearInputHighlight(ids) {
+            ids.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.classList.remove('is-correct', 'is-incorrect');
+                }
+            });
+        }
+
+
+        // Вправа № 3
+        // Функція для перевірки відповідей на зіставлення
+        function checkMatching() {
+            clearMatchingHighlight(); // Очистити попереднє підсвічування
+            const answers = {
+                match1: 'Структурна', // 1. Структурна — Програма складається з послідовності дій.
+                match2: 'ООП', // 2. Об'єктно-орієнтована — Програма складається з об'єктів, що взаємодіють.
+                match3: 'Декларативна' // 3. Декларативна — Програма описує, що потрібно отримати.
+            };
+
+            let correctCount = 0;
+            let totalMatches = Object.keys(answers).length;
+
+            let allAnswered = true;
+            for (let i = 1; i <= totalMatches; i++) {
+                const selectElement = document.getElementById(`match${i}`);
+                const matchItem = selectElement.closest('.match-item');
+
+                if (selectElement.value === '') {
+                    allAnswered = false;
+                    // Don't highlight if not answered, but indicate missing answers overall
+                } else if (selectElement.value === answers[`match${i}`]) {
+                    correctCount++;
+                    matchItem.classList.add('is-correct');
+                    selectElement.classList.add('is-correct');
+                } else {
+                    matchItem.classList.add('is-incorrect');
+                    selectElement.classList.add('is-incorrect');
+                }
+            }
+
+            if (!allAnswered) {
+                displayResult('matchingResult', false, 'Будь ласка, оберіть відповіді для всіх зіставлень.');
+                return;
+            }
+
+
+            if (correctCount === totalMatches) {
+                displayResult('matchingResult', true, 'Правильно! Всі зіставлення правильні.');
+            } else if (correctCount > 0) {
+                displayResult('matchingResult', null, `Частково правильно. Ви правильно зіставили ${correctCount} з ${totalMatches} пунктів. Спробуйте ще раз.`);
+            } else {
+                displayResult('matchingResult', false, 'Неправильно. Спробуйте ще раз.');
+            }
+        }
+
+        // Функція для скидання зіставлення
+        function resetMatching() {
+            for (let i = 1; i <= 3; i++) { // Changed to 3 to match the number of matching items
+                document.getElementById(`match${i}`).value = '';
+            }
+            clearMatchingHighlight();
+            document.getElementById('matchingResult').classList.add('hidden');
+            document.getElementById('matchingResult').textContent = '';
+        }
+
+
+        // Вправа № 4
+        // Функція для перевірки відповідей на множинний вибір (чекбокси)
+        function checkCheckboxes() {
+            clearOptionHighlight('checkboxForm'); // Очистити попереднє підсвічування
+            const checkboxes = document.querySelectorAll('input[name="videoSources"]');
+            const selectedCheckboxes = document.querySelectorAll('input[name="videoSources"]:checked');
+            const correctAnswers = ['Універсальні', 'Спеціалізовані'];
+            let correctCount = 0;
+            let totalSelected = selectedCheckboxes.length;
+
+            if (totalSelected === 0) {
+                displayResult('checkboxResult', false, 'Будь ласка, оберіть відповіді.');
+                return;
+            }
+
+            checkboxes.forEach(checkbox => {
+                const label = checkbox.closest('.option-label');
+                if (correctAnswers.includes(checkbox.value)) {
+                    if (checkbox.checked) {
+                        correctCount++;
+                        label.classList.add('is-correct');
+                    } else {
+                        label.classList.add('is-correct'); // Highlight correct but unselected
+                    }
+                } else {
+                    if (checkbox.checked) {
+                        label.classList.add('is-incorrect'); // Highlight incorrect and selected
+                    }
+                }
+            });
+
+            if (correctCount === correctAnswers.length && totalSelected === correctAnswers.length) {
+                displayResult('checkboxResult', true, 'Правильно! Мови програмування класифікують за їх призначенням. Універсальні мови (наприклад, C++, Python) можна використовувати для вирішення широкого спектра завдань. Спеціалізовані мови (наприклад, SQL для роботи з базами даних) призначені для конкретних, вузьких галузей. Машинні та езотеричні мови є іншими типами, але не класифікуються за "галуззю застосування".');
+            } else if (correctCount > 0 || totalSelected > correctAnswers.length) {
+                 displayResult('checkboxResult', null, `Частково правильно. Ви обрали правильних відповідей: ${correctCount}. Спробуйте ще раз.`);
+            }
+            else {
+                displayResult('checkboxResult', false, 'Неправильно. Спробуйте ще раз.');
+            }
+        }
+
+        // Функція для скидання чекбоксів
+        function resetCheckboxes() {
+            document.querySelectorAll('input[name="videoSources"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            clearOptionHighlight('checkboxForm');
+            document.getElementById('checkboxResult').classList.add('hidden');
+            document.getElementById('checkboxResult').textContent = '';
+        }
+
+    </script>
+</body>
+</html>

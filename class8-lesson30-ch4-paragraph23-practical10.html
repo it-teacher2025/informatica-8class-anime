@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: 8 клас</title>
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Тіло документа */
+        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
+
+        /* Стилі для навігації в меню */
+        .logo-main { display: none; }
+        .main-title-text { width: 140px; text-align: center; }
+        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
+        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
+        @media screen and (min-width: 768px) {
+            .main-title-text { width: auto; }
+            .main-navigation { display: inline; width: auto; }
+        }
+
+        /* main стилі */
+        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
+        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
+        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
+        .source-text { padding: 8px; }
+        @media screen and (min-width: 300px) {
+            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
+            .text-2xlooo { font-size: 1.25rem; }
+        }
+        @media screen and (min-width: 480px) {
+            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
+            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
+            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
+        }
+
+        /* Стилі для "Про урок" */
+        /* Групи результатів */
+        .text-group-result { padding-top: 16px; }
+
+        /* Style to hide inactive tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Style to tab content */
+        .tab-btn.active { 
+            color: #c026d3;                /* text-fuchsia-600 */
+            border-bottom-color: #c026d3;  /* text-fuchsia-600 */
+            background-color: #fdf2f8;     /* text-fuchsia-100 */
+        }
+        .tab-btn { 
+            transition: color 0.3s, 
+            border-color 0.3s, 
+            background-color 0.3s; 
+            border-bottom: 2px solid transparent;
+        }
+
+        /* Styles for flip cards */
+        .flip-card {
+            background-color: transparent;
+            width: 100%; /* Make cards responsive to grid column width */
+            height: 200px; /* Fixed height for consistency, adjust as needed */
+            perspective: 1000px; /* 3D effect */
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left; /* Adjust text alignment as needed */
+            overflow-wrap: break-word; /* break-words */
+            /*word-break: break-all;*/ /* break-all */
+        }
+
+        .flip-card-front {
+            color: #4b5563; /* text-gray-700 */
+        }
+
+        .flip-card-back {
+            color: #4b5563; /* text-gray-700 */
+            transform: rotateY(180deg);
+        }
+
+        /* Responsive adjustments for min-height */
+        @media (min-width: 768px) { /* md breakpoint */
+            .flip-card.min-h-md {
+                min-height: 250px; /* Example, adjust as needed for medium screens */
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .flip-card.min-h-lg {
+                min-height: 200px; /* Example, adjust as needed for large screens */
+            }
+        }
+
+        /* Стилі для практичного блоку */
+        .exercise-section {
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background-color: #f9fafb;
+            border-radius: 0.75rem;
+            border: 1px solid #e5e7eb;
+        }
+        .question-text {
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            color: #4b5563;
+            cursor: pointer;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s, border-color 0.2s;
+            border: 1px solid transparent; /* Додано для візуального ефекту підсвічування */
+        }
+        .option-label:hover {
+            background-color: #eff6ff;
+        }
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin-right: 0.75rem;
+            transform: scale(1.2);
+            accent-color: #3b82f6;
+        }
+        .fill-in-the-blanks p {
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            color: #1f2937;
+        }
+        .fill-in-the-blanks input[type="text"] {
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 1rem;
+            color: #1f2937;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            width: auto; /* Allow input to size naturally */
+            min-width: 100px; /* Minimum width for visibility */
+            vertical-align: middle;
+            margin: 0 0.25rem;
+        }
+        .fill-in-the-blanks input[type="text"]:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+        .match-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            background-color: #e0f2fe;
+            border-radius: 0.75rem;
+            border: 1px solid #93c5fd;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .match-item-left {
+            font-weight: 500;
+            color: #1e40af;
+            font-size: 1.05rem;
+            flex: 1;
+        }
+        .match-item-right select {
+            border: 1px solid #93c5fd;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 1rem;
+            color: #1e40af;
+            background-color: #ffffff;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .match-item-right select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .submit-button, .reset-button {
+            padding: 0.75rem 2rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #ffffff;
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .submit-button {
+            background-color: #2563eb;
+        }
+        .submit-button:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+        .submit-button:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .reset-button {
+            background-color: #6b7280;
+        }
+        .reset-button:hover {
+            background-color: #4b5563;
+            transform: translateY(-2px);
+        }
+        .reset-button:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .result-message {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .result-message.correct {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .result-message.incorrect {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        .result-message.partial {
+            background-color: #fffbeb;
+            color: #92400e;
+        }
+        .error-message {
+            color: #ef4444;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        /* Styles for highlighting correct/incorrect answers */
+        .is-correct {
+            background-color: #d1fae5 !important;
+            border-color: #34d399 !important;
+        }
+        .is-incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+        }
+        .fill-in-the-blanks input.is-correct {
+            border-color: #34d399 !important;
+            box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.25) !important;
+        }
+        .fill-in-the-blanks input.is-incorrect {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25) !important;
+        }
+        .match-item.is-correct {
+            background-color: #d1fae5 !important;
+            border-color: #34d399 !important;
+        }
+        .match-item.is-incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+        }
+        .match-item-right select.is-correct {
+            border-color: #34d399 !important;
+        }
+        .match-item-right select.is-incorrect {
+            border-color: #ef4444 !important;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="container mx-auto flex justify-between items-center   bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10  logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
+            </ul>
+            <!-- <a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a>
+            <a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a> -->
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <!-- Секція теми уроку -->
+        <section class="text-center mb-8">
+            <h1 class="text-lg text-slate-600 mt-2 break-words">Тема 4: «Опрацювання мультимедійних об’єктів». Урок № 30. (До § 23, ПР10)</h1>
+            <h1 class="text-3xlooo md:text-4xl font-bold text-slate-900 break-words  theme-text">Опрацювання, зберігання та розміщення відеофільму в інтернеті<br>Практична робота № 10. «Розміщення відеоматеріалів в інтернеті»</h1>
+            <h2 class="text-lg text-slate-600 mt-2 break-words">Інтерактивний план-конспект уроку для 8 класу НУШ</h2>
+        </section>
+
+
+        <!-- Секція "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання" -->
+        <section>
+            <!-- Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання". -->
+            <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+                <nav id="tabs" class="flex flex-wrap justify-center gap-2 sm:gap-4">
+                    <button data-tab="about" class="tab-btn active text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Про урок</button>
+                    <button data-tab="theory" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Теоретичний блок</button>
+                    <button data-tab="practice" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Практичний блок</button>
+                    <button data-tab="check" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Перевірка знань</button>
+                    <button data-tab="homework" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Домашнє завдання</button>
+                </nav>
+            </div>
+
+            <!-- Про урок -->
+            <div id="about-content" class="tab-content active">
+                <div class="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Lesson Goal -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-fuchsia-600 break-words break-all">🎯 Мета уроку</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Освітня:</b> ознайомити учнів з принципами збереження та розміщення відеофільмів в Інтернеті, розглянути основні формати відеофайлів та сервіси для публікації відео.</li>
+                            <li class="break-words"><b>Розвивальна:</b> розвивати вміння експортувати відео, конвертувати формати, працювати з хмарними сховищами та відеохостингами, формувати навички безпечного та відповідального розміщення матеріалів в Інтернеті.</li>
+                            <li class="break-words"><b>Виховна:</b> виховувати відповідальне ставлення до авторського права, повагу до інформаційної безпеки та етичних норм у цифровому середовищі.</li>
+                        </ul>
+                    </div>
+                    <!-- Expected Outcomes -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-fuchsia-600 break-words break-all">✅ Очікувані результати</h3>
+                        <p class="mb-2 text-gray-600">Після уроку учні зможуть:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Пояснювати важливість вибору формату відеофайлу для збереження.</li>
+                            <li class="break-words">Виконувати експорт відеофільму з відеоредактора.</li>
+                            <li class="break-words">Конвертувати відеофайли у різні формати.</li>
+                            <li class="break-words">Розміщувати відеофайли на хмарних дисках та у відеохостингах.</li>
+                            <li class="break-words">Надавати доступ до розміщених відеоматеріалів.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-bold mb-3 text-fuchsia-600 break-words">📊 Групи результатів (НУШ)</h3>
+                        <p class="text-gray-600 mb-4 break-words">Візуалізація важливості груп результатів для цього уроку.</p>
+                        <div class="chart-container relative h-64 w-full max-w-md mx-auto">
+                            <canvas id="resultsChart"></canvas>
+                        </div>
+                        <p class="text-gray-600 mb-4 break-words text-group-result"><i>Учень / учениця:</i></p>
+                        <ul>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР1 – працює з інформацією, даними, моделями;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР2 – створює інформаційні продукти;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР3 – працює в цифровому середовищі;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР4 – безпечно та відповідально працює з інформаційними технологіями.</p></li>
+                        </ul>
+                    </div>
+                    <!-- Lesson Type & Equipment -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-fuchsia-600 break-words">📚 Тип уроку</h3>
+                        <p class="text-gray-700 break-words">Урок закріплення та застосування знань, умінь і навичок, практична робота.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-fuchsia-600 break-words">💻 Обладнання та ПЗ</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Персональні комп'ютери, проєктор, інтерактивна дошка.</li>
+                            <li class="break-words">Програмне забезпечення: браузер, відеоредактор, відеоконвертер, доступ до Інтернету (хмарні сховища, відеохостинги).</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-fuchsia-600 break-words">🔗 Міжпредметні зв'язки</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Медіаграмотність: аналіз та оцінка достовірності інформації у відеоматеріалах.</li>
+                            <li class="break-words">Українська мова: створення опису та тегів для відео.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Теоретичний блок -->
+            <div id="theory-content" class="tab-content   mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">
+                <!-- ВАРІАНТ № 2, початок -->
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-fuchsia-500 mb-4 heading-underline break-words  title-review">ПОВТОРЮЄМО</h2>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">Актуалізація опорних знань</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2">
+                        <li class="break-words">Що таке відеоредактор?</li>
+                        <li class="break-words">Які основні етапи процесу створення відеофільму?</li>
+                        <li class="break-words">Для чого використовується монтажний стіл у відеоредакторі?</li>
+                        <li class="break-words">Що таке титри і як їх додавати у OpenShot?</li>
+                        <li class="break-words">Чому важливо синхронізувати аудіо- та відеоряд?</li>
+                        <li class="break-words">Які дії входять у поняття "редагування відеофрагментів"?</li>
+                    </ol>
+                    <img src="./images/img-tema4-6.webp" alt="Знак питання" class="rounded-lg shadow-md" width="200">
+                </div>
+                
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 136-142)</a></i></p>
+                </div>
+                <!-- ВАРІАНТ № 2, кінець -->
+            </div>
+            
+
+            <!-- Практичний блок -->
+            <div id="practice-content" class="tab-content">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-4 text-fuchsia-600 break-words">Практичний блок уроку</h3>
+                    <!-- <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Практична робота № 10. «Розміщення відеоматеріалів в інтернеті»</h4>
+                    <p class="text-gray-600 mb-4">**Завдання:** опублікувати відеофільм в Інтернеті, надати доступ.</p>
+                    <p class="text-gray-600 mb-4">**Обладнання:** комп’ютер із браузером, відеоредактором, відеоконвертером, з’єднаний з інтернетом.</p>
+
+                    <h5 class="text-lg font-semibold mb-2 text-gray-800">Хід роботи:</h5>
+                    <p class="text-gray-700 mb-2"><i>Під час роботи за комп’ютером дотримуйтеся правил безпеки.</i></p>
+                    <ol class="list-decimal list-inside text-gray-700 space-y-2 mb-4">
+                        <li class="break-words">Запустіть відеоредактор OpenShot та відкрийте проєкт із назвою Практична робота 9.</li>
+                        <li class="break-words">Експортуйте відеофільм із назвою Практична робота 10. У вікні експортування виберіть профіль Інтернет.</li>
+                        <li class="break-words">Закрийте відеоредактор і запустіть відеоконвертер.</li>
+                        <li class="break-words">Сконвертуйте відеофільм у формат MP4.</li>
+                        <li class="break-words">Запустіть браузер і відкрийте електронну скриньку.</li>
+                        <li class="break-words">Зайдіть на хмарний диск.</li>
+                        <li class="break-words">Збережіть на хмарному диску відеофільм у форматі mp4.</li>
+                        <li class="break-words">Відкрийте доступ усім, хто має посилання на відеофільм.</li>
+                        <li class="break-words">Надішліть посилання на адресу, зазначену вчителем/вчителькою.</li>
+                        <li class="break-words">Зареєструйтеся на сервісі YouTube (Google) і/або увійдіть у свій обліковий запис.</li>
+                        <li class="break-words">Опублікуйте відеофільм на YouTube для загального доступу.</li>
+                        <li class="break-words">Надішліть посилання на відеофільм на адресу, зазначену вчителем/вчителькою.</li>
+                        <li class="break-words">Завершіть роботу за комп’ютером.</li>
+                    </ol>
+                    <h5 class="text-lg font-semibold mb-2 text-gray-800">Зробіть висновок:</h5>
+                    <p class="text-gray-700 mb-4">як розмістити аудіо- та відеоматеріали в інтернеті, які переваги різних способів розміщення.</p>
+
+                    <div class="flex justify-center my-6">
+                        <img src="https://placehold.co/400x200/cccccc/333333?text=YouTube%20Interface" alt="Інтерфейс YouTube" class="rounded-lg shadow-md max-w-full h-auto">
+                    </div>
+
+                    <hr class="my-8 border-gray-200">
+
+                    <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Самооцінка: Дайте відповіді на питання, пов'язані з практичною роботою.</h4>
+                    <p class="text-gray-600 mb-4">Оберіть правильний варіант або виконайте дію.</p> -->
+
+                    <!-- Multiple Choice (Radio Buttons) -->
+                    <div class="exercise-section">
+                        <h2>1. Множинний вибір (Радіокнопки)</h2>
+                        <div class="question-text">
+                            Який формат файлу рекомендовано для конвертації відеофільму перед розміщенням на хмарному диску?
+                        </div>
+                        <form id="radioForm">
+                            <label class="option-label">
+                                <input type="radio" name="videoProgram" value="AVI"> AVI
+                            </label>
+                            <label class="option-label">
+                                <input type="radio" name="videoProgram" value="MP4"> MP4
+                            </label>
+                            <label class="option-label">
+                                <input type="radio" name="videoProgram" value="WMV"> WMV
+                            </label>
+                            <div class="button-group">
+                                <button type="button" class="submit-button" onclick="checkRadio()">Перевірити</button>
+                                <button type="button" class="reset-button" onclick="resetRadio()">Скинути</button>
+                            </div>
+                            <div id="radioResult" class="result-message hidden"></div>
+                        </form>
+                    </div>
+
+                    <!-- Multiple Choice (Checkboxes) -->
+                    <div class="exercise-section">
+                        <h2>2. Множинний вибір (Чекбокси)</h2>
+                        <div class="question-text">
+                            Які джерела відеосигналу розрізняють для захоплення відео? (Оберіть кілька правильних відповідей)
+                        </div>
+                        <form id="checkboxForm">
+                            <label class="option-label">
+                                <input type="checkbox" name="videoSources" value="Широке поширення"> Широке поширення
+                            </label>
+                            <label class="option-label">
+                                <input type="checkbox" name="videoSources" value="Можливість коментування"> Можливість коментування
+                            </label>
+                            <label class="option-label">
+                                <input type="checkbox" name="videoSources" value="Збільшення розміру файлу"> Збільшення розміру файлу
+                            </label>
+                            <label class="option-label">
+                                <input type="checkbox" name="videoSources" value="Доступність з будь-якого пристрою"> Доступність з будь-якого пристрою
+                            </label>
+                            <div class="button-group">
+                                <button type="button" class="submit-button" onclick="checkCheckboxes()">Перевірити</button>
+                                <button type="button" class="reset-button" onclick="resetCheckboxes()">Скинути</button>
+                            </div>
+                            <div id="checkboxResult" class="result-message hidden"></div>
+                        </form>
+                    </div>
+
+                    <!-- Fill in the Blanks -->
+                    <div class="exercise-section fill-in-the-blanks">
+                        <h2>3. Заповнення пропусків</h2>
+                        <p>
+                            <span class="question-text">Заповніть пропуски:</span><br>
+                            <br>
+                            <span class="segment">Сервіс YouTube належить компанії </span>
+                            <input type="text" id="blank1" placeholder="Ваша відповідь">.
+                        </p>
+                        <div class="button-group">
+                            <button type="button" class="submit-button" onclick="checkBlanks()">Перевірити</button>
+                            <button type="button" class="reset-button" onclick="resetBlanks()">Скинути</button>
+                        </div>
+                        <div id="blanksResult" class="result-message hidden"></div>
+                    </div>
+
+                    <!-- Matching -->
+                    <div class="exercise-section">
+                        <h2>4. Зіставлення</h2>
+                        <div class="question-text">Які переваги розміщення відеоматеріалів в Інтернеті? (Оберіть кілька варіантів).</div>
+                        <form id="matchingForm">
+                            <div class="match-item">
+                                <div class="match-item-left">1. Відео доступне всім користувачам.</div>
+                                <div class="match-item-right">
+                                    <select id="match1">
+                                        <option value="">Оберіть...</option>
+                                        <option value="Загальний доступ">Загальний доступ</option>
+                                        <option value="Доступ за посиланням">Доступ за посиланням</option>
+                                        <option value="Приватний доступ">Приватний доступ</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="match-item">
+                                <div class="match-item-left">2. Відео доступне тільки тим, хто має посилання.</div>
+                                <div class="match-item-right">
+                                    <select id="match2">
+                                        <option value="">Оберіть...</option>
+                                        <option value="Загальний доступ">Загальний доступ</option>
+                                        <option value="Доступ за посиланням">Доступ за посиланням</option>
+                                        <option value="Приватний доступ">Приватний доступ</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="match-item">
+                                <div class="match-item-left">3. Відео доступне тільки автору.</div>
+                                <div class="match-item-right">
+                                    <select id="match3">
+                                        <option value="">Оберіть...</option>
+                                        <option value="Загальний доступ">Загальний доступ</option>
+                                        <option value="Доступ за посиланням">Доступ за посиланням</option>
+                                        <option value="Приватний доступ">Приватний доступ</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="button-group">
+                                <button type="button" class="submit-button" onclick="checkMatching()">Перевірити</button>
+                                <button type="button" class="reset-button" onclick="resetMatching()">Скинути</button>
+                            </div>
+                            <div id="matchingResult" class="result-message hidden"></div>
+                        </form>
+                    </div>
+
+                </div>                
+            </div>
+
+            <!-- Перевірка знань -->
+            <!-- Вручну треба змінювати лише ті значення minimum-height (min-h-[300px]), які потрібно, і треба використовувати медіа-адаптацію (стилі тут на сторінці в тезі <style>)-->
+                <!-- Тут grid -->
+            <div id="check-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-6 text-center text-fuchsia-600 break-words">Перевірка знань</h3>
+                <p class="text-center text-gray-600 mb-8 break-words">Натисніть на картку, щоб побачити відповідь.</p>
+                <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-fuchsia-100 p-6 rounded-xl shadow-md break-words">1. Які основні етапи підготовки відеофільму до публікації в Інтернеті?</div>
+                        <div class="flip-card-back bg-fuchsia-200 p-6 rounded-xl shadow-md break-words">Завершення монтажу відеоряду, звуку та титрів, а потім експорт у відповідний відеоформат.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-fuchsia-100 p-6 rounded-xl shadow-md break-words">2. Які основні способи розповсюдження відео в Інтернеті?</div>
+                        <div class="flip-card-back bg-fuchsia-200 p-6 rounded-xl shadow-md break-words">Через хмарні сховища (Google Диск, Microsoft OneDrive тощо) та через соціальні мережі (YouTube, Instagram, Primcast, Vimeo).</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-fuchsia-100 p-6 rounded-xl shadow-md break-words">3. Що потрібно для розміщення відеофільму на YouTube?</div>
+                        <div class="flip-card-back bg-fuchsia-200 p-6 rounded-xl shadow-md break-words">Обліковий запис Google, натиснути кнопку «Створити», вибрати «Завантажити відео», ввести інформацію про відеофільм, вибрати рівень доступу.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-fuchsia-100 p-6 rounded-xl shadow-md break-words">4. Які можливості надають популярні відеосервіси?</div>
+                            <div class="flip-card-back bg-fuchsia-200 p-6 rounded-xl shadow-md break-words">Можливість публікувати, лайкати, коментувати, оцінювати, ділитися відео.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-fuchsia-100 p-6 rounded-xl shadow-md break-words">5. Чому важливо вибирати профіль "Інтернет" при експорті відео?</div>
+                            <div class="flip-card-back bg-fuchsia-200 p-6 rounded-xl shadow-md break-words">Для оптимального формату та якості відеофайлу для веб-перегляду, що забезпечує сумісність з онлайн-платформами.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-fuchsia-100 p-6 rounded-xl shadow-md break-words">6. Яке призначення програм-відеоконвертерів?</div>
+                            <div class="flip-card-back bg-fuchsia-200 p-6 rounded-xl shadow-md break-words">Призначені для зміни формату відеофайлів, якщо вихідний формат відеоредактора не підтримується сервісом розміщення.</div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 143-146)</a></i></p>
+                </div>
+            </div>
+         
+
+            <!-- Домашнє завдання -->
+            <div id="homework-content" class="tab-content   bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-fuchsia-600 break-words">Домашнє завдання</h3>                    
+                <!--  -->
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <div>
+                            <p class="break-words break-all"><b>1. Теоретична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li class="break-words break-all">Опрацювати § 23 (стор. 143-146).</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><b>2. Практична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Виконати практичну роботу № 10 (стор. 148).</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p><b>3. Завдання за бажанням (для закріплення):</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Інтерактивна платформа IZZI (8 клас) до § 23: <a href="https://ua.izzi.digital/DOS/1183864/1262412.html" target="_blank" class="text-blue-600 hover:underline break-words break-all block">https://ua.izzi.digital/DOS/1183864/1262412.html</a></li>
+
+                                <li>Інтерактивна платформа IZZI (8 клас) до практичної роботи № 10: <a href="https://ua.izzi.digital/DOS/1183864/1410273.html" target="_blank" class="text-blue-600 hover:underline break-words break-all block">https://ua.izzi.digital/DOS/1183864/1410273.html</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="./images/img08.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!--  -->
+            </div>
+        </section>
+
+
+        <!-- Додаткові матеріали -->
+        <!-- Additional Materials Section -->
+        <section class="bg-white p-6 rounded-xl shadow-md mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-fuchsia-600 break-words">Додаткові матеріали</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li class="break-words"><a href="https://sites.google.com/view/lga84-9/tehnika_bezpeky" target="_blank" class="text-blue-600 hover:underline">Техніка безпеки</a></li>
+
+                <li class="break-words"><a href="https://drive.google.com/file/d/1C9_KEF981LvokY0GWNOhUXb7rJKJUUbM/view" target="_blank" class="text-blue-600 hover:underline">Оцінювання учнів та учениць на уроках інформатики</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу</a> (§ 23, стор. 143-146; ПР10, стор. 148)</li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">Інтерактивна платформа IZZI (8 клас)</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до § 23: <a href="https://ua.izzi.digital/DOS/1183864/1262412.html" target="_blank" class="text-blue-600 hover:underline">https://ua.izzi.digital/DOS/1183864/1262412.html</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до практичної роботи № 10: <a href="https://ua.izzi.digital/DOS/1183864/1410273.html" target="_blank" class="text-blue-600 hover:underline break-words2">https://ua.izzi.digital/DOS/1183864/1410273.html</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до пдсумкової роботи до розділу № 4: <a href="https://ua.izzi.digital/DOS/1183864/1415845.html" target="_blank" class="text-blue-600 hover:underline break-words2">https://ua.izzi.digital/DOS/1183864/1415845.html</a></li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm   bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>           
+        </ul>
+    </footer>    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Початок:
+            // Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання".
+            const tabs = document.getElementById('tabs');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            tabs.addEventListener('click', (e) => {
+                // Ensure the click target is a BUTTON (tab button)
+                if (e.target.tagName === 'BUTTON') {
+                    const tab = e.target.dataset.tab;
+
+                    // Remove 'active' class from all buttons and add to the clicked one
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Hide all tab contents and show the corresponding one
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Use === for strict comparison
+                        if (content.id === `${tab}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                }
+            });
+            // Кінець.
+
+
+            // Початок:
+            // ГРУПИ РЕЗУЛЬТАТІВ.
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            // 1. Створення об'єкту-мапи для відповідності значень і кольорів
+            // Тут вручну можна поміняти значення background й border
+            const colorMap = {
+                1: {
+                    background: '#fdf2f8', // text-fuchsia-100
+                    border: '#fae8ff'      // text-fuchsia-200
+                },
+                2: {
+                    background: '#fae8ff', // text-fuchsia-200
+                    border: '#f0abfc'       // text-fuchsia-300
+                },
+                3: {
+                    background: '#f0abfc',  // text-fuchsia-300
+                    border: '#e879f9'        // text-fuchsia-400
+                },
+                4: {
+                    background: '#e879f9',   // text-fuchsia-400
+                    border: '#d946ef'      // text-fuchsia-500
+                }
+            };
+
+            // Дані, які можна змінювати вручну
+            const chartData = [2, 2, 4, 4];
+
+            // 2. Генерація масивів кольорів на основі даних
+            const backgroundColors = chartData.map(value => colorMap[value].background);
+            const borderColors = chartData.map(value => colorMap[value].border);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ГР1', 'ГР2', 'ГР3', 'ГР4'],
+                    datasets: [{
+                        label: 'Важливість',
+                        data: chartData, // Використовуємо змінну
+                        backgroundColor: backgroundColors, // Використовуємо згенерований масив
+                        borderColor: borderColors, // Використовуємо згенерований масив
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const labels = ['', 'Важлива', 'Дуже важлива', 'Найважливіша'];
+                                    return labels[value] || '';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.parsed.y;
+                                    const importanceLabels = {4: 'Найважливіша', 3: 'Дуже важлива', 2: 'Важлива', 1: 'Найменш важлива'};
+                                    label += importanceLabels[value] || '';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // Кінець. ГРУПИ РЕЗУЛЬТАТІВ.
+
+
+            // Початок.
+            // ПОВОРОТ КАРТОК "Перевірка знань"
+            const flipCards = document.querySelectorAll('.flip-card');
+            flipCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+            // Кінець. ПОВОРОТ КАРТОК.
+
+        });
+    </script>
+
+    <script>
+        // Функція для відображення повідомлень
+        function displayResult(elementId, isCorrect, message) {
+            const resultElement = document.getElementById(elementId);
+            resultElement.classList.remove('hidden', 'correct', 'incorrect', 'partial');
+            if (isCorrect === true) {
+                resultElement.classList.add('correct');
+            } else if (isCorrect === false) {
+                resultElement.classList.add('incorrect');
+            } else { // Partial
+                resultElement.classList.add('partial');
+            }
+            resultElement.textContent = message;
+        }
+
+        // Функція для очищення підсвічування для радіокнопок/чекбоксів
+        function clearOptionHighlight(formId) {
+            document.querySelectorAll(`#${formId} .option-label`).forEach(label => {
+                label.classList.remove('is-correct', 'is-incorrect');
+            });
+        }
+
+        // Функція для очищення підсвічування для полів введення
+        function clearInputHighlight(inputIds) {
+            inputIds.forEach(id => {
+                document.getElementById(id).classList.remove('is-correct', 'is-incorrect');
+            });
+        }
+
+        // Функція для очищення підсвічування для зіставлення
+        function clearMatchingHighlight() {
+            document.querySelectorAll('#matchingForm .match-item').forEach(item => {
+                item.classList.remove('is-correct', 'is-incorrect');
+            });
+            document.querySelectorAll('#matchingForm select').forEach(select => {
+                select.classList.remove('is-correct', 'is-incorrect');
+            });
+        }
+
+        // Вправа № 1
+        // Функція для перевірки відповідей на множинний вибір (радіокнопки)
+        function checkRadio() {
+            clearOptionHighlight('radioForm'); // Очистити попереднє підсвічування
+            const selectedOption = document.querySelector('input[name="videoProgram"]:checked');
+            const resultElement = document.getElementById('radioResult');
+
+            if (!selectedOption) {
+                displayResult('radioResult', false, 'Будь ласка, оберіть відповідь.');
+                return;
+            }
+
+            const label = selectedOption.closest('.option-label');
+            if (selectedOption.value === 'MP4') {
+                displayResult('radioResult', true, 'Правильно! MP4 (MPEG-4) є найпоширенішим і найуніверсальнішим форматом. Він забезпечує хорошу якість при відносно невеликому розмірі файлу, що робить його ідеальним для завантаження на хмарні диски та стрімінгові платформи. Формати AVI та WMV, як правило, створюють значно більші файли.');
+                label.classList.add('is-correct');
+            } else {
+                displayResult('radioResult', false, `Неправильно. Спробуйте ще раз.`);
+                label.classList.add('is-incorrect');
+                // Optionally highlight the correct one
+                document.querySelector('input[name="videoProgram"][value="OBS Studio"]').closest('.option-label').classList.add('is-correct');
+            }
+        }
+
+        // Функція для скидання радіокнопок
+        function resetRadio() {
+            document.querySelectorAll('input[name="videoProgram"]').forEach(radio => {
+                radio.checked = false;
+            });
+            clearOptionHighlight('radioForm');
+            document.getElementById('radioResult').classList.add('hidden');
+            document.getElementById('radioResult').textContent = '';
+        }
+
+        // Вправа № 2
+        // Функція для перевірки відповідей на множинний вибір (чекбокси)
+        function checkCheckboxes() {
+            clearOptionHighlight('checkboxForm'); // Очистити попереднє підсвічування
+            const checkboxes = document.querySelectorAll('input[name="videoSources"]');
+            const selectedCheckboxes = document.querySelectorAll('input[name="videoSources"]:checked');
+            const correctAnswers = ['Широке поширення', 'Можливість коментування', 'Доступність з будь-якого пристрою'];
+            let correctCount = 0;
+            let totalSelected = selectedCheckboxes.length;
+
+            if (totalSelected === 0) {
+                displayResult('checkboxResult', false, 'Будь ласка, оберіть відповіді.');
+                return;
+            }
+
+            checkboxes.forEach(checkbox => {
+                const label = checkbox.closest('.option-label');
+                if (correctAnswers.includes(checkbox.value)) {
+                    if (checkbox.checked) {
+                        correctCount++;
+                        label.classList.add('is-correct');
+                    } else {
+                        label.classList.add('is-correct'); // Highlight correct but unselected
+                    }
+                } else {
+                    if (checkbox.checked) {
+                        label.classList.add('is-incorrect'); // Highlight incorrect and selected
+                    }
+                }
+            });
+
+            if (correctCount === correctAnswers.length && totalSelected === correctAnswers.length) {
+                displayResult('checkboxResult', true, 'Правильно! Розміщення відео в Інтернеті дозволяє охопити велику аудиторію (широке поширення), взаємодіяти з нею через коментарі (можливість коментування) і переглядати контент з будь-якого пристрою, підключеного до мережі. Збільшення розміру файлу не є перевагою.');
+            } else if (correctCount > 0 || totalSelected > correctAnswers.length) {
+                 displayResult('checkboxResult', null, `Частково правильно. Ви обрали правильних відповідей: ${correctCount}. Спробуйте ще раз.`);
+            }
+            else {
+                displayResult('checkboxResult', false, 'Неправильно. Спробуйте ще раз.');
+            }
+        }
+
+        // Функція для скидання чекбоксів
+        function resetCheckboxes() {
+            document.querySelectorAll('input[name="videoSources"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            clearOptionHighlight('checkboxForm');
+            document.getElementById('checkboxResult').classList.add('hidden');
+            document.getElementById('checkboxResult').textContent = '';
+        }
+
+
+        // Вправа № 3
+        // Функція для перевірки відповідей на заповнення пропусків
+        function checkBlanks() {
+            // Очистити попереднє підсвічування
+            const blank1Input = document.getElementById('blank1');
+            blank1Input.classList.remove('is-correct', 'is-incorrect');
+
+            const blank1 = blank1Input.value.trim().toLowerCase();
+            const correctBlank1 = ['google'];
+
+            let isCorrect = false;
+
+            if (correctBlank1.includes(blank1)) {
+                isCorrect = true;
+                blank1Input.classList.add('is-correct');
+            } else {
+                blank1Input.classList.add('is-incorrect');
+            }
+
+            const resultMessageElement = document.getElementById('blanksResult');
+            resultMessageElement.classList.remove('hidden');
+
+            if (isCorrect) {
+                resultMessageElement.textContent = 'Правильно! Компанія Google придбала YouTube у 2006 році.';
+                resultMessageElement.style.color = 'green';
+            } else {
+                resultMessageElement.textContent = 'Неправильно. Спробуйте ще раз.';
+                resultMessageElement.style.color = 'red';
+            }
+        }
+
+        // Функція для скидання заповнення пропусків
+        function resetBlanks() {
+            const blank1Input = document.getElementById('blank1');
+            blank1Input.value = '';
+            blank1Input.classList.remove('is-correct', 'is-incorrect');
+
+            const resultMessageElement = document.getElementById('blanksResult');
+            resultMessageElement.classList.add('hidden');
+            resultMessageElement.textContent = '';
+        }
+
+        // Допоміжна функція, яка використовується
+        function clearInputHighlight(ids) {
+            ids.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.classList.remove('is-correct', 'is-incorrect');
+                }
+            });
+        }
+
+        // Вправа № 4
+        // Функція для перевірки відповідей на зіставлення
+        function checkMatching() {
+            clearMatchingHighlight(); // Очистити попереднє підсвічування
+            const answers = {
+                match1: 'Загальний доступ', // 1. Загальний доступ — Відео доступне всім користувачам.
+                match2: 'Доступ за посиланням', // 2. Доступ за посиланням — Відео доступне тільки тим, хто має посилання.
+                match3: 'Приватний доступ' // 3. Приватний доступ — Відео доступне тільки автору.
+            };
+
+            let correctCount = 0;
+            let totalMatches = Object.keys(answers).length;
+
+            let allAnswered = true;
+            for (let i = 1; i <= totalMatches; i++) {
+                const selectElement = document.getElementById(`match${i}`);
+                const matchItem = selectElement.closest('.match-item');
+
+                if (selectElement.value === '') {
+                    allAnswered = false;
+                    // Don't highlight if not answered, but indicate missing answers overall
+                } else if (selectElement.value === answers[`match${i}`]) {
+                    correctCount++;
+                    matchItem.classList.add('is-correct');
+                    selectElement.classList.add('is-correct');
+                } else {
+                    matchItem.classList.add('is-incorrect');
+                    selectElement.classList.add('is-incorrect');
+                }
+            }
+
+            if (!allAnswered) {
+                displayResult('matchingResult', false, 'Будь ласка, оберіть відповіді для всіх зіставлень.');
+                return;
+            }
+
+
+            if (correctCount === totalMatches) {
+                displayResult('matchingResult', true, 'Правильно! Всі зіставлення правильні.');
+            } else if (correctCount > 0) {
+                displayResult('matchingResult', null, `Частково правильно. Ви правильно зіставили ${correctCount} з ${totalMatches} пунктів. Спробуйте ще раз.`);
+            } else {
+                displayResult('matchingResult', false, 'Неправильно. Спробуйте ще раз.');
+            }
+        }
+
+        // Функція для скидання зіставлення
+        function resetMatching() {
+            for (let i = 1; i <= 3; i++) { // Changed to 3 to match the number of matching items
+                document.getElementById(`match${i}`).value = '';
+            }
+            clearMatchingHighlight();
+            document.getElementById('matchingResult').classList.add('hidden');
+            document.getElementById('matchingResult').textContent = '';
+        }
+    </script>
+
+</body>
+</html>

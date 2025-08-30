@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: 8 клас</title>
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Тіло документа */
+        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
+
+        /* Стилі для навігації в меню */
+        .logo-main { display: none; }
+        .main-title-text { width: 140px; text-align: center; }
+        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
+        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
+        @media screen and (min-width: 768px) {
+            .main-title-text { width: auto; }
+            .main-navigation { display: inline; width: auto; }
+        }
+
+        /* main стилі */
+        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
+        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
+        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
+        .source-text { padding: 8px; }
+        @media screen and (min-width: 300px) {
+            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
+            .text-2xlooo { font-size: 1.25rem; }
+        }
+        @media screen and (min-width: 480px) {
+            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
+            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
+            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
+        }
+
+        /* Стилі для "Про урок" */
+        /* Групи результатів */
+        .text-group-result { padding-top: 16px; }
+
+        /* Style to hide inactive tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Style to tab content */
+        .tab-btn.active { 
+            color: #d97706;                /* text-amber-600 */
+            border-bottom-color: #d97706;  /* text-amber-600 */
+            background-color: #fef3c7;     /* text-amber-100 */
+        }
+        .tab-btn { 
+            transition: color 0.3s, 
+            border-color 0.3s, 
+            background-color 0.3s; 
+            border-bottom: 2px solid transparent;
+        }
+
+        /* Styles for flip cards */
+        .flip-card {
+            background-color: transparent;
+            width: 100%; /* Make cards responsive to grid column width */
+            height: 200px; /* Fixed height for consistency, adjust as needed */
+            perspective: 1000px; /* 3D effect */
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left; /* Adjust text alignment as needed */
+            overflow-wrap: break-word; /* break-words */
+            /*word-break: break-all;*/ /* break-all */
+        }
+
+        .flip-card-front {
+            color: #4b5563; /* text-gray-700 */
+        }
+
+        .flip-card-back {
+            color: #4b5563; /* text-gray-700 */
+            transform: rotateY(180deg);
+        }
+
+        /* Responsive adjustments for min-height */
+        @media (min-width: 768px) { /* md breakpoint */
+            .flip-card.min-h-md {
+                min-height: 250px; /* Example, adjust as needed for medium screens */
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .flip-card.min-h-lg {
+                min-height: 200px; /* Example, adjust as needed for large screens */
+            }
+        }
+
+    </style>
+
+    <style>
+        /* Styles for interactive exercises */
+        .code-input-area {
+            background-color: #1f2937; /* bg-gray-800 */
+            color: #e5e7eb; /* text-gray-200 */
+            font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+            min-height: 200px;
+            padding: 15px;
+            border-radius: 8px;
+            resize: vertical;
+            overflow-y: auto;
+        }
+        .code-output-area {
+            background-color: #f3f4f6; /* bg-gray-100 */
+            color: #1f2937; /* text-gray-900 */
+            font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+            min-height: 80px;
+            padding: 15px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        .execute-button {
+            background-color: #d97706; /* bg-amber-600 */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            margin-top: 10px;
+        }
+        .execute-button:hover {
+            background-color: #b45309; /* bg-amber-700 */
+            transform: translateY(-1px);
+        }
+        .execute-button:active {
+            transform: translateY(0);
+        }
+        .check-button, .reset-button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            margin: 0 5px;
+        }
+        .check-button {
+            background-color: #d97706; /* bg-amber-600 */
+            color: white;
+            border: none;
+        }
+        .check-button:hover {
+            background-color: #b45309; /* bg-amber-700 */
+            transform: translateY(-1px);
+        }
+        .check-button:active {
+            transform: translateY(0);
+        }
+        .reset-button {
+            background-color: #fef3c7; /* bg-amber-100 */
+            color: #d97706; /* text-amber-600 */
+            border: 1px solid #d97706;
+        }
+        .reset-button:hover {
+            background-color: #fde68a; /* bg-amber-200 */
+            transform: translateY(-1px);
+        }
+        .reset-button:active {
+            transform: translateY(0);
+        }
+        .feedback {
+            margin-top: 15px;
+            font-weight: 600;
+            color: #343a40; /* text-gray-800 */
+        }
+        .feedback.correct {
+            color: #10b981; /* text-green-500 */
+        }
+        .feedback.incorrect {
+            color: #ef4444; /* text-red-500 */
+        }
+        .mc-container .mc-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f9fafb; /* bg-gray-50 */
+            border: 1px solid #e5e7eb; /* border-gray-200 */
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .mc-container .mc-option:hover {
+            background-color: #f3f4f6; /* bg-gray-100 */
+        }
+        .mc-container .mc-option input[type="radio"],
+        .mc-container .mc-option input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        .mc-container .mc-option label {
+            flex-grow: 1;
+            cursor: pointer;
+        }
+        .mc-container .mc-option.correct {
+            background-color: #d1fae5; /* bg-green-100 */
+            border-color: #34d399; /* border-green-400 */
+        }
+        .mc-container .mc-option.incorrect {
+            background-color: #fee2e2; /* bg-red-100 */
+            border-color: #ef4444; /* border-red-500 */
+        }
+        .python-code-editor-container {
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .python-code-editor-header {
+            background-color: #e2e8f0;
+            padding: 10px 15px;
+            font-weight: 600;
+            border-bottom: 1px solid #cbd5e1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .python-code-editor-body {
+            padding: 15px;
+            background-color: #ffffff;
+        }
+
+        textarea {
+            height: 1200px;
+        }
+    </style>
+
+    <!-- TKINTER MODAL SIMULATION -->
+    <style>
+        .tk-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.35);z-index:9999}
+        .tk-modal.show{display:flex}
+        .tk-window{width:360px;background:#f3f4f6;border:1px solid #d1d5db;border-radius:10px;box-shadow:0 12px 30px rgba(0,0,0,.25);font-family:system-ui,Segoe UI,Arial}
+        .tk-titlebar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#e6eefc;border-bottom:1px solid #cbd5e1;border-top-left-radius:10px;border-top-right-radius:10px}
+        .tk-titlebar span{font-weight:600;color:#0f172a}
+        .tk-close{border:none;background:transparent;font-size:18px;line-height:1;cursor:pointer;color:#334155}
+        .tk-body{padding:14px 16px}
+        .tk-grid{display:grid;grid-template-columns:20px 1fr;gap:8px 10px;align-items:center}
+        .tk-body label{color:#111827;font-size:14px}
+        .tk-input{width:100%;padding:6px 8px;border:1px solid #cbd5e1;border-radius:4px;background:#fff}
+        .tk-actions{margin-top:12px}
+        .tk-btn{padding:8px 12px;border:1px solid #94a3b8;border-radius:6px;background:#e5e7eb;color:#111827;cursor:pointer}
+        .tk-btn:hover{background:#dfe3e8}
+        /* messagebox */
+        .tk-msg{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.25);z-index:10000}
+        .tk-msg.show{display:flex}
+        .tk-msg-box{min-width:280px;background:#fff;border:1px solid #d1d5db;border-radius:10px;box-shadow:0 10px 24px rgba(0,0,0,.25)}
+        .tk-msg-hd{padding:8px 12px;background:#e6eefc;border-bottom:1px solid #cbd5e1;border-top-left-radius:10px;border-top-right-radius:10px;font-weight:600}
+        .tk-msg-bd{padding:14px 16px;white-space:pre-line;color:#111827}
+        .tk-msg-ft{padding:10px 12px;text-align:right}
+        .tk-ok{padding:6px 12px;border:1px solid #2563eb;background:#3b82f6;color:#fff;border-radius:6px;cursor:pointer}
+        .tk-ok:hover{background:#2563eb}
+    </style>
+</head>
+<body>
+
+    <header class="container mx-auto flex justify-between items-center   bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10  logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
+            </ul>
+            <!-- <a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a>
+            <a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a> -->
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <!-- Секція теми уроку -->
+        <section class="text-center mb-8">
+            <h1 class="text-lg text-slate-600 mt-2 break-words">Тема 5: «Алгоритми та програми». Урок № 50. (До § 33)</h1>
+            <h1 class="text-3xlooo md:text-4xl font-bold text-slate-900 break-words  theme-text">Розв’язання завдань з логічним типом даних</h1>
+            <h2 class="text-lg text-slate-600 mt-2 break-words">Інтерактивний план-конспект уроку для 8 класу НУШ</h2>
+        </section>
+
+
+        <!-- Секція "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання" -->
+        <section>
+            <!-- Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання". -->
+            <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+                <nav id="tabs" class="flex flex-wrap justify-center gap-2 sm:gap-4">
+                    <button data-tab="about" class="tab-btn active text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Про урок</button>
+                    <button data-tab="theory" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Теоретичний блок</button>
+                    <button data-tab="practice" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Практичний блок</button>
+                    <button data-tab="check" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Перевірка знань</button>
+                    <button data-tab="homework" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Домашнє завдання</button>
+                </nav>
+            </div>
+
+            <!-- Про урок -->
+            <div id="about-content" class="tab-content active">
+                <div class="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Lesson Goal -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-amber-600 break-words break-all">🎯 Мета уроку</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Освітня:</b> закріпити знання про логічний тип даних та операції над ним, навчити застосовувати алгоритмічні структури розгалуження для розв'язання практичних задач, зокрема для створення програм з графічним інтерфейсом, що використовують умови.</li>
+                            <li class="break-words"><b>Розвивальна:</b> розвивати навички аналізу умов, конструювання логічних виразів, декомпозиції задач на підзадачі, а також навички налагодження програм, що містять розгалуження.</li>
+                            <li class="break-words"><b>Виховна:</b> виховувати відповідальність за правильність логічних побудов, старанність у тестуванні програм, інтерес до створення функціональних застосунків з інтерактивним інтерфейсом.</li>
+                        </ul>
+                    </div>
+                    <!-- Expected Outcomes -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-amber-600 break-words break-all">✅ Очікувані результати</h3>
+                        <p class="mb-2 text-gray-600">Після уроку учні зможуть:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Ефективно використовувати логічні оператори (`and`, `or`, `not`) для складання складних умов.</li>
+                            <li class="break-words">Розробляти програми, що використовують повні, неповні та багатоваріантні розгалуження.</li>
+                            <li class="break-words">Створювати графічні інтерфейси за допомогою `tkinter` для програм, що розв'язують задачі з логічними умовами.</li>
+                            <li class="break-words">Знаходити корені квадратного рівняння та обробляти різні випадки (два корені, один корінь, немає коренів).</li>
+                            <li class="break-words">Тестувати програми з логічними умовами, підбираючи різні набори вхідних даних.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-bold mb-3 text-amber-600 break-words">📊 Групи результатів (НУШ)</h3>
+                        <p class="text-gray-600 mb-4 break-words">Візуалізація важливості груп результатів для цього уроку.</p>
+                        <div class="chart-container relative h-64 w-full max-w-md mx-auto">
+                            <canvas id="resultsChart"></canvas>
+                        </div>
+                        <p class="text-gray-600 mb-4 break-words text-group-result"><i>Учень / учениця:</i></p>
+                        <ul>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР1 – працює з інформацією, даними, моделями;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР2 – створює інформаційні продукти;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР3 – працює в цифровому середовищі;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР4 – безпечно та відповідально працює з інформаційними технологіями.</p></li>
+                        </ul>
+                    </div>
+                    <!-- Lesson Type & Equipment -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-amber-600 break-words">📚 Тип уроку</h3>
+                        <p class="text-gray-700 break-words">Урок застосування знань, умінь та навичок.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-amber-600 break-words">💻 Обладнання та ПЗ</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Персональні комп'ютери з встановленим Python та модулем `tkinter`.</li>
+                            <li class="break-words">Середовище розробки (IDLE, VS Code).</li>
+                            <li class="break-words">Проєктор або інтерактивна дошка.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-amber-600 break-words">🔗 Міжпредметні зв'язки</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Математика (квадратні рівняння, дискримінант).</li>
+                            <li class="break-words">Алгебра (розв'язання рівнянь).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Теоретичний блок -->
+            <div id="theory-content" class="tab-content   mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">
+                <!-- ВАРІАНТ № 2, початок -->
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-amber-500 mb-4 heading-underline break-words  title-review">ПОВТОРЮЄМО</h2>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">Актуалізація опорних знань</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2">
+                        <li class="break-words">Які значення може набувати змінна логічного типу `bool` у Python?</li>
+                        <li class="break-words">Наведіть приклад операції порівняння.</li>
+                        <li class="break-words">Які є логічні оператори в Python?</li>
+                        <li class="break-words">Який результат виразу `(5 > 3 and 10 < 20)`?</li>
+                        <li class="break-words">Для чого використовується функція `all()`?</li>
+                        <li class="break-words">Яка алгоритмічна конструкція реалізується командою `if-elif-else`?</li>
+                    </ol>
+                    <img src="./images/img-tema5-08.webp" alt="Знак питання" class="rounded-lg shadow-md" width="200">
+                </div>
+                
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 210-215)</a></i></p>
+                </div>
+                <!-- ВАРІАНТ № 2, кінець -->
+            </div>
+            
+
+            <!-- Практичний блок -->
+            <div id="practice-content" class="tab-content">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-6 text-center text-amber-600 break-words">Практичний блок уроку</h3>
+
+                    <!-- <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Вправа 33: Квадратне рівняння</h4>
+                    <p class="text-gray-600 mb-4">Складіть програму для знаходження коренів квадратного рівняння вигляду $ax^2 + bx + c = 0$.</p>
+                    
+                    <ol class="list-decimal list-inside space-y-2 text-gray-700 mb-4">
+                        <li class="break-words">В IDLE виберіть команду File → New File.</li>
+                        <li class="break-words">Створіть файл програми з назвою Vprava33.</li>
+                        <li class="break-words">Завантажте модулі `tkinter`, `messagebox` (як `mb`), `math`.</li>
+                        <li class="break-words">Створіть вікно програми із заголовком `Квадратне рівняння`. У кінці програми напишіть команду `root.mainloop()`.</li>
+                        <li class="break-words">Розробіть інтерфейс програми за зразком (рис. 33.7). Віджетам `Entry` дайте назви `enA`, `enB`, `enC`.</li>
+                        <li class="break-words">Опишіть функцію `btn_click()` — обробник події для кнопки `Знайти корені`. Значення `a`, `b`, `c` можна зчитати з полів `enA`, `enB`, `enC` в такий спосіб:
+                            <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto my-2"><code>a, b, c = map(float, [enA.get(), enB.get(), enC.get()])</code></pre>
+                            Результати обчислення виводьте до діалогового вікна. Якщо рівняння має два корені, їх значення можна вивести так:
+                            <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto my-2"><code>s = 'x1 = ' + str(round(x1, 2)) + ' x2 = ' + str(round(x2, 2))
+mb.showinfo('Два корені', s)</code></pre>
+                        </li>
+                        <li class="break-words">Доберіть такі набори значень `a`, `b`, `c`, щоб квадратне рівняння мало один корінь; два корені; не мало коренів.</li>
+                    </ol>
+
+                    <img src="./images/image_2ffcb7.jpg" alt="Інтерфейс програми Квадратне рівняння" class="rounded-lg shadow-md mx-auto mb-6" width="400">
+                    <p class="text-center text-sm text-gray-600 mt-2 mb-4">Рис. 33.7. Програма "Квадратне рівняння"</p>
+                    <p class="source-text break-words mb-4"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 216)</a></i></p>
+
+                    <hr class="my-8 border-gray-200"> -->
+
+                    <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Інтерактивна вправа: Розв'язання квадратного рівняння</h4>
+                    <p class="text-gray-600 mb-4">Спробуйте написати код для розв'язання квадратного рівняння та протестуйте його. Введіть коефіцієнти `a`, `b`, `c` і натисніть "Знайти корені".</p>
+
+                    <div class="python-code-editor-container">
+                        <div class="python-code-editor-header">
+                            Python Code Editor
+                        </div>
+                        <div class="python-code-editor-body">
+                            <textarea id="python-code-editor" class="code-input-area w-full" spellcheck="false"
+                            >import math
+from tkinter import Tk, Label, Entry, Button
+from tkinter import messagebox as mb
+
+def solve_quadratic_equation():
+    try:
+        a = float(enA.get())
+        b = float(enB.get())
+        c = float(enC.get())
+
+        if a == 0:
+            mb.showinfo("Помилка", "Коефіцієнт 'a' не може бути нулем для квадратного рівняння.")
+            return
+
+        discriminant = b**2 - 4*a*c
+
+        if discriminant > 0:
+            x1 = (-b + math.sqrt(discriminant)) / (2*a)
+            x2 = (-b - math.sqrt(discriminant)) / (2*a)
+            s = f"x1 = {round(x1, 2)}\nx2 = {round(x2, 2)}"
+            mb.showinfo("Два корені", s)
+        elif discriminant == 0:
+            x = -b / (2*a)
+            mb.showinfo("Один корінь", f"x = {round(x, 2)}")
+        else:
+            mb.showinfo("Немає дійсних коренів", "Рівняння не має дійсних коренів.")
+    except ValueError:
+        mb.showinfo("Помилка", "Будь ласка, введіть числові значення для коефіцієнтів.")
+
+root = Tk()
+root.title("Квадратне рівняння")
+root.geometry("320x180")
+
+Label(root, text="A").grid(row=0, column=0, padx=5, pady=5)
+enA = Entry(root)
+enA.grid(row=0, column=1, padx=5, pady=5)
+
+Label(root, text="B").grid(row=1, column=0, padx=5, pady=5)
+enB = Entry(root)
+enB.grid(row=1, column=1, padx=5, pady=5)
+
+Label(root, text="C").grid(row=2, column=0, padx=5, pady=5)
+enC = Entry(root)
+enC.grid(row=2, column=1, padx=5, pady=5)
+
+button = Button(root, text="Знайти корені", command=solve_quadratic_equation)
+button.grid(row=3, column=0, columnspan=2, pady=10)
+
+root.mainloop()</textarea>
+                            <button class="execute-button w-full" onclick="executePythonCode()">Виконати код</button>
+                            <div id="code-output" class="code-output-area"></div>
+                        </div>
+                    </div>
+
+                </div>
+                
+                <!-- Модальне вікно -->
+                <div id="tk-modal" class="tk-modal" aria-hidden="true">
+                    <div class="tk-window" role="dialog" aria-labelledby="tk-title">
+                        <div class="tk-titlebar">
+                        <span id="tk-title">Квадратне рівняння</span>
+                        <button class="tk-close" id="tk-close" aria-label="Закрити">×</button>
+                        </div>
+                        <div class="tk-body">
+                        <div class="tk-grid">
+                            <label for="tk-a">A</label><input id="tk-a" class="tk-input" type="number" step="any" placeholder="введіть A">
+                            <label for="tk-b">B</label><input id="tk-b" class="tk-input" type="number" step="any" placeholder="введіть B">
+                            <label for="tk-c">C</label><input id="tk-c" class="tk-input" type="number" step="any" placeholder="введіть C">
+                        </div>
+                        <div class="tk-actions">
+                            <button class="tk-btn" id="tk-solve">Знайти корені</button>
+                        </div>
+                        </div>
+                    </div>
+
+                    <!-- messagebox-подобие -->
+                    <div id="tk-msg" class="tk-msg" aria-hidden="true">
+                        <div class="tk-msg-box" role="alertdialog" aria-labelledby="tk-msg-hd">
+                        <div id="tk-msg-hd" class="tk-msg-hd">Повідомлення</div>
+                        <div id="tk-msg-text" class="tk-msg-bd"></div>
+                        <div class="tk-msg-ft"><button id="tk-ok" class="tk-ok">ОК</button></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Перевірка знань -->
+            <!-- Вручну треба змінювати лише ті значення minimum-height (min-h-[300px]), які потрібно, і треба використовувати медіа-адаптацію (стилі тут на сторінці в тезі <style>)-->
+                <!-- Тут grid -->
+            <div id="check-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-6 text-center text-amber-600 break-words">Перевірка знань</h3>
+                <p class="text-center text-gray-600 mb-8 break-words">Натисніть на картку, щоб побачити відповідь.</p>
+                <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-amber-100 p-6 rounded-xl shadow-md break-words">1. Який математичний вираз використовується для обчислення дискримінанта квадратного рівняння?</div>
+                        <div class="flip-card-back bg-amber-200 p-6 rounded-xl shadow-md break-words">D = b² - 4ac</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-amber-100 p-6 rounded-xl shadow-md break-words">2. Скільки коренів має квадратне рівняння, якщо його дискримінант більше нуля?</div>
+                        <div class="flip-card-back bg-amber-200 p-6 rounded-xl shadow-md break-words">Два дійсних корені.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-amber-100 p-6 rounded-xl shadow-md break-words">3. Що означає, якщо дискримінант квадратного рівняння дорівнює нулю?</div>
+                        <div class="flip-card-back bg-amber-200 p-6 rounded-xl shadow-md break-words">Рівняння має один дійсний корінь (або два однакові).</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-amber-100 p-6 rounded-xl shadow-md break-words">4. Який результат, якщо дискримінант квадратного рівняння менше нуля?</div>
+                        <div class="flip-card-back bg-amber-200 p-6 rounded-xl shadow-md break-words">Рівняння не має дійсних коренів.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-amber-100 p-6 rounded-xl shadow-md break-words">5. Який модуль Python використовується для роботи з математичними функціями, такими як квадратний корінь?</div>
+                            <div class="flip-card-back bg-amber-200 p-6 rounded-xl shadow-md break-words">Модуль `math`.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-amber-100 p-6 rounded-xl shadow-md break-words">6. Яка функція `tkinter.messagebox` використовується для виведення інформаційних повідомлень?</div>
+                            <div class="flip-card-back bg-amber-200 p-6 rounded-xl shadow-md break-words">`messagebox.showinfo()`.</div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 216)</a></i></p>
+                </div>
+            </div>
+         
+
+            <!-- Домашнє завдання -->
+            <div id="homework-content" class="tab-content   bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-amber-600 break-words">Домашнє завдання</h3>                    
+                <!--  -->
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <div>
+                            <p class="break-words break-all"><b>1. Теоретична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li class="break-words break-all">Повторити § 33 (стор. 210-216).</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><b>2. Практична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Виконати вправу № 33 (стор. 216).</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p><b>3. Завдання за бажанням (для закріплення):</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Інтерактивна платформа IZZI (8 клас) до § 33: <a href="https://ua.izzi.digital/DOS/1183864/1337126.html" target="_blank" class="text-blue-600 hover:underline break-words break-all block">https://ua.izzi.digital/DOS/1183864/1337126.html</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="./images/img08.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!--  -->
+            </div>
+        </section>
+
+
+        <!-- Додаткові матеріали -->
+        <!-- Additional Materials Section -->
+        <section class="bg-white p-6 rounded-xl shadow-md mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-amber-600 break-words">Додаткові матеріали</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li class="break-words"><a href="https://sites.google.com/view/lga84-9/tehnika_bezpeky" target="_blank" class="text-blue-600 hover:underline">Техніка безпеки</a></li>
+
+                <li class="break-words"><a href="https://drive.google.com/file/d/1C9_KEF981LvokY0GWNOhUXb7rJKJUUbM/view" target="_blank" class="text-blue-600 hover:underline">Оцінювання учнів та учениць на уроках інформатики</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу</a> (§ 33, стор. 210-216)</li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">Інтерактивна платформа IZZI (8 клас)</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до § 33: <a href="https://ua.izzi.digital/DOS/1183864/1337126.html" target="_blank" class="text-blue-600 hover:underline">https://ua.izzi.digital/DOS/1183864/1337126.html</a></li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm   bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>           
+        </ul>
+    </footer>    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Початок:
+            // Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання".
+            const tabs = document.getElementById('tabs');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            tabs.addEventListener('click', (e) => {
+                // Ensure the click target is a BUTTON (tab button)
+                if (e.target.tagName === 'BUTTON') {
+                    const tab = e.target.dataset.tab;
+
+                    // Remove 'active' class from all buttons and add to the clicked one
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Hide all tab contents and show the corresponding one
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Use === for strict comparison
+                        if (content.id === `${tab}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                }
+            });
+            // Кінець.
+
+
+            // Початок:
+            // ГРУПИ РЕЗУЛЬТАТІВ.
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            // 1. Створення об'єкту-мапи для відповідності значень і кольорів
+            // Тут вручну можна поміняти значення background й border
+            const colorMap = {
+                1: {
+                    background: '#fef3c7', // text-amber-100
+                    border: '#fde68a'      // text-amber-200
+                },
+                2: {
+                    background: '#fde68a', // text-amber-200
+                    border: '#fcd34d'       // text-amber-300
+                },
+                3: {
+                    background: '#fcd34d',  // text-amber-300
+                    border: '#fbbf24'        // text-amber-400
+                },
+                4: {
+                    background: '#fbbf24',   // text-amber-400
+                    border: '#f59e0b'      // text-amber-500
+                }
+            };
+
+            // Дані, які можна змінювати вручну
+            const chartData = [4, 3, 2, 2];
+
+            // 2. Генерація масивів кольорів на основі даних
+            const backgroundColors = chartData.map(value => colorMap[value].background);
+            const borderColors = chartData.map(value => colorMap[value].border);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ГР1', 'ГР2', 'ГР3', 'ГР4'],
+                    datasets: [{
+                        label: 'Важливість',
+                        data: chartData, // Використовуємо змінну
+                        backgroundColor: backgroundColors, // Використовуємо згенерований масив
+                        borderColor: borderColors, // Використовуємо згенерований масив
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const labels = ['', 'Важлива', 'Дуже важлива', 'Найважливіша'];
+                                    return labels[value] || '';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.parsed.y;
+                                    const importanceLabels = {4: 'Найважливіша', 3: 'Дуже важлива', 2: 'Важлива', 1: 'Найменш важлива'};
+                                    label += importanceLabels[value] || '';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // Кінець. ГРУПИ РЕЗУЛЬТАТІВ.
+
+
+            // Початок.
+            // ПОВОРОТ КАРТОК "Перевірка знань"
+            const flipCards = document.querySelectorAll('.flip-card');
+            flipCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+            // Кінець. ПОВОРОТ КАРТОК.
+
+        });
+    </script>
+
+    <!-- Скрипт для інтерактивної вправи -->
+    <!-- <script>
+        // Start of Python code execution logic
+            function executePythonCode() {
+                const code = document.getElementById('python-code-editor').value;
+                const outputElement = document.getElementById('code-output');
+                outputElement.textContent = 'Виконується...'; // Clear and show loading state
+
+                // This is a simplified simulation. In a real scenario, you'd send
+                // this code to a backend Python interpreter and display its output.
+                // For a browser-only environment, executing Python directly is complex.
+                // We'll simulate the output for the quadratic equation problem.
+
+                // A very basic attempt to parse a,b,c from the code for simulation purposes
+                const aMatch = code.match(/enA\.get\(\) = (\d+(\.\d+)?)/);
+                const bMatch = code.match(/enB\.get\(\) = (\d+(\.\d+)?)/);
+                const cMatch = code.match(/enC\.get\(\) = (\d+(\.\d+)?)/);
+
+                let a = 0, b = 0, c = 0;
+                try {
+                    // Try to get values from placeholder comments if available, otherwise default
+                    const defaultA = parseFloat(enA.value || '1');
+                    const defaultB = parseFloat(enB.value || '0');
+                    const defaultC = parseFloat(enC.value || '-1');
+
+                    // Here we're trying to simulate the input from the Entry fields.
+                    // Since tkinter isn't running in the browser, we'll try to get values from the editor
+                    // or use sensible defaults/mock values for demonstration.
+                    // For this specific exercise, the user is meant to interact with a *simulated* tkinter app.
+                    // The example code includes tkinter UI, which cannot run directly in browser JS.
+                    // So, we'll extract relevant parts and mock the `mb.showinfo` output.
+
+                    // We need to simulate the `enA.get()` etc.
+                    // Let's assume the user would paste the tkinter code.
+                    // We cannot run tkinter directly in JS. So, this simulation will be limited.
+                    
+                    // The best we can do is give a fixed output for a given input.
+                    // Or provide a more general Python interpreter (which is beyond this task's scope).
+
+                    // Let's try to extract mock values for enA, enB, enC from the exercise description itself
+                    // For example, from image_2ffcb7.jpg, A=3, B=1, C=2
+                    // This is for demonstration, as actual input fields are part of the tkinter app.
+                    const mock_a = 3;
+                    const mock_b = 1;
+                    const mock_c = 2;
+
+                    let discriminant = mock_b**2 - 4*mock_a*mock_c;
+                    let result_message = "";
+
+                    if (discriminant > 0) {
+                        let x1 = (-mock_b + Math.sqrt(discriminant)) / (2*mock_a);
+                        let x2 = (-mock_b - Math.sqrt(discriminant)) / (2*mock_a);
+                        result_message = `Два корені:\nx1 = ${x1.toFixed(2)}\nx2 = ${x2.toFixed(2)}`;
+                    } else if (discriminant === 0) {
+                        let x = -mock_b / (2*mock_a);
+                        result_message = `Один корінь:\nx = ${x.toFixed(2)}`;
+                    } else {
+                        result_message = "Немає дійсних коренів.";
+                    }
+                    outputElement.textContent = `Виконання симуляції для A=${mock_a}, B=${mock_b}, C=${mock_c}:\n${result_message}`;
+
+
+                } catch (e) {
+                    outputElement.textContent = `Помилка виконання: ${e.message}`;
+                    console.error("Python code simulation error:", e);
+                }
+            }
+
+            // End of Python code execution logic
+     </script> -->
+
+    <!-- Скрипт для інтерактивної вправи -->
+    <script>
+        // заменяем поведение "Виконати код" — открываем модальное окно-симулятор
+        function executePythonCode() {
+            openTkModal();
+        }
+
+        // открыть/закрыть окно
+        const tkModal = document.getElementById('tk-modal');
+        const tkMsg   = document.getElementById('tk-msg');
+        const tkClose = document.getElementById('tk-close');
+        const tkOK    = document.getElementById('tk-ok');
+        const tkSolve = document.getElementById('tk-solve');
+
+        function openTkModal() {
+            // можно проставить дефолты как в Python-примере
+            document.getElementById('tk-a').value = document.getElementById('tk-a').value || 1;
+            document.getElementById('tk-b').value = document.getElementById('tk-b').value || 0;
+            document.getElementById('tk-c').value = document.getElementById('tk-c').value || -1;
+            tkModal.classList.add('show');
+            tkModal.setAttribute('aria-hidden','false');
+        }
+        function closeTkModal() {
+            tkModal.classList.remove('show');
+            tkModal.setAttribute('aria-hidden','true');
+            closeMsg();
+        }
+        function showMsg(title, text) {
+            document.getElementById('tk-msg-hd').textContent = title;
+            document.getElementById('tk-msg-text').textContent = text;
+            tkMsg.classList.add('show');
+            tkMsg.setAttribute('aria-hidden','false');
+        }
+        function closeMsg() {
+            tkMsg.classList.remove('show');
+            tkMsg.setAttribute('aria-hidden','true');
+        }
+
+        // обработчики
+        tkClose.addEventListener('click', closeTkModal);
+        tkOK.addEventListener('click', closeMsg);
+        // клик по подложке закрывает сообщение/окно
+        tkModal.addEventListener('click', (e)=>{
+            if (e.target === tkModal) closeTkModal();
+            if (e.target === tkMsg) closeMsg();
+        });
+
+        // логика решения как в Python
+        tkSolve.addEventListener('click', ()=>{
+            const a = parseFloat(document.getElementById('tk-a').value);
+            const b = parseFloat(document.getElementById('tk-b').value);
+            const c = parseFloat(document.getElementById('tk-c').value);
+
+            if ([a,b,c].some(v => Number.isNaN(v))) {
+                showMsg('Помилка','Будь ласка, введіть числові значення для коефіцієнтів.');
+            return;
+            }
+            if (a === 0) {
+                showMsg('Помилка', 'Коефіцієнт "a" не може бути нулем для квадратного рівняння.');
+            return;
+            }
+
+            const D = b*b - 4*a*c;
+            if (D > 0) {
+                const x1 = (-b + Math.sqrt(D)) / (2*a);
+                const x2 = (-b - Math.sqrt(D)) / (2*a);
+                showMsg('Два корені', `x1 = ${x1.toFixed(2)}\nx2 = ${x2.toFixed(2)}`);
+            } else if (D === 0) {
+                const x = (-b) / (2*a);
+                showMsg('Один корінь', `x = ${x.toFixed(2)}`);
+            } else {
+                showMsg('Немає дійсних коренів', 'Рівняння не має дійсних коренів.');
+            }
+        });
+    </script>
+
+</body>
+</html>

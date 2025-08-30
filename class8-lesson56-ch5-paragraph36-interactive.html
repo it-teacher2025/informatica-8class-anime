@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: 8 клас</title>
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Тіло документа */
+        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
+
+        /* Стилі для навігації в меню */
+        .logo-main { display: none; }
+        .main-title-text { width: 140px; text-align: center; }
+        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
+        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
+        @media screen and (min-width: 768px) {
+            .main-title-text { width: auto; }
+            .main-navigation { display: inline; width: auto; }
+        }
+
+        /* main стилі */
+        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
+        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
+        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
+        .source-text { padding: 8px; }
+        @media screen and (min-width: 300px) {
+            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
+            .text-2xlooo { font-size: 1.25rem; }
+        }
+        @media screen and (min-width: 480px) {
+            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
+            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
+            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
+        }
+               
+    </style>
+
+     <style>
+    /* Styles for Canvas interaction in Practical Block */
+    #canvas-container {
+      border: 2px solid #0891b2; /* border-cyan-600 */
+      background-color: #f0f9ff; /* bg-blue-50 */
+      width: 500px; /* Fixed width as per screenshot */
+      height: 500px; /* Fixed height as per screenshot */
+      margin: 0 auto;
+      position: relative;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      border-radius: 0.5rem;
+      overflow: hidden; /* Ensure drawings stay within bounds */
+    }
+
+    @media (max-width: 600px) {
+      #canvas-container { width: 100%; height: 100vw; }
+    }
+
+    .canvas-controls {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1rem; justify-content: center;
+    }
+    .canvas-controls button, .canvas-controls select {
+      background-color: #0891b2; color: white; padding: 0.75rem 1.25rem; border-radius: 0.5rem;
+      border: none; cursor: pointer; transition: background-color 0.3s ease; font-weight: 500;
+    }
+    .canvas-controls button:hover, .canvas-controls select:hover { background-color: #0e7490; }
+    .canvas-controls input[type="color"] {
+      appearance: none; width: 40px; height: 40px; background-color: transparent; border: none; cursor: pointer; padding: 0;
+      border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 2px #0891b2;
+    }
+    .canvas-controls input[type="color"]::-webkit-color-swatch { border-radius: 50%; border: none; }
+    .canvas-controls input[type="color"]::-moz-color-swatch { border-radius: 50%; border: none; }
+  </style>
+</head>
+<body>
+
+    <header class="container mx-auto flex justify-between items-center bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10 logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
+                <a href="./class8-lesson56-ch5-paragraph36.html" class="hover:text-slate-300 transition-colors duration-200">Назад</a>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <!-- Секція теми уроку -->
+        <section class="text-center mb-8">
+            <h1 class="text-lg text-slate-600 mt-2 break-words">Тема 5: «Алгоритми та програми». Урок № 56. (До § 36)</h1>
+            <h1 class="text-3xlooo md:text-4xl font-bold text-slate-900 break-words theme-text">Графічні методи модуля tkinter</h1>
+            <h2 class="text-lg text-slate-600 mt-2 break-words">Інтерактивний план-конспект уроку для 8 класу НУШ</h2>
+        </section>
+
+
+        <section class="text-center mb-8">
+            <div class="bg-white p-6 rounded-xl shadow-md">
+
+                <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Інтерактивний Canvas-редактор</h4>
+                <p class="text-gray-600 mb-4">Спробуйте малювати різні фігури на полотні, змінюючи їх властивості. Цей інтерактивний інструмент імітує роботу з `tkinter.Canvas`.</p>
+
+                <div id="canvas-container">
+                    <canvas id="drawingCanvas" class="w-full h-full" style="display:block;width:100%;height:100%"></canvas>
+                </div>
+
+                <div class="canvas-controls">
+                    <select id="shapeSelector" class="rounded-lg shadow-md">
+                    <option value="line">Відрізок</option>
+                    <option value="rectangle">Прямокутник</option>
+                    <option value="oval">Овал</option>
+                    <option value="polygon">Трикутник (Багатокутник)</option>
+                    <option value="text">Текст</option>
+                    </select>
+                    <input type="color" id="lineColorPicker" value="#000000" title="Колір лінії">
+                    <input type="color" id="fillColorPicker" value="#ffffff" title="Колір заливки">
+                    <select id="lineWidthSelector" class="rounded-lg shadow-md" title="Товщина лінії">
+                    <option value="1" selected>1px</option>
+                    <option value="2">2px</option>
+                    <option value="3">3px</option>
+                    <option value="5">5px</option>
+                    <option value="8">8px</option>
+                    </select>
+                    <input type="text" id="textInput" placeholder="Введіть текст" class="p-2 border rounded-md text-gray-800" style="background-color:white;width:150px">
+                    <button id="clearCanvas" class="rounded-lg shadow-md">Очистити</button>
+                </div>
+
+                <h4 class="text-xl font-semibold mt-8 mb-3 text-gray-800 break-words">Завдання для самостійного виконання</h4>
+                <ul class="list-disc list-inside space-y-2 text-gray-700 mb-4">
+                    <li class="break-words">Намалюйте складне зображення (наприклад, будинок, сонце, дерево), використовуючи різні графічні методи модуля `tkinter`.</li>
+                    <li class="break-words">Збережіть ваш код Python з `tkinter` для малювання.</li>
+                    <li class="break-words">Додайте можливість змінювати колір фігур за допомогою вводу користувача.</li>
+                </ul>
+            </div>
+
+            <!-- <div id="canvas-container">
+                <canvas id="drawingCanvas" class="w-full h-full" style="display:block;width:100%;height:100%"></canvas>
+            </div>
+
+            <div class="canvas-controls">
+                <select id="shapeSelector" class="rounded-lg shadow-md">
+                <option value="line">Відрізок</option>
+                <option value="rectangle">Прямокутник</option>
+                <option value="oval">Овал</option>
+                <option value="polygon">Трикутник (Багатокутник)</option>
+                <option value="text">Текст</option>
+                </select>
+                <input type="color" id="lineColorPicker" value="#000000" title="Колір лінії">
+                <input type="color" id="fillColorPicker" value="#ffffff" title="Колір заливки">
+                <select id="lineWidthSelector" class="rounded-lg shadow-md" title="Товщина лінії">
+                <option value="1" selected>1px</option>
+                <option value="2">2px</option>
+                <option value="3">3px</option>
+                <option value="5">5px</option>
+                <option value="8">8px</option>
+                </select>
+                <input type="text" id="textInput" placeholder="Введіть текст" class="p-2 border rounded-md text-gray-800" style="background-color:white;width:150px">
+                <button id="clearCanvas" class="rounded-lg shadow-md">Очистити</button>
+            </div> -->
+        </section>
+
+
+        <!-- Додаткові матеріали -->
+        <!-- Additional Materials Section -->
+        <section class="bg-white p-6 rounded-xl shadow-md mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-cyan-600 break-words">Додаткові матеріали</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li class="break-words"><a href="https://sites.google.com/view/lga84-9/tehnika_bezpeky" target="_blank" class="text-blue-600 hover:underline">Техніка безпеки</a></li>
+
+                <li class="break-words"><a href="https://drive.google.com/file/d/1C9_KEF981LvokY0GWNOhUXb7rJKJUUbM/view" target="_blank" class="text-blue-600 hover:underline">Оцінювання учнів та учениць на уроках інформатики</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу</a> (§ 36, стор. 235-240)</li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">Інтерактивна платформа IZZI (8 клас)</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до § 36: <a href="https://ua.izzi.digital/DOS/1183864/1337132.html" target="_blank" class="text-blue-600 hover:underline">https://ua.izzi.digital/DOS/1183864/1337132.html</a></li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>          
+        </ul>
+    </footer>     
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      /* =====================
+         CANVAS-РЕДАКТОР
+      ====================== */
+      const canvasElement = document.getElementById('drawingCanvas');
+      const ctxCanvas = canvasElement.getContext('2d');
+      const shapeSelector = document.getElementById('shapeSelector');
+      const lineColorPicker = document.getElementById('lineColorPicker');
+      const fillColorPicker = document.getElementById('fillColorPicker');
+      const lineWidthSelector = document.getElementById('lineWidthSelector');
+      const textInput = document.getElementById('textInput');
+      const clearCanvasButton = document.getElementById('clearCanvas');
+
+      let isDrawing = false;
+      let startX = 0, startY = 0;
+      let currentShape = shapeSelector.value;
+      let currentLineColor = lineColorPicker.value;
+      let currentFillColor = fillColorPicker.value;
+      let currentLineWidth = parseInt(lineWidthSelector.value, 10) || 1;
+
+      // HiDPI масштабування, щоб лінії були чіткими
+      function resizeCanvas() {
+        const container = document.getElementById('canvas-container');
+        const dpr = window.devicePixelRatio || 1;
+        const logicalWidth = container.clientWidth;
+        const logicalHeight = container.clientHeight;
+        canvasElement.width = Math.floor(logicalWidth * dpr);
+        canvasElement.height = Math.floor(logicalHeight * dpr);
+        // Візуальний розмір керується CSS (100%)
+        ctxCanvas.setTransform(dpr, 0, 0, dpr, 0, 0);
+        drawBackground();
+      }
+
+      function drawBackground() {
+        ctxCanvas.fillStyle = '#f0f9ff';
+        ctxCanvas.fillRect(0, 0, canvasElement.width, canvasElement.height);
+      }
+
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      // Контроли
+      shapeSelector.addEventListener('change', (e) => { currentShape = e.target.value; });
+      lineColorPicker.addEventListener('input', (e) => { currentLineColor = e.target.value; });
+      fillColorPicker.addEventListener('input', (e) => { currentFillColor = e.target.value; });
+      lineWidthSelector.addEventListener('change', (e) => { currentLineWidth = parseInt(e.target.value, 10) || 1; });
+      clearCanvasButton.addEventListener('click', () => { ctxCanvas.clearRect(0, 0, canvasElement.width, canvasElement.height); drawBackground(); });
+
+      // Малювання
+      canvasElement.addEventListener('mousedown', (e) => {
+        isDrawing = true;
+        const rect = canvasElement.getBoundingClientRect();
+        startX = e.clientX - rect.left;
+        startY = e.clientY - rect.top;
+      });
+
+      canvasElement.addEventListener('mouseup', (e) => {
+        if (!isDrawing) return;
+        isDrawing = false;
+        const rect = canvasElement.getBoundingClientRect();
+        const endX = e.clientX - rect.left;
+        const endY = e.clientY - rect.top;
+
+        ctxCanvas.strokeStyle = currentLineColor;
+        ctxCanvas.fillStyle = currentFillColor;
+        ctxCanvas.lineWidth = currentLineWidth;
+
+        switch (currentShape) {
+          case 'line':
+            ctxCanvas.beginPath();
+            ctxCanvas.moveTo(startX, startY);
+            ctxCanvas.lineTo(endX, endY);
+            ctxCanvas.stroke();
+            break;
+          case 'rectangle':
+            ctxCanvas.fillRect(startX, startY, endX - startX, endY - startY);
+            ctxCanvas.strokeRect(startX, startY, endX - startX, endY - startY);
+            break;
+          case 'oval': {
+            const centerX = (startX + endX) / 2;
+            const centerY = (startY + endY) / 2;
+            const radiusX = Math.abs(endX - startX) / 2;
+            const radiusY = Math.abs(endY - startY) / 2;
+            ctxCanvas.beginPath();
+            ctxCanvas.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2 * Math.PI);
+            ctxCanvas.fill();
+            ctxCanvas.stroke();
+            break; }
+          case 'polygon': {
+            const midX = (startX + endX) / 2;
+            ctxCanvas.beginPath();
+            ctxCanvas.moveTo(startX, startY);
+            ctxCanvas.lineTo(endX, startY);
+            ctxCanvas.lineTo(midX, endY);
+            ctxCanvas.closePath();
+            ctxCanvas.fill();
+            ctxCanvas.stroke();
+            break; }
+          case 'text': {
+            const text = textInput.value || 'Текст';
+            ctxCanvas.fillStyle = currentLineColor; // текст малюємо кольором лінії
+            ctxCanvas.textBaseline = 'top';
+            const fontSize = Math.max(10, currentLineWidth * 10);
+            ctxCanvas.font = `${fontSize}px Inter, Arial, sans-serif`;
+            ctxCanvas.fillText(text, startX, startY);
+            break; }
+        }
+      });
+
+      canvasElement.addEventListener('mouseout', () => { isDrawing = false; });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: 8 клас</title>
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Тіло документа */
+        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
+
+        /* Стилі для навігації в меню */
+        .logo-main { display: none; }
+        .main-title-text { width: 140px; text-align: center; }
+        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
+        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
+        @media screen and (min-width: 768px) {
+            .main-title-text { width: auto; }
+            .main-navigation { display: inline; width: auto; }
+        }
+
+        /* main стилі */
+        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
+        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
+        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
+        .source-text { padding: 8px; }
+        @media screen and (min-width: 300px) {
+            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
+            .text-2xlooo { font-size: 1.25rem; }
+        }
+        @media screen and (min-width: 480px) {
+            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
+            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
+            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
+        }
+
+        /* Стилі для "Про урок" */
+        /* Групи результатів */
+        .text-group-result { padding-top: 16px; }
+
+        /* Style to hide inactive tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Style to tab content */
+        .tab-btn.active { 
+            color: rgb(245, 73, 0);                /* text-orange-600 */
+            border-bottom-color: rgb(245, 73, 0);  /* text-orange-600 */
+            background-color: rgb(255, 237, 212);     /* text-orange-100 */
+        }
+        .tab-btn { 
+            transition: color 0.3s, 
+            border-color 0.3s, 
+            background-color 0.3s; 
+            border-bottom: 2px solid transparent;
+        }
+
+        /* Styles for flip cards */
+        .flip-card {
+            background-color: transparent;
+            width: 100%; /* Make cards responsive to grid column width */
+            height: 200px; /* Fixed height for consistency, adjust as needed */
+            perspective: 1000px; /* 3D effect */
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left; /* Adjust text alignment as needed */
+            overflow-wrap: break-word; /* break-words */
+            /*word-break: break-all;*/ /* break-all */
+        }
+
+        .flip-card-front {
+            color: #4b5563; /* text-gray-700 */
+        }
+
+        .flip-card-back {
+            color: #4b5563; /* text-gray-700 */
+            transform: rotateY(180deg);
+        }
+
+        /* Responsive adjustments for min-height */
+        @media (min-width: 768px) { /* md breakpoint */
+            .flip-card.min-h-md {
+                min-height: 250px; /* Example, adjust as needed for medium screens */
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .flip-card.min-h-lg {
+                min-height: 200px; /* Example, adjust as needed for large screens */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="container mx-auto flex justify-between items-center   bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10  logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
+            </ul>
+            <!-- <a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a>
+            <a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a> -->
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <!-- Секція теми уроку -->
+        <section class="text-center mb-8">
+            <h1 class="text-lg text-slate-600 mt-2 break-words">Урок № 1</h1>
+            <h1 class="text-3xlooo md:text-4xl font-bold text-slate-900 break-words  theme-text">Правила поведінки та безпеки життєдіяльності при роботі в комп’ютерному класі</h1>
+            <h2 class="text-lg text-slate-600 mt-2 break-words">Інтерактивний план-конспект уроку для 8 класу НУШ</h2>
+        </section>
+
+
+        <!-- Секція "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання" -->
+        <section>
+            <!-- Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання". -->
+            <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+                <nav id="tabs" class="flex flex-wrap justify-center gap-2 sm:gap-4">
+                    <button data-tab="about" class="tab-btn active text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Про урок</button>
+                    <button data-tab="theory" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Теоретичний блок</button>
+                    <button data-tab="practice" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Практичний блок</button>
+                    <button data-tab="check" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Перевірка знань</button>
+                    <button data-tab="homework" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Домашнє завдання</button>
+                </nav>
+            </div>
+
+            <!-- Про урок -->
+            <div id="about-content" class="tab-content active">
+                <div class="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Lesson Goal -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-orange-600 break-words break-all">🎯 Мета уроку</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><b>Освітня:</b> Сформувати в учнів уявлення про основні правила безпечної поведінки в комп’ютерному класі та під час роботи з комп’ютерною технікою; ознайомити з можливими ризиками та способами їх уникнення; актуалізувати знання про гігієнічні вимоги до роботи за комп'ютером.</li>
+                            <li><b>Розвивальна:</b> Розвивати вміння аналізувати інформацію, робити висновки; формувати навички свідомого та відповідального ставлення до власного здоров’я та здоров’я оточуючих; розвивати логічне мислення та увагу.</li>
+                            <li><b>Виховна:</b> Виховувати відповідальність за дотримання правил безпеки; виховувати дисциплінованість, акуратність, дбайливе ставлення до шкільного майна.</li>
+                        </ul>
+                    </div>
+                    <!-- Expected Outcomes -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-orange-600 break-words break-all">✅ Очікувані результати</h3>
+                        <p class="mb-2 text-gray-600">Після уроку учні зможуть:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li>Називати основні правила безпечної поведінки в комп’ютерному класі.</li>
+                            <li>Пояснювати наслідки недотримання правил безпеки для здоров'я та обладнання.</li>
+                            <li>Демонструвати правильну поставу під час роботи за комп’ютером.</li>
+                            <li>Розрізняти безпечні та небезпечні дії в комп’ютерному класі.</li>
+                            <li>Застосовувати отримані знання на практиці для збереження власного здоров'я та майна.</li>
+                        </ul>
+                    </div>
+                    <!-- <div class="bg-white p-6 rounded-xl shadow-md md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-bold mb-3 text-orange-600 break-words">📊 Групи результатів (НУШ)</h3>
+                        <p class="text-gray-600 mb-4 break-words">Візуалізація важливості груп результатів для цього уроку.</p>
+                        <div class="chart-container relative h-64 w-full max-w-md mx-auto">
+                            <canvas id="resultsChart"></canvas>
+                        </div>
+                        <p class="text-gray-600 mb-4  break-words text-group-result"><i>Учень / учениця:</i></p>
+                        <ul>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР1 – працює з інформацією, даними, моделями;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР2 – створює інформаційні продукти;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР3 – працює в цифровому середовищі;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР4 – безпечно та відповідально працює з інформаційними технологіями.</p></li>
+                        </ul>
+                    </div> -->
+                    <!-- Lesson Type & Equipment -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-orange-600 break-words">📚 Тип уроку</h3>
+                        <p class="text-gray-700 break-words">Урок вивчення нового матеріалу та формування практичних навичок.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-orange-600 break-words">💻 Обладнання та ПЗ</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li>Комп’ютери для кожного учня (або групи учнів).</li>
+                            <li>Проєктор або інтерактивна дошка.</li>
+                            <li>Презентація "Правила безпечної поведінки в комп'ютерному класі".</li>
+                            <li>Плакати або ілюстрації з правилами безпеки.</li>
+                            <li>Роздатковий матеріал (пам'ятки з правилами безпеки, тестові завдання).</li>
+                            <li>Засоби для вимірювання освітленості (люксметр, якщо є).</li>
+                            <li>Лінійка (для вимірювання відстані до монітора).</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-orange-600 break-words">🔗 Міжпредметні зв'язки</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li>Основи здоров'я</li>
+                            <li>Фізична культура</li>
+                            <li>Захист України</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Теоретичний блок -->
+            <div id="theory-content" class="tab-content" role="tabpanel" aria-labelledby="tab-theory">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-4 text-center text-orange-600">Вивчення нового матеріалу</h3>
+
+                    <!-- Загальні правила поведінки -->
+                    <div class="mb-8">
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800">1. Загальні правила поведінки в комп’ютерному класі</h4>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700 mb-4">
+                            <li>Вхід до класу лише з дозволу вчителя.</li>
+                            <li>Заборона приносити їжу, напої, сторонні предмети.</li>
+                            <li>Дотримання тиші, не бігати, не штовхатися.</li>
+                            <li>Обережно поводитися з меблями та технікою.</li>
+                            <li>Повідомлення вчителя про будь-які несправності чи незрозумілі ситуації.</li>
+                            <li>Початок і закінчення роботи за командою вчителя.</li>
+                        </ul>
+                        <p class="text-gray-600 italic">Демонстрація слайдів презентації.</p>
+                        <img src="./images/lesson1/img-security-1-1.webp" onerror="this.onerror=null;this.src='https://placehold.co/600x300/d1fae5/10b981?text=Правила%2Bповедінки';" alt="Зображення загальних правил поведінки в комп’ютерному класі" class="rounded-md mt-4">
+                    </div>
+
+                    <!-- Правила безпеки при роботі з комп'ютерною технікою -->
+                    <div class="mb-8">
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800">2. Правила безпеки при роботі з комп'ютерною технікою</h4>
+                        <div class="mb-4">
+                            <h5 class="text-lg font-medium mb-2 text-gray-700">До початку роботи:</h5>
+                            <ul class="list-disc list-inside space-y-1 text-gray-700">
+                                <li>Перевірка справності обладнання (цілісність кабелів, монітора, клавіатури).</li>
+                                <li>Не торкатися дротів, роз'ємів, задніх панелей обладнання.</li>
+                                <li>Вмикати/вимикати комп'ютер тільки за вказівкою вчителя.</li>
+                            </ul>
+                        </div>
+                        <div class="mb-4">
+                            <h5 class="text-lg font-medium mb-2 text-gray-700">Під час роботи:</h5>
+                            <ul class="list-disc list-inside space-y-1 text-gray-700">
+                                <li>Не торкатися екрана монітора руками.</li>
+                                <li>Не допускати різких рухів, що можуть призвести до падіння обладнання.</li>
+                                <li>Не намагатися самостійно усувати несправності.</li>
+                                <li>Повідомляти вчителя про будь-які неприємні відчуття (біль в очах, голові, втома).</li>
+                            </ul>
+                        </div>
+                        <div class="mb-4">
+                            <h5 class="text-lg font-medium mb-2 text-gray-700">Після закінчення роботи:</h5>
+                            <ul class="list-disc list-inside space-y-1 text-gray-700">
+                                <li>Завершити роботу з усіма програмами.</li>
+                                <li>Коректно вимкнути комп'ютер.</li>
+                                <li>Привести робоче місце в порядок.</li>
+                            </ul>
+                        </div>
+                        <p class="text-gray-600 italic">Демонстрація слайдів презентації з візуальними прикладами.</p>
+                        <img src="./images/lesson1/img-security-1-6.webp" onerror="this.onerror=null;this.src='https://placehold.co/600x300/d1fae5/10b981?text=Безпека%2Bз%2Bтехнікою';" alt="Зображення правил безпеки при роботі з комп'ютерною технікою" class="rounded-md mt-4">
+                    </div>
+
+                    <!-- Гігієнічні вимоги та ергономіка -->
+                    <div>
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800">3. Гігієнічні вимоги та ергономіка робочого місця</h4>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700 mb-4">
+                            <li><b>Постава:</b> Правильне положення тіла (спина рівна, стопи на підлозі, лікті зігнуті під кутом 90 градусів, зап'ястя прямі).
+                                <p class="text-gray-600 italic mt-1">Практичне відпрацювання: Запропонувати учням сісти правильно за комп'ютерами, виправити помилки.</p>
+                                <img src="./images/lesson1/img-security-1-7.webp" onerror="this.onerror=null;this.src='https://placehold.co/400x200/d1fae5/10b981?text=Правильна%2Bпостава';" alt="Зображення правильної постави за комп'ютером" class="rounded-md mt-2">
+                            </li>
+                            <li><b>Відстань до монітора:</b> 50-70 см.
+                                <p class="text-gray-600 italic mt-1">Практичне відпрацювання: Кожен учень вимірює відстань за допомогою лінійки.</p>
+                            </li>
+                            <li><b>Освітлення:</b> Достатнє та рівномірне освітлення робочого місця. Відсутність бліків на екрані.
+                                <p class="text-gray-600 italic mt-1">Практичне відпрацювання (якщо є люксметр): Виміряти рівень освітленості.</p>
+                                <img src="./images/lesson1/img-security-1-8.webp" onerror="this.onerror=null;this.src='https://placehold.co/400x200/d1fae5/10b981?text=Освітлення%2Bробочого%2Bмісця';" alt="Зображення освітлення робочого місця" class="rounded-md mt-2">
+                            </li>
+                            <li><b>Режим роботи:</b> Регламент роботи за комп'ютером (15-20 хв безперервної роботи, потім перерва та вправи для очей/тіла).</li>
+                            <li><b>Вправи для очей та тіла:</b> Проведення короткої фізкультхвилинки та гімнастики для очей (приклад вправ: подивитися вліво-вправо, вгору-вниз, кругові рухи очима, "пальмінг" – закрити очі долонями). Обов'язкове виконання.
+                                <img src="./images/lesson1/img-security-1-9.webp" onerror="this.onerror=null;this.src='https://placehold.co/400x200/d1fae5/10b981?text=Вправи%2Bдля%2Bочей';" alt="Зображення вправ для очей" class="rounded-md mt-2">
+                            </li>
+                        </ul>
+                        <p class="text-gray-600 italic mt-4">Демонстрація слайдів з ілюстраціями правильної постави та вправ.</p>
+                    </div>
+                </div>
+            </div>
+            
+
+            <!-- Практичний блок -->
+            <div id="practice-content" class="tab-content" role="tabpanel" aria-labelledby="tab-practice">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-4 text-orange-600">Закріплення вивченого матеріалу та формування навичок</h3>
+
+                    <!-- Робота з пам'ятками -->
+                    <div class="mb-8">
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800">1. Робота з пам'ятками</h4>
+                        <p class="text-gray-700">Учні отримують пам'ятки з основними правилами. Запропонувати прочитати та поставити запитання.</p>
+                        <img src="./images/lesson1/img-security-1-2.webp" onerror="this.onerror=null;this.src='https://placehold.co/400x250/d1fae5/10b981?text=Пам%27ятка%2Bбезпеки';" alt="Зображення пам'ятки безпеки" class="rounded-md mt-4">
+                        <img src="./images/lesson1/img-security-1-3.webp" onerror="this.onerror=null;this.src='https://placehold.co/400x250/d1fae5/10b981?text=Пам%27ятка%2Bбезпеки';" alt="Зображення пам'ятки безпеки" class="rounded-md mt-4">
+                        <img src="./images/lesson1/img-security-1-4.webp" onerror="this.onerror=null;this.src='https://placehold.co/400x250/d1fae5/10b981?text=Пам%27ятка%2Bбезпеки';" alt="Зображення пам'ятки безпеки" class="rounded-md mt-4">
+                        <img src="./images/lesson1/img-security-1-5.webp" onerror="this.onerror=null;this.src='https://placehold.co/400x250/d1fae5/10b981?text=Пам%27ятка%2Bбезпеки';" alt="Зображення пам'ятки безпеки" class="rounded-md mt-4">
+                    </div>
+
+                    <!-- Ситуаційні завдання -->
+                    <div class="mb-8">
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800">2. Ситуаційні завдання</h4>
+                        <p class="text-gray-700 mb-4">Вчитель пропонує різні ситуації, а учні мають визначити, чи відповідає поведінка правилам безпеки, і як потрібно діяти:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li>"Ви прийшли в комп'ютерний клас, а на столі стоїть відкрита пляшка води. Ваші дії?"</li>
+                            <li>"Під час роботи ви помітили, що монітор мерехтить. Ваші дії?"</li>
+                            <li>"Ваш сусід по парті почав бігати по класу і штовхати стільці. Як ви поводитеся?"</li>
+                            <li>"Ви втомилися, очі почали боліти. Що ви робите?"</li>
+                        </ul>
+                    </div>
+
+                    <!-- Короткий тест або інтерактивна вправа -->
+                    <div>
+                        <h4 class="text-xl font-semibold mb-3 text-gray-800">3. Короткий тест або інтерактивна вправа "Так/Ні"</h4>
+                        <p class="text-gray-700 mb-4">Дайте відповідь "Так" або "Ні" на наступні запитання:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li>Чи можна торкатися дротів під час роботи комп'ютера? <span class="font-bold text-red-600">(Ні)</span></li>
+                            <li>Чи потрібно сідати якомога ближче до монітора? <span class="font-bold text-red-600">(Ні)</span></li>
+                            <li>Чи можна їсти в комп'ютерному класі? <span class="font-bold text-red-600">(Ні)</span></li>
+                            <li>Чи потрібно повідомляти вчителя про несправності? <span class="font-bold text-orange-600">(Так)</span></li>
+                            <li>Чи варто робити перерви під час тривалої роботи за комп'ютером? <span class="font-bold text-orange-600">(Так)</span></li>
+                            <li>Чи можна користуватися телефоном під час уроку без дозволу вчителя? <span class="font-bold text-red-600">(Ні)</span></li>
+                        </ul>
+                        <p class="text-gray-600 italic mt-4">Ви також можете пройти інтерактивну вправу за посиланням: <a href="https://learningapps.org/view41174371" target="_blank" class="text-blue-600 hover:underline">LearningApps.org</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Перевірка знань -->
+            <!-- Вручну треба змінювати лише ті значення minimum-height (min-h-[300px]), які потрібно, і треба використовувати медіа-адаптацію (стилі тут на сторінці в тезі <style>)-->
+                <!-- Тут grid -->
+            <div id="check-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-6 text-center text-orange-600 break-words">Перевірка знань</h3>
+                <p class="text-center text-gray-600 mb-8 break-words">Натисніть на картку, щоб побачити відповідь.</p>
+                <!-- <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-orange-100 p-6 rounded-xl shadow-md break-words break-all">Назвіть 3 основні правила поведінки в комп'ютерному класі.</div>
+                            <div class="flip-card-back bg-orange-200 p-6 rounded-xl shadow-md break-words break-all">Вхід з дозволу вчителя, не приносити їжу/напої, дотримуватися тиші.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-orange-100 p-6 rounded-xl shadow-md break-words break-all">Що потрібно перевірити перед початком роботи з комп'ютером?</div>
+                            <div class="flip-card-back bg-orange-200 p-6 rounded-xl shadow-md break-words break-all">Справність обладнання (кабелі, монітор, клавіатура).</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-orange-100 p-6 rounded-xl shadow-md break-words break-all">Яка правильна відстань до монітора?</div>
+                            <div class="flip-card-back bg-orange-200 p-6 rounded-xl shadow-md break-words break-all">50-70 см.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-orange-100 p-6 rounded-xl shadow-md break-words break-all">Чому не можна їсти в комп'ютерному класі?</div>
+                            <div class="flip-card-back bg-orange-200 p-6 rounded-xl shadow-md break-words break-all">Щоб уникнути пошкодження техніки та зберегти чистоту.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-orange-100 p-6 rounded-xl shadow-md break-words break-all">Що робити, якщо відчуваєте втому очей під час роботи?</div>
+                            <div class="flip-card-back bg-orange-200 p-6 rounded-xl shadow-md break-words break-all">Зробити перерву та виконати вправи для очей.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-orange-100 p-6 rounded-xl shadow-md break-words break-all">Навіщо потрібно повідомляти вчителя про несправності?</div>
+                            <div class="flip-card-back bg-orange-200 p-6 rounded-xl shadow-md break-words break-all">Щоб уникнути подальших пошкоджень або небезпечних ситуацій.</div>
+                        </div>
+                    </li>
+                </ul> -->
+            
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2">
+                        <li class="break-words">Назвіть 3 основні правила поведінки в комп'ютерному класі.</li>
+                        <li class="break-words">Що потрібно перевірити перед початком роботи з комп'ютером?</li>
+                        <li class="break-words">Яка правильна відстань до монітора?</li>
+                        <li class="break-words">Чому не можна їсти в комп'ютерному класі?</li>
+                        <li class="break-words">Що робити, якщо відчуваєте втому очей під час роботи?</li>
+                        <li class="break-words">Навіщо потрібно повідомляти вчителя про несправності?</li>
+                    </ol>
+                    <img src="./images/img09.webp" alt="Знак питання" class="rounded-lg shadow-md" width="200">
+                </div>
+            
+            </div>
+         
+
+            <!-- Домашнє завдання -->
+            <div id="homework-content" class="tab-content   bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-orange-600 break-words">Домашнє завдання</h3>                    
+                <!--  -->
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <div>
+                            <p><b>Обов'язкове:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li class="break-words break-all">Вивчити правила безпеки життєдіяльності та поведінки в комп’ютерному класі (видана пам'ятка або відповідний розділ підручника).</li>
+                                <li class="break-words break-all">Повторити правила безпеки зору та постави.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><b>За бажанням (на вибір):</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li class="break-words break-all">Підготувати невелике повідомлення або презентацію на тему "Вплив комп'ютера на здоров'я людини та як його мінімізувати".</li>
+                                <li class="break-words break-all">Розробити власний плакат "Безпека в комп'ютерному класі".</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="./images/img08.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!--  -->
+            </div>
+        </section>
+
+
+        <!-- Додаткові матеріали -->
+        <!-- Additional Materials Section -->
+        <section class="bg-white p-6 rounded-xl shadow-md mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-orange-600 break-words">Додаткові матеріали</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li class="break-words"><a href="https://sites.google.com/view/lga84-9/tehnika_bezpeky" target="_blank" class="text-blue-600 hover:underline">Техніка безпеки</a></li>
+
+                <li class="break-words"><a href="https://drive.google.com/file/d/1C9_KEF981LvokY0GWNOhUXb7rJKJUUbM/view" target="_blank" class="text-blue-600 hover:underline">Оцінювання учнів та учениць на уроках інформатики</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">Інтерактивна платформа IZZI (8 клас)</a></li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm   bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>           
+        </ul>
+    </footer>    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Початок:
+            // Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання".
+            const tabs = document.getElementById('tabs');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            tabs.addEventListener('click', (e) => {
+                // Ensure the click target is a BUTTON (tab button)
+                if (e.target.tagName === 'BUTTON') {
+                    const tab = e.target.dataset.tab;
+
+                    // Remove 'active' class from all buttons and add to the clicked one
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Hide all tab contents and show the corresponding one
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Use === for strict comparison
+                        if (content.id === `${tab}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                }
+            });
+            // Кінець.
+
+
+            // Початок:
+            // ГРУПИ РЕЗУЛЬТАТІВ.
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            // 1. Створення об'єкту-мапи для відповідності значень і кольорів
+            // Тут вручну можна поміняти значення background й border
+            const colorMap = {
+                1: {
+                    background: '#ffedd4', // text-orange-100
+                    border: '#ffd6a8'      // text-orange-200
+                },
+                2: {
+                    background: '#ffd6a8', // text-orange-200
+                    border: '#ffb86a'       // text-orange-300
+                },
+                3: {
+                    background: '#ffb86a',  // text-orange-300
+                    border: '#ff8904'        // text-orange-400
+                },
+                4: {
+                    background: '#ff8904',   // text-orange-400
+                    border: '#ff6900'      // text-orange-500
+                }
+            };
+
+            // Дані, які можна змінювати вручну
+            const chartData = [1, 4, 3, 2];
+
+            // 2. Генерація масивів кольорів на основі даних
+            const backgroundColors = chartData.map(value => colorMap[value].background);
+            const borderColors = chartData.map(value => colorMap[value].border);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ГР1', 'ГР2', 'ГР3', 'ГР4'],
+                    datasets: [{
+                        label: 'Важливість',
+                        data: chartData, // Використовуємо змінну
+                        backgroundColor: backgroundColors, // Використовуємо згенерований масив
+                        borderColor: borderColors, // Використовуємо згенерований масив
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const labels = ['', 'Важлива', 'Дуже важлива', 'Найважливіша'];
+                                    return labels[value] || '';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.parsed.y;
+                                    const importanceLabels = {4: 'Найважливіша', 3: 'Дуже важлива', 2: 'Важлива', 1: 'Найменш важлива'};
+                                    label += importanceLabels[value] || '';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // Кінець. ГРУПИ РЕЗУЛЬТАТІВ.
+
+
+            // // Початок.
+            // // ПОВОРОТ КАРТОК "Перевірка знань"
+            // const flipCards = document.querySelectorAll('.flip-card');
+            // flipCards.forEach(card => {
+            //     card.addEventListener('click', () => {
+            //         card.classList.toggle('active');
+            //     });
+            // });
+            // // Кінець. ПОВОРОТ КАРТОК.
+            
+
+        });
+    </script>
+</body>
+</html>

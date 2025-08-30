@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: 8 клас</title>
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Тіло документа */
+        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
+
+        /* Стилі для навігації в меню */
+        .logo-main { display: none; }
+        .main-title-text { width: 140px; text-align: center; }
+        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
+        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
+        @media screen and (min-width: 768px) {
+            .main-title-text { width: auto; }
+            .main-navigation { display: inline; width: auto; }
+        }
+
+        /* main стилі */
+        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
+        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
+        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
+        .source-text { padding: 8px; }
+        @media screen and (min-width: 300px) {
+            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
+            .text-2xlooo { font-size: 1.25rem; }
+        }
+        @media screen and (min-width: 480px) {
+            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
+            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
+            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
+        }
+
+        /* Стилі для "Про урок" */
+        /* Групи результатів */
+        .text-group-result { padding-top: 16px; }
+
+        /* Style to hide inactive tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Style to tab content */
+        .tab-btn.active { 
+            color: #0d9488;          /* text-teal-600 */
+            border-bottom-color: #0d9488;  /* text-teal-600 */
+            background-color: #cffafe;      /* text-teal-100 */
+        }
+        .tab-btn { 
+            transition: color 0.3s, 
+            border-color 0.3s, 
+            background-color 0.3s; 
+            border-bottom: 2px solid transparent;
+        }
+
+        /* Styles for flip cards */
+        .flip-card {
+            background-color: transparent;
+            width: 100%; /* Make cards responsive to grid column width */
+            height: 200px; /* Fixed height for consistency, adjust as needed */
+            perspective: 1000px; /* 3D effect */
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left; /* Adjust text alignment as needed */
+            overflow-wrap: break-word; /* break-words */
+            /*word-break: break-all;*/ /* break-all */
+        }
+
+        .flip-card-front {
+            color: #4b5563; /* text-gray-700 */
+        }
+
+        .flip-card-back {
+            color: #4b5563; /* text-gray-700 */
+            transform: rotateY(180deg);
+        }
+
+        /* Responsive adjustments for min-height */
+        @media (min-width: 768px) { /* md breakpoint */
+            .flip-card.min-h-md {
+                min-height: 250px; /* Example, adjust as needed for medium screens */
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .flip-card.min-h-lg {
+                min-height: 200px; /* Example, adjust as needed for large screens */
+            }
+        }
+
+        /* Additional styles for practical block interactive elements */
+        .task-description {
+            background-color: #f0fdf4; /* bg-green-50 */
+            border-left: 4px solid #34d399; /* border-green-400 */
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0.375rem; /* rounded-md */
+            color: #1f2937; /* text-gray-800 */
+        }
+        .task-list {
+            list-style: decimal;
+            list-style-position: inside;
+            margin-left: 1rem;
+            margin-bottom: 1.5rem;
+            color: #374151; /* text-gray-700 */
+        }
+        .task-list li {
+            margin-bottom: 0.5rem;
+        }
+        .code-example {
+            background-color: #1f2937; /* bg-gray-900 */
+            color: #f9fafb; /* text-gray-50 */
+            padding: 1rem;
+            border-radius: 0.375rem; /* rounded-md */
+            font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+            overflow-x: auto;
+            margin-top: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .mock-app {
+            background-color: #ffffff;
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        .mock-app-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #111827; /* text-gray-900 */
+        }
+        .mock-app-label {
+            font-size: 1rem;
+            color: #374151; /* text-gray-700 */
+            margin-bottom: 0.5rem;
+        }
+        .mock-app-image-container {
+            width: 100%;
+            max-width: 250px; /* Adjust as needed */
+            height: 150px;
+            border: 1px dashed #9ca3af; /* border-gray-400 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            color: #6b7280; /* text-gray-500 */
+            border-radius: 0.375rem;
+            overflow: hidden; /* To ensure image fits */
+        }
+        .mock-app-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .mock-app-button {
+            background-color: #0d9488; /* bg-teal-600 */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none;
+        }
+        .mock-app-button:hover {
+            background-color: #0f766e; /* bg-teal-700 */
+        }
+        .mock-app-radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+            max-width: 300px;
+        }
+        .mock-app-radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            background-color: #f3f4f6; /* bg-gray-100 */
+            transition: background-color 0.2s ease;
+        }
+        .mock-app-radio-group label:hover {
+            background-color: #e5e7eb; /* bg-gray-200 */
+        }
+        .mock-app-radio-group input[type="radio"] {
+            transform: scale(1.1);
+        }
+
+        .interactive-code-editor {
+            background-color: #1f2937;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        .code-editor-textarea {
+            width: 100%;
+            height: 200px;
+            background-color: #111827;
+            color: #f9fafb;
+            border: 1px solid #4b5563;
+            border-radius: 0.375rem;
+            padding: 0.75rem;
+            font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+            resize: vertical;
+        }
+        .code-output {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            margin-top: 1rem;
+            min-height: 50px;
+            white-space: pre-wrap;
+            font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+            overflow-x: auto;
+        }
+        .code-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .code-buttons button {
+            background-color: #0d9488;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .code-buttons button:hover {
+            background-color: #0f766e;
+        }
+        .code-buttons button:disabled {
+            background-color: #6b7280;
+            cursor: not-allowed;
+        }
+
+        /* Styles for multiple choice questions */
+        .mc-container .mc-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f9fafb; /* bg-gray-50 */
+            border: 1px solid #e5e7eb; /* border-gray-200 */
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .mc-container .mc-option:hover {
+            background-color: #f3f4f6; /* bg-gray-100 */
+        }
+        .mc-container .mc-option input[type="radio"],
+        .mc-container .mc-option input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        .mc-container .mc-option label {
+            flex-grow: 1;
+            cursor: pointer;
+        }
+        .mc-container .mc-option.correct {
+            background-color: #cffafe; /* bg-teal-100 */
+            border-color: #2dd4bf; /* border-teal-400 */
+        }
+        .mc-container .mc-option.incorrect {
+            background-color: #fee2e2; /* bg-red-100 */
+            border-color: #ef4444; /* border-red-500 */
+        }
+        .check-button, .reset-button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            margin: 0 5px;
+        }
+        .check-button {
+            background-color: #0d9488; /* bg-teal-600 */
+            color: white;
+            border: none;
+        }
+        .check-button:hover {
+            background-color: #0f766e; /* darker teal */
+            transform: translateY(-1px);
+        }
+        .check-button:active {
+            transform: translateY(0);
+        }
+        .reset-button {
+            background-color: #cffafe; /* bg-teal-100 */
+            color: #0d9488; /* text-teal-600 */
+            border: 1px solid #0d9488;
+        }
+        .reset-button:hover {
+            background-color: #99f6e4; /* bg-teal-200 */
+            transform: translateY(-1px);
+        }
+        .reset-button:active {
+            transform: translateY(0);
+        }
+        .feedback {
+            margin-top: 15px;
+            font-weight: 600;
+            color: #343a40; /* text-gray-800 */
+        }
+        .feedback.correct {
+            color: #10b981; /* text-green-500 */
+        }
+        .feedback.incorrect {
+            color: #ef4444; /* text-red-500 */
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="container mx-auto flex justify-between items-center bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10 logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <!-- Секція теми уроку -->
+        <section class="text-center mb-8">
+            <h1 class="text-lg text-slate-600 mt-2 break-words">Тема 5: «Алгоритми та програми». Урок № 55. (До ПР12)</h1>
+            <h1 class="text-3xlooo md:text-4xl font-bold text-slate-900 break-words theme-text">Практична робота № 12. «Створення програми з графічним інтерфейсом»</h1>
+            <h2 class="text-lg text-slate-600 mt-2 break-words">Інтерактивний план-конспект уроку для 8 класу НУШ</h2>
+        </section>
+
+
+        <!-- Секція "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання" -->
+        <section>
+            <!-- Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання". -->
+            <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+                <nav id="tabs" class="flex flex-wrap justify-center gap-2 sm:gap-4">
+                    <button data-tab="about" class="tab-btn active text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300 break-words break-all">Про урок</button>
+                    <button data-tab="theory" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300 break-words break-all">Теоретичний блок</button>
+                    <button data-tab="practice" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300 break-words break-all">Практичний блок</button>
+                    <button data-tab="check" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300 break-words break-all">Перевірка знань</button>
+                    <button data-tab="homework" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300 break-words break-all">Домашнє завдання</button>
+                </nav>
+            </div>
+
+            <!-- Про урок -->
+            <div id="about-content" class="tab-content active">
+                <div class="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Lesson Goal -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-teal-600 break-words break-all">🎯 Мета уроку</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Освітня:</b> закріпити знання про створення програм із графічним інтерфейсом за допомогою бібліотеки `tkinter`, навчити створювати прості вікна, додавати віджети (мітки, кнопки, радіокнопки, текстові поля), обробляти події.</li>
+                            <li class="break-words"><b>Розвивальна:</b> розвивати навички візуального програмування, логічне мислення при проєктуванні інтерфейсу, вміння інтегрувати графічні елементи з програмною логікою.</li>
+                            <li class="break-words"><b>Виховна:</b> виховувати інтерес до розробки програм, акуратність та самостійність при роботі з графічними інтерфейсами, заохочувати до творчого підходу у створенні власних додатків.</li>
+                        </ul>
+                    </div>
+                    <!-- Expected Outcomes -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-teal-600 break-words break-all">✅ Очікувані результати</h3>
+                        <p class="mb-2 text-gray-600">Після уроку учні зможуть:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Створювати базове вікно програми за допомогою `tkinter`.</li>
+                            <li class="break-words">Додавати різні віджети (Label, Radiobutton, Button, Text) до вікна.</li>
+                            <li class="break-words">Розміщувати віджети у вікні за допомогою методів `grid()` та `config()`.</li>
+                            <li class="break-words">Отримувати дані з радіокнопок та текстових полів.</li>
+                            <li class="break-words">Змінювати зображення та текст у графічному інтерфейсі динамічно.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-bold mb-3 text-teal-600 break-words">📊 Групи результатів (НУШ)</h3>
+                        <p class="text-gray-600 mb-4 break-words">Візуалізація важливості груп результатів для цього уроку.</p>
+                        <div class="chart-container relative h-64 w-full max-w-md mx-auto">
+                            <canvas id="resultsChart"></canvas>
+                        </div>
+                        <p class="text-gray-600 mb-4 break-words text-group-result"><i>Учень / учениця:</i></p>
+                        <ul>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР1 – працює з інформацією, даними, моделями;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР2 – створює інформаційні продукти;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР3 – працює в цифровому середовищі;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР4 – безпечно та відповідально працює з інформаційними технологіями.</p></li>
+                        </ul>
+                    </div>
+                    <!-- Lesson Type & Equipment -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-teal-600 break-words">📚 Тип уроку</h3>
+                        <p class="text-gray-700 break-words">Урок формування практичних умінь та навичок.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-teal-600 break-words">💻 Обладнання та ПЗ</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Персональні комп'ютери з встановленим Python та `tkinter`.</li>
+                            <li class="break-words">Середовище розробки (IDLE, VS Code).</li>
+                            <li class="break-words">Проєктор або інтерактивна дошка.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-teal-600 break-words">🔗 Міжпредметні зв'язки</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Дизайн та технології (UI/UX принципи).</li>
+                            <li class="break-words">Українська мова (структурування тексту).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Теоретичний блок -->
+            <div id="theory-content" class="tab-content mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-teal-500 mb-4 heading-underline break-words title-review">ПОВТОРЮЄМО</h2>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">Актуалізація опорних знань</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2">
+                        <li class="break-words">Що таке цикл в програмуванні?</li>
+                        <li class="break-words">Які є основні типи циклів у Python?</li>
+                        <li class="break-words">Для чого використовується функція `range()` в циклах `for`?</li>
+                        <li class="break-words">Коли доцільно використовувати цикл `while`?</li>
+                        <li class="break-words">Що таке вкладений цикл?</li>
+                        <li class="break-words">Яке призначення команди `break` у циклі?</li>
+                        <li class="break-words">Яке значення параметра `step` потрібно вказати у функції `range()`, щоб отримати послідовність чисел у зворотному порядку?</li>
+                        <li class="break-words">Чим відрізняється умова циклу `while` від умови умовного оператора `if`?</li>
+                    </ol>
+                    <img src="./images/img-tema5-05.webp" alt="Знак питання" class="rounded-lg shadow-md" width="200">
+                </div>
+                
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 223-230)</a></i></p>
+                </div>
+            </div>
+            
+
+            <!-- Практичний блок -->
+            <div id="practice-content" class="tab-content">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-6 text-teal-600 break-words">Практичний блок уроку</h3>
+
+                    <!-- <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Практична робота № 12. «Створення програми з графічним інтерфейсом»</h4>
+                    <div class="task-description">
+                        <p class="font-bold mb-2">Завдання:</p>
+                        <p>Розробити програму міста України: залежно від стану перемикача вивести відомості та зображення.</p>
+                        <p class="font-bold mt-2">Обладнання:</p>
+                        <p>Комп'ютер із середовищем програмування IDLE.</p>
+                    </div>
+
+                    <h5 class="text-lg font-bold mb-3 text-gray-800">Хід роботи</h5>
+                    <ul class="task-list">
+                        <li>Під час роботи за комп’ютером дотримуйтесь правил безпеки.</li>
+                        <li>В IDLE виберіть команду File → New File.</li>
+                        <li>У текстовому редакторі підготуйте декілька файлів із короткою інформацією про міста України. Збережіть файли Київ.txt, Львів.txt тощо до папки Міста України.</li>
+                        <li>Створіть вікно програми із заголовком Міста України. Завершіть програму командою `root.mainloop()`. Збережіть програму у файлі з назвою Практична12 у папку Міста України.</li>
+                        <li>Створіть список назв міст: <br> `cities = ['Київ', 'Львів', 'Дніпро', 'Одеса', 'Харків']`</li>
+                        <li>Додайте у вікно віджет класу Text, призначений для виведення інформації з текстових файлів: <br> `text1 = Text(width=24, height=10, wrap = WORD)` <br> `text1.grid(row = 0, column = 1, rowspan = 5)`</li>
+                        <li>Створіть п’ять радіокнопок із підписами, що відповідають назвам міст (див. рисунок).</li>
+                        <li class="mb-4">
+                            <div class="flex justify-center my-4">
+                                <img src="./image_160c07.jpg" alt="Приклад графічного інтерфейсу з радіокнопками міст" class="rounded-lg shadow-md max-w-full h-auto">
+                            </div>
+                            Оскільки значення параметра радіокнопок подібні, створити їх можна в циклі за списком назв міст. <br> `var=IntVar()` <br> `var.set(0)` <br> `for i in range(len(cities)):` <br> `    Radiobutton(text = cities[i], variable = var, value = i, command = change_image).grid(row = i, column = 0, sticky='w')`
+                        </li>
+                        <li>Опишіть спільний обробник події для перемикачів — функцію `change()`. <br> Залежно від значення `var.get()` зі списку `cities` вибирається назва міста, з якої формується ім’я файлу з інформацією про вибране місто: <br> `def change():` <br> `    f = open(cities[var.get()]+'.txt')` <br> `    text1.delete(1.0, END)` <br> `    text1.insert(1.0, f.read())` <br> `    f.close()`
+                        </li>
+                        <li>Помістіть у папку з програмою графічні файли зі світлинами міст (імена файлів: Київ.png, Львів.png тощо).</li>
+                        <li>Додайте до вікна об’єкт `lab` класу `Label` для виведення зображення міста: <br> `image1 = None # Початкове «порожнє» значення` <br> `lab = Label(root, width = 200, height = 150)` <br> `lab.grid(row = 0, column = 2, rowspan = len(cities), padx = 20)`</li>
+                        <li>У функції `change()` додайте команди для зміни властивості `image` об’єкта `lab`: <br> `global image1` <br> `image1 = PhotoImage(file = cities[var.get()]+'.png')` <br> `lab.config(image = image1)`</li>
+                        <li>Додайте в список `cities` ще кілька назв міст України.</li>
+                        <li>Підготуйте текстові файли з цікавою інформацією про ці міста, графічні файли зі світлинами цих міст. Випробуйте програму.</li>
+                        <li>Запропонуйте ідеї щодо покращення створеної програми. Спробуйте їх реалізувати.</li>
+                    </ul>
+                    <p class="source-text mb-4 break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 232-234)</a></i></p> -->
+
+                    <h4 class="text-xl font-semibold mb-3 text-gray-800 break-words">Інтерактивна симуляція</h4>
+                    <p class="text-gray-600 mb-4">Спробуйте взаємодіяти з елементами графічного інтерфейсу, що імітує вашу програму.</p>
+
+                    <div class="mock-app">
+                        <h5 class="mock-app-title">Міста України</h5>
+                        <div class="mock-app-radio-group" id="city-radio-group">
+                            <!-- Radio buttons will be inserted here by JS -->
+                        </div>
+                        <div class="mock-app-image-container">
+                            <img id="city-image" class="mock-app-image" src="https://placehold.co/250x150/e0f2f7/0d9488?text=Виберіть%20місто" alt="Зображення міста">
+                        </div>
+                        <textarea id="city-info" class="w-full h-40 border border-gray-300 rounded-md p-2" readonly>Інформація про місто з'явиться тут.</textarea>
+                    </div>
+                </div>        
+            </div>
+
+            <!-- Перевірка знань -->
+            <div id="check-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-6 text-teal-600 break-words">Перевірка знань</h3>
+                <p class="text-center text-gray-600 mb-8 break-words">Натисніть на картку, щоб побачити відповідь.</p>
+                <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-teal-100 p-6 rounded-xl shadow-md break-words">1. Яка бібліотека в Python використовується для створення графічного інтерфейсу?</div>
+                        <div class="flip-card-back bg-teal-200 p-6 rounded-xl shadow-md break-words">Для створення графічного інтерфейсу в Python часто використовується вбудована бібліотека `tkinter`.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-teal-100 p-6 rounded-xl shadow-md break-words">2. Що таке "віджет" у `tkinter`? Наведіть приклади.</div>
+                        <div class="flip-card-back bg-teal-200 p-6 rounded-xl shadow-md break-words">Віджет — це елемент графічного інтерфейсу користувача (наприклад, кнопка, текстове поле, мітка, радіокнопка), за допомогою якого відбувається взаємодія користувача з програмою.<br>Приклади: `Label`, `Button`, `Entry`, `Radiobutton`, `Text`.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-teal-100 p-6 rounded-xl shadow-md break-words">3. Які методи використовуються для розміщення віджетів у вікні `tkinter`?</div>
+                        <div class="flip-card-back bg-teal-200 p-6 rounded-xl shadow-md break-words">Основними методами є `pack()`, `grid()` та `place()`. У даній практичній роботі використовується `grid()`.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-teal-100 p-6 rounded-xl shadow-md break-words">4. Для чого потрібна функція `root.mainloop()`?</div>
+                        <div class="flip-card-back bg-teal-200 p-6 rounded-xl shadow-md break-words">`root.mainloop()` запускає головний цикл обробки подій `tkinter`, який чекає на дії користувача (кліки, введення) і оновлює інтерфейс. Без неї вікно програми не буде відображатися.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-teal-100 p-6 rounded-xl shadow-md break-words">5. Як отримати поточне значення вибраної радіокнопки в `tkinter`?</div>
+                            <div class="flip-card-back bg-teal-200 p-6 rounded-xl shadow-md break-words">Значення отримується за допомогою методу `.get()` від змінної, пов'язаної з групою радіокнопок (наприклад, `var.get()`).</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-teal-100 p-6 rounded-xl shadow-md break-words">6. Як оновити зображення в віджеті `Label`?</div>
+                            <div class="flip-card-back bg-teal-200 p-6 rounded-xl shadow-md break-words">Потрібно створити новий об'єкт `PhotoImage` з шляхом до нового зображення, а потім призначити його властивості `image` віджета `Label` за допомогою `lab.config(image = new_image_object)`.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-teal-100 p-6 rounded-xl shadow-md break-words">7. Опишіть призначення параметрів `row` та `column` у методі `grid()`.</div>
+                            <div class="flip-card-back bg-teal-200 p-6 rounded-xl shadow-md break-words">Параметр `row` вказує номер рядка, у якому буде розміщено віджет, а `column` — номер стовпця. Нумерація починається з 0.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-teal-100 p-6 rounded-xl shadow-md break-words">8. Які переваги створення програм з графічним інтерфейсом порівняно з консольними програмами?</div>
+                            <div class="flip-card-back bg-teal-200 p-6 rounded-xl shadow-md break-words">Графічний інтерфейс є більш інтуїтивно зрозумілим, візуально привабливим та легким у використанні для кінцевого користувача, що підвищує доступність програми.</div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 232-234)</a></i></p>
+                </div>
+            </div>
+          
+
+            <!-- Домашнє завдання -->
+            <div id="homework-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-teal-600 break-words">Домашнє завдання</h3>                  
+                <!--  -->
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <div>
+                            <p class="break-words break-all"><b>1. Теоретична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li class="break-words break-all">Повторити §§ 29-35 (стор. 187-232).</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><b>2. Практична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Виконати практичну роботу № 12 (стор. 232-234).</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p><b>3. Завдання за бажанням (для закріплення):</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Інтерактивна платформа IZZI (8 клас) до практичної роботи № 12: <a href="https://ua.izzi.digital/DOS/1183864/1410268.html" target="_blank" class="text-blue-600 hover:underline break-words break-all block">https://ua.izzi.digital/DOS/1183864/1410268.html</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="./images/img08.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!--  -->
+            </div>
+        </section>
+
+
+        <!-- Додаткові матеріали -->
+        <!-- Additional Materials Section -->
+        <section class="bg-white p-6 rounded-xl shadow-md mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-teal-600 break-words">Додаткові матеріали</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li class="break-words"><a href="https://sites.google.com/view/lga84-9/tehnika_bezpeky" target="_blank" class="text-blue-600 hover:underline">Техніка безпеки</a></li>
+
+                <li class="break-words"><a href="https://drive.google.com/file/d/1C9_KEF981LvokY0GWNOhUXb7rJKJUUbM/view" target="_blank" class="text-blue-600 hover:underline">Оцінювання учнів та учениць на уроках інформатики</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу</a> (ПР12, стор. 232-234)</li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">Інтерактивна платформа IZZI (8 клас)</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до практичної роботи № 12: <a href="https://ua.izzi.digital/DOS/1183864/1410268.html" target="_blank" class="text-blue-600 hover:underline break-words2">https://ua.izzi.digital/DOS/1183864/1410268.html</a></li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>          
+        </ul>
+    </footer>     
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Початок:
+            // Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання".
+            const tabs = document.getElementById('tabs');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            tabs.addEventListener('click', (e) => {
+                // Ensure the click target is a BUTTON (tab button)
+                if (e.target.tagName === 'BUTTON') {
+                    const tab = e.target.dataset.tab;
+
+                    // Remove 'active' class from all buttons and add to the clicked one
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Hide all tab contents and show the corresponding one
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Use === for strict comparison
+                        if (content.id === `${tab}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                }
+            });
+            // Кінець.
+
+
+            // Початок:
+            // ГРУПИ РЕЗУЛЬТАТІВ.
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            // 1. Створення об'єкту-мапи для відповідності значень і кольорів
+            // Тут вручну можна поміняти значення background й border
+            const colorMap = {
+                1: {
+                    background: '#cffafe', // text-teal-100
+                    border: '#99f6e4'      // text-teal-200
+                },
+                2: {
+                    background: '#99f6e4', // text-teal-200
+                    border: '#5eead4'       // text-teal-300
+                },
+                3: {
+                    background: '#5eead4',  // text-teal-300
+                    border: '#2dd4bf'        // text-teal-400
+                },
+                4: {
+                    background: '#2dd4bf',   // text-teal-400
+                    border: '#14b8a6'      // text-teal-500
+                }
+            };
+
+            // Дані, які можна змінювати вручну
+            const chartData = [2, 4, 2, 3]; // GR1 - Важлива, GR2 - Найважливіша, GR3 - Важлива, GR4 - Дуже важлива
+
+            // 2. Генерація масивів кольорів на основі даних
+            const backgroundColors = chartData.map(value => colorMap[value].background);
+            const borderColors = chartData.map(value => colorMap[value].border);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ГР1', 'ГР2', 'ГР3', 'ГР4'],
+                    datasets: [{
+                        label: 'Важливість',
+                        data: chartData, // Використовуємо змінну
+                        backgroundColor: backgroundColors, // Використовуємо згенерований масив
+                        borderColor: borderColors, // Використовуємо згенерований масив
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const labels = ['', 'Важлива', 'Дуже важлива', 'Найважливіша'];
+                                    return labels[value] || '';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.parsed.y;
+                                    const importanceLabels = {4: 'Найважливіша', 3: 'Дуже важлива', 2: 'Важлива', 1: 'Найменш важлива'};
+                                    label += importanceLabels[value] || '';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // Кінець. ГРУПИ РЕЗУЛЬТАТІВ.
+
+
+            // Початок.
+            // ПОВОРОТ КАРТОК "Перевірка знань"
+            const flipCards = document.querySelectorAll('.flip-card');
+            flipCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+            // Кінець. ПОВОРОТ КАРТОК.
+
+            // Interactive simulation logic for Practical Block
+            const cities = ['Київ', 'Львів', 'Дніпро', 'Одеса', 'Харків'];
+            const cityInfo = {
+                'Київ': 'Київ — столиця та найбільше місто України, розташоване на річці Дніпро.',
+                'Львів': 'Львів — культурний, освітньо-науковий, туристичний та торговий осередок країни, історична столиця Галичини.',
+                'Дніпро': 'Дніпро — велике місто на річці Дніпро, промисловий центр України.',
+                'Одеса': 'Одеса — портове місто на Чорному морі, великий економічний та туристичний центр.',
+                'Харків': 'Харків — друге за величиною місто України, великий промисловий та освітній центр.'
+            };
+            const cityImages = {
+                'Київ': 'https://placehold.co/250x150/e0f2f7/0d9488?text=Київ', // Placeholder for Kyiv
+                'Львів': 'https://placehold.co/250x150/e0f2f7/0d9488?text=Львів', // Placeholder for Lviv
+                'Дніпро': 'https://placehold.co/250x150/e0f2f7/0d9488?text=Дніпро', // Placeholder for Dnipro
+                'Одеса': 'https://placehold.co/250x150/e0f2f7/0d9488?text=Одеса', // Placeholder for Odesa
+                'Харків': 'https://placehold.co/250x150/e0f2f7/0d9488?text=Харків' // Placeholder for Kharkiv
+            };
+
+            const cityRadioGroup = document.getElementById('city-radio-group');
+            const cityImageElement = document.getElementById('city-image');
+            const cityInfoTextarea = document.getElementById('city-info');
+
+            // Function to update city info and image
+            function updateCityDisplay(selectedCity) {
+                cityInfoTextarea.value = cityInfo[selectedCity] || "Інформація про місто не знайдена.";
+                cityImageElement.src = cityImages[selectedCity] || "https://placehold.co/250x150/e0f2f7/0d9488?text=Виберіть%20місто";
+                cityImageElement.alt = `Зображення міста ${selectedCity}`;
+            }
+
+            // Create radio buttons dynamically
+            cities.forEach((city, index) => {
+                const radioId = `city_${index}`;
+                const radioDiv = document.createElement('div');
+                radioDiv.classList.add('flex', 'items-center');
+
+                const radioInput = document.createElement('input');
+                radioInput.type = 'radio';
+                radioInput.name = 'selected_city';
+                radioInput.id = radioId;
+                radioInput.value = city;
+                radioInput.classList.add('form-radio', 'h-4', 'w-4', 'text-teal-600', 'transition-colors', 'duration-200');
+
+                const radioLabel = document.createElement('label');
+                radioLabel.htmlFor = radioId;
+                radioLabel.textContent = city;
+                radioLabel.classList.add('ml-2', 'text-gray-700', 'cursor-pointer');
+
+                radioDiv.appendChild(radioInput);
+                radioDiv.appendChild(radioLabel);
+
+                cityRadioGroup.appendChild(radioDiv);
+
+                radioInput.addEventListener('change', (event) => {
+                    updateCityDisplay(event.target.value);
+                });
+            });
+
+            // Set initial display
+            if (cities.length > 0) {
+                const firstRadio = cityRadioGroup.querySelector('input[type="radio"]');
+                if (firstRadio) {
+                    firstRadio.checked = true;
+                    updateCityDisplay(firstRadio.value);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: 8 клас</title>
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Тіло документа */
+        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
+
+        /* Стилі для навігації в меню */
+        .logo-main { display: none; }
+        .main-title-text { width: 140px; text-align: center; }
+        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
+        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
+        @media screen and (min-width: 768px) {
+            .main-title-text { width: auto; }
+            .main-navigation { display: inline; width: auto; }
+        }
+
+        /* main стилі */
+        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
+        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
+        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
+        .source-text { padding: 8px; }
+        @media screen and (min-width: 300px) {
+            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
+            .text-2xlooo { font-size: 1.25rem; }
+        }
+        @media screen and (min-width: 480px) {
+            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
+            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
+            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
+        }
+
+        /* Стилі для "Про урок" */
+        /* Групи результатів */
+        .text-group-result { padding-top: 16px; }
+
+        /* Style to hide inactive tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Style to tab content */
+        .tab-btn.active { 
+            color: #9333ea;                /* text-purple-600 */
+            border-bottom-color: #9333ea;  /* text-purple-600 */
+            background-color: #f3e8ff;     /* text-purple-100 */
+        }
+        .tab-btn { 
+            transition: color 0.3s, 
+            border-color 0.3s, 
+            background-color 0.3s; 
+            border-bottom: 2px solid transparent;
+        }
+
+        /* Styles for flip cards */
+        .flip-card {
+            background-color: transparent;
+            width: 100%; /* Make cards responsive to grid column width */
+            height: 200px; /* Fixed height for consistency, adjust as needed */
+            perspective: 1000px; /* 3D effect */
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left; /* Adjust text alignment as needed */
+            overflow-wrap: break-word; /* break-words */
+            /*word-break: break-all;*/ /* break-all */
+        }
+
+        .flip-card-front {
+            color: #4b5563; /* text-gray-700 */
+        }
+
+        .flip-card-back {
+            color: #4b5563; /* text-gray-700 */
+            transform: rotateY(180deg);
+        }
+
+        /* Responsive adjustments for min-height */
+        @media (min-width: 768px) { /* md breakpoint */
+            .flip-card.min-h-md {
+                min-height: 250px; /* Example, adjust as needed for medium screens */
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .flip-card.min-h-lg {
+                min-height: 200px; /* Example, adjust as needed for large screens */
+            }
+        }
+
+    </style>
+
+    <!-- Стилі для практичного блоку -->
+    <style>
+        /* Styles for Practical Block */
+        .quiz-container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 1.5rem;
+        }
+        .question-title {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 700; /* font-bold */
+            margin-bottom: 1.5rem;
+            color: #9333ea; /* text-purple-600 */
+        }
+        .question-text {
+            font-size: 1.125rem; /* text-lg */
+            margin-bottom: 1rem;
+            color: #374151; /* text-gray-700 */
+        }
+        .option-label {
+            display: block;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #4b5563; /* text-gray-700 */
+        }
+        .option-label input[type="radio"],
+        .option-label input[type="checkbox"] {
+            margin-right: 0.75rem;
+            transform: scale(1.2); /* Make radio/checkbox larger */
+        }
+        .check-button, .reset-button {
+            background-color: #9333ea; /* bg-purple-600 */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: 600;
+            margin-top: 1.5rem;
+        }
+        .check-button:hover, .reset-button:hover {
+            background-color: #7e22ce; /* bg-purple-700 */
+        }
+        .feedback {
+            margin-top: 1rem;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .feedback.correct {
+            color: #10b981; /* text-green-500 */
+        }
+        .feedback.incorrect {
+            color: #ef4444; /* text-red-500 */
+        }
+
+        /* Fill-in-the-blanks specific styles */
+        .fill-in-the-blanks-container input[type="text"] {
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            border-radius: 0.375rem; /* rounded-md */
+            padding: 0.5rem 0.75rem;
+            font-size: 1rem;
+            width: 120px;
+            margin: 0 0.25rem;
+        }
+        .fill-in-the-blanks-container input[type="text"]:focus {
+            outline: none;
+            border-color: #9333ea; /* border-purple-600 */
+            box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.25);
+        }
+
+        /* Matching exercise specific styles */
+        .matching-pair {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            background-color: #f9fafb; /* bg-gray-50 */
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb; /* border-gray-200 */
+        }
+        .matching-pair .term {
+            font-weight: 500;
+            color: #374151; /* text-gray-700 */
+            flex: 1;
+            padding-right: 1rem;
+        }
+        .matching-pair select {
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            border-radius: 0.375rem; /* rounded-md */
+            padding: 0.5rem;
+            font-size: 1rem;
+            color: #4b5563; /* text-gray-700 */
+            background-color: white;
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="container mx-auto flex justify-between items-center   bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10  logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
+            </ul>
+            <!-- <a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a>
+            <a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a> -->
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <!-- Секція теми уроку -->
+        <section class="text-center mb-8">
+            <h1 class="text-lg text-slate-600 mt-2 break-words">Практикум з використання інформаційних технологій. Урок № 61. (До ПР14)</h1>
+            <h1 class="text-3xlooo md:text-4xl font-bold text-slate-900 break-words  theme-text">Практична робота № 14. «Створення текстового документа, що містить об’єкти різних типів»</h1>
+            <h2 class="text-lg text-slate-600 mt-2 break-words">Інтерактивний план-конспект уроку для 8 класу НУШ</h2>
+        </section>
+
+
+        <!-- Секція "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання" -->
+        <section>
+            <!-- Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання". -->
+            <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+                <nav id="tabs" class="flex flex-wrap justify-center gap-2 sm:gap-4">
+                    <button data-tab="about" class="tab-btn active text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Про урок</button>
+                    <button data-tab="theory" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Теоретичний блок</button>
+                    <button data-tab="practice" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Практичний блок</button>
+                    <button data-tab="check" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Перевірка знань</button>
+                    <button data-tab="homework" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Домашнє завдання</button>
+                </nav>
+            </div>
+
+            <!-- Про урок -->
+            <div id="about-content" class="tab-content active">
+                <div class="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Lesson Goal -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-purple-600 break-words break-all">🎯 Мета уроку</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Освітня:</b> узагальнити та систематизувати знання учнів щодо створення текстових документів, що містять об’єкти різних типів; закріпити навички форматування тексту та об’єктів, створення автоматизованого змісту та роботи з колонтитулами.</li>
+                            <li class="break-words"><b>Розвивальна:</b> розвивати навички роботи з текстовими редакторами, логічне мислення, уважність, вміння аналізувати та застосовувати знання на практиці.</li>
+                            <li class="break-words"><b>Виховна:</b> виховувати акуратність при роботі з документами, відповідальність за якість виконаної роботи, самостійність та інтерес до використання інформаційних технологій.</li>
+                        </ul>
+                    </div>
+                    <!-- Expected Outcomes -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-purple-600 break-words break-all">✅ Очікувані результати</h3>
+                        <p class="mb-2 text-gray-600">Після уроку учні зможуть:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Створювати титульну сторінку та зміст документа.</li>
+                            <li class="break-words">Вставляти та форматувати зображення, таблиці, нумеровані та марковані списки.</li>
+                            <li class="break-words">Працювати з колонтитулами, зокрема розміщувати прізвище, ім'я та клас.</li>
+                            <li class="break-words">Створювати та редагувати текстові об'єкти з різними шрифтами та кольорами.</li>
+                            <li class="break-words">Зберігати документ на хмарному диску та надавати доступ для спільної роботи.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-bold mb-3 text-purple-600 break-words">📊 Групи результатів (НУШ)</h3>
+                        <p class="text-gray-600 mb-4 break-words">Візуалізація важливості груп результатів для цього уроку.</p>
+                        <div class="chart-container relative h-64 w-full max-w-md mx-auto">
+                            <canvas id="resultsChart"></canvas>
+                        </div>
+                        <p class="text-gray-600 mb-4 break-words text-group-result"><i>Учень / учениця:</i></p>
+                        <ul>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР1 – працює з інформацією, даними, моделями;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР2 – створює інформаційні продукти;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР3 – працює в цифровому середовищі;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР4 – безпечно та відповідально працює з інформаційними технологіями.</p></li>
+                        </ul>
+                    </div>
+                    <!-- Lesson Type & Equipment -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-purple-600 break-words">📚 Тип уроку</h3>
+                        <p class="text-gray-700 break-words">Урок практичного застосування знань, умінь і навичок з теми "Текстовий документ та його об'єкти".</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-purple-600 break-words">💻 Обладнання та ПЗ</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Комп'ютери з текстовим процесором (наприклад, Microsoft Word, LibreOffice Writer, Google Docs).</li>
+                            <li class="break-words">Під'єднання до інтернету (для роботи з хмарним диском).</li>
+                            <li class="break-words">Проєктор або інтерактивна дошка.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-purple-600 break-words">🔗 Міжпредметні зв'язки</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Українська мова та література (структурування тексту, оформлення).</li>
+                            <li class="break-words">Мистецтво (вибір шрифтів, кольорів, розміщення об'єктів).</li>
+                            <li class="break-words">Історія (можливість створення документів на історичну тематику).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Теоретичний блок -->
+            <div id="theory-content" class="tab-content   mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">
+
+                <!-- ВАРІАНТ № 1, початок -->
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-purple-500 mb-4 heading-underline break-words  title-review">ПОВТОРЮЄМО</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="md:w-1/4 flex justify-center md:justify-start mb-6 md:mb-0">
+                        <img src="./images/img06.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="300">
+                    </div>
+                    <div class="md:w-3/4 text-gray-700 text-lg">
+                        <p class="mb-4 break-words">&#160;&#160;&#160;&#160;Ви вже здобули певні знання та навички:</p>
+                        <ul>
+                            <li class="mb-4 break-word">• навчилися виконувати кодування й декодування даних, детальніше ознайомилися з апаратним забезпеченням комп’ютера;</li>
+                            <li class="mb-4 break-word">• дізналися, як працювати з об’єктами текстового документа; опанували опрацювання тексто вих документів онлайн на хмарному диску під час спільної роботи;</li>
+                            <li class="mb-4 break-word">• навчилися створювати й опрацьовувати такі об’єкти мультимедіа, як звук і відео, опанували процес створення відеофільму та способи його розміщення в інтернеті;</li>
+                            <li class="mb-4 break-word">• продовжили вивчення основ програмування мовою Python і навчилися розробляти програми з графічним інтерфейсом; знаєте, як задавати властивості найуживаніших об’єктів графічного інтерфейсу та програмувати обробку подій.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">Актуалізація опорних знань</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2">
+                        <li class="break-words">Як додати до документа автоматизований зміст?</li>
+                        <li class="break-words">Який порядок використання стилів у текстовому документі?</li>
+                        <li class="break-words">Як мовою Python запрограмувати відтворення звуку з файлу?</li>
+                        <li class="break-words">Опишіть відмінності в призначенні пакувальників pack, place і grid.</li>
+                        <li class="break-words">Які властивості спільні для багатьох типів віджетів tkinter?</li>
+                    </ol>
+                    <img src="./images/img-tema3-3.webp" alt="Знак питання" class="rounded-lg shadow-md" width="200">
+                </div>
+
+                <div class="bg-purple-50 border-l-4 border-purple-500 p-6 rounded-lg shadow-md">
+                    <p class="text-gray-800 text-lg mb-4 break-words">У цьому розділі («Практикум з використання інформаційних технологій») ви створите різні інформаційні продукти, користуючись інструментами програмних середовищ, із якими ознайомились у 8 класі.</p>
+                </div>
+                
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 250)</a></i></p>
+                </div>
+                <!-- ВАРІАНТ № 1, кінець -->
+                 
+                <!-- <hr class="my-8 border-gray-300">
+
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-purple-500 mb-4 heading-underline break-words title-review">ПРАКТИЧНА РОБОТА № 14</h2>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-2xlooo font-bold text-gray-800 mb-4 break-words">«Створення текстового документа, що містить об’єкти різних типів»</h3>
+                    <p class="text-gray-700 mb-4 break-words">Завдання: створити мінігазету — документ, який містить об’єкти різних типів, здійснити форматування його об’єктів, створити автоматизований зміст.</p>
+                    
+                    <h4 class="text-xl font-semibold text-gray-800 mb-3 break-words">Хід роботи:</h4>
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2 mb-4">
+                        <li class="break-words">Під час роботи за комп'ютером дотримуйтеся правил безпеки.</li>
+                        <li class="break-words">Запустіть текстовий процесор і створіть новий документ.</li>
+                        <li class="break-words">Створіть титульну сторінку мінігазети, на якій розмістіть назву, логотип, гасло або підзаголовок. Зазначте дату випуску й номер. Додайте своє прізвище, ім’я й клас у нижній частині сторінки як відомості про відповідальну особу.</li>
+                        <li class="break-words">Підготуйте статтю (3-4 абзаци) на певну тему (наприклад, опис шкільного проєкту, огляд благодійної виставки).</li>
+                        <li class="break-words">Розмістіть текст на наступній сторінці й відформатуйте.</li>
+                        <li class="break-words">Вставте відповідне зображення та додайте під ним підпис.</li>
+                        <li class="break-words">Додайте таблицю, наприклад, для розкладу подій або шкільних заходів. Налаштуйте в ній колір меж, стиль тексту, розмір клітинок.</li>
+                        <li class="break-words">Додайте нумерований або маркований список фактів, пов’язаних із темою статті або шкільними новинами.</li>
+                        <li class="break-words">Оформіть колонтитули: у верхньому або нижньому колонтитулі додайте назву газети чи номер сторінки.</li>
+                        <li class="break-words">Для першої сторінки встановіть у верхньому колонтитулі свої прізвище, ім’я, клас.</li>
+                        <li class="break-words">Вставте текстове поле, створіть оголошення (наприклад, про гурток або захід у школі). Для привернення уваги використайте різні шрифти, накреслення та яскраві кольори.</li>
+                        <li class="break-words">Для назв статті й таблиці встановіть стиль Заголовок 1. Створіть автоматизований зміст газети.</li>
+                        <li class="break-words">Збережіть файл на хмарному диску. Надайте доступ до файлу вчителю / вчительці та кільком однокласникам / однокласницям.</li>
+                        <li class="break-words">Зробіть висновок: які особливості форматування текстових об'єктів було використано при оформленні документа.</li>
+                    </ol>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 251-252)</a></i></p> -->
+
+            </div>
+            
+
+            <!-- Практичний блок -->
+            <div id="practice-content" class="tab-content">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-6 text-center text-purple-600 break-words">Практичний блок уроку</h3>
+
+                    <!-- Множинний вибір (радіокнопки) -->
+                    <div class="quiz-container">
+                        <h4 class="question-title">Питання 1: Множинний вибір (радіокнопки)</h4>
+                        <p class="question-text">Який з цих елементів є обов'язковим для створення автоматизованого змісту?</p>
+                        <div id="radio-question-1">
+                            <label class="option-label"><input type="radio" name="q1_pr14" value="plain_text"> Звичайний текст</label>
+                            <label class="option-label"><input type="radio" name="q1_pr14" value="styles"> Застосування стилів заголовків</label>
+                            <label class="option-label"><input type="radio" name="q1_pr14" value="images"> Вставка зображень</label>
+                            <label class="option-label"><input type="radio" name="q1_pr14" value="tables"> Додавання таблиць</label>
+                        </div>
+                        <button class="check-button" onclick="checkRadioQuestionPr14(1)">Перевірити</button>
+                        <p id="feedback-radio-1" class="feedback"></p>
+                    </div>
+
+                    <!-- Множинний вибір (чекбокси) -->
+                    <div class="quiz-container">
+                        <h4 class="question-title">Питання 2: Множинний вибір (чекбокси)</h4>
+                        <p class="question-text">Які типи об'єктів ви можете вставити в текстовий документ згідно з інструкцією ПР №14?</p>
+                        <div id="checkbox-question-2">
+                            <label class="option-label"><input type="checkbox" name="q2_pr14" value="image"> Зображення</label>
+                            <label class="option-label"><input type="checkbox" name="q2_pr14" value="table"> Таблиця</label>
+                            <label class="option-label"><input type="checkbox" name="q2_pr14" value="list"> Нумерований/маркований список</label>
+                            <label class="option-label"><input type="checkbox" name="q2_pr14" value="video"> Відео</label>
+                        </div>
+                        <button class="check-button" onclick="checkCheckboxQuestionPr14(2)">Перевірити</button>
+                        <p id="feedback-checkbox-2" class="feedback"></p>
+                    </div>
+
+                    <!-- Заповнення пропусків -->
+                    <div class="quiz-container">
+                        <h4 class="question-title">Питання 3: Заповнення пропусків</h4>
+
+                        <div class="fill-in-the-blanks-container text-gray-700">
+                            На титульній сторінці мінігазети необхідно розмістити назву, логотип, гасло або підзаголовок, а також 
+                            <input type="text" id="blank3_pr14_1" placeholder="..."> 
+                            випуску й номер.<br>Внизу сторінки слід додати своє прізвище, ім'я й клас у <input type="text" id="blank3_pr14_2" placeholder="..."> колонтитулі.
+                            <br><br>
+                            <p><i>(Підказка: дату, нижньому.)</i></p>
+                        </div>
+
+                        <button class="check-button" onclick="checkFillInBlanksPr14(3)">Перевірити</button>
+                        <p id="feedback-fill-in-blanks-3" class="feedback"></p>
+                    </div>
+
+                    <!-- Зіставлення -->
+                    <div class="quiz-container">
+                        <h4 class="question-title">Питання 4: Зіставлення</h4>
+                        <p class="question-text">Зіставте дії з їхнім призначенням при створенні текстового документа:</p>
+                        <div id="matching-question-4">
+                            <div class="matching-pair">
+                                <span class="term">Використання різних шрифтів та кольорів у текстовому полі</span>
+                                <select id="match-q4_pr14-1">
+                                    <option value="">Виберіть...</option>
+                                    <option value="attract_attention">Привернення уваги</option>
+                                    <option value="structure_document">Структурування документа</option>
+                                    <option value="personal_info">Додавання особистої інформації</option>
+                                    <option value="data_representation">Представлення даних</option>
+                                </select>
+                            </div>
+                            <div class="matching-pair">
+                                <span class="term">Додавання прізвища, ім’я, класу у верхній колонтитул першої сторінки</span>
+                                <select id="match-q4_pr14-2">
+                                    <option value="">Виберіть...</option>
+                                    <option value="attract_attention">Привернення уваги</option>
+                                    <option value="structure_document">Структурування документа</option>
+                                    <option value="personal_info">Додавання особистої інформації</option>
+                                    <option value="data_representation">Представлення даних</option>
+                                </select>
+                            </div>
+                            <div class="matching-pair">
+                                <span class="term">Надання доступу до файлу на хмарному диску</span>
+                                <select id="match-q4_pr14-3">
+                                    <option value="">Виберіть...</option>
+                                    <option value="attract_attention">Привернення уваги</option>
+                                    <option value="structure_document">Структурування документа</option>
+                                    <option value="personal_info">Додавання особистої інформації</option>
+                                    <option value="collaboration">Спільна робота</option>
+                                </select>
+                            </div>
+                            <div class="matching-pair">
+                                <span class="term">Встановлення стилю "Заголовок 1" для назв статті й таблиці</span>
+                                <select id="match-q4_pr14-4">
+                                    <option value="">Виберіть...</option>
+                                    <option value="attract_attention">Привернення уваги</option>
+                                    <option value="structure_document">Структурування документа</option>
+                                    <option value="personal_info">Додавання особистої інформації</option>
+                                    <option value="collaboration">Спільна робота</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="check-button" onclick="checkMatchingPr14(4)">Перевірити</button>
+                        <p id="feedback-matching-4" class="feedback"></p>
+                    </div>
+
+                    <h4 class="text-xl font-semibold mt-8 mb-3 text-gray-800 break-words">Додаткові завдання (за бажанням)</h4>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 mb-4">
+                        <li class="break-words">Додайте до мінігазети графік, який ілюструє якісь дані, пов'язані з темою статті (наприклад, результати опитування).</li>
+                        <li class="break-words">Використайте функцію "Розрив розділу" для створення різних колонтитулів на різних сторінках.</li>
+                        <li class="break-words">Додайте до мінігазети елемент SmartArt або діаграму для візуалізації інформації.</li>
+                        <li class="break-words">Створіть інтерактивні посилання на зовнішні ресурси в документі.</li>
+                    </ul>                    
+                    
+                </div>                
+            </div>
+
+            <!-- Перевірка знань -->
+            <!-- Вручну треба змінювати лише ті значення minimum-height (min-h-[300px]), які потрібно, і треба використовувати медіа-адаптацію (стилі тут на сторінці в тезі <style>)-->
+                <!-- Тут grid -->
+            <div id="check-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-6 text-center text-purple-600 break-words">Перевірка знань</h3>
+                <p class="text-center text-gray-600 mb-8 break-words">Натисніть на картку, щоб побачити відповідь.</p>
+                <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-purple-100 p-6 rounded-xl shadow-md break-words">1. Яке значення має використання автоматизованого змісту в документі?</div>
+                        <div class="flip-card-back bg-purple-200 p-6 rounded-xl shadow-md break-words">Автоматизований зміст забезпечує швидку навігацію по документу та його оновлення при зміні структури, що є важливим для великих і складних документів.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-purple-100 p-6 rounded-xl shadow-md break-words">2. Для чого на титульній сторінці вказують відповідальну особу?</div>
+                        <div class="flip-card-back bg-purple-200 p-6 rounded-xl shadow-md break-words">Це дозволяє ідентифікувати автора або колектив, відповідальний за створення документа, та надає можливість зворотної комунікації.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-purple-100 p-6 rounded-xl shadow-md break-words">3. Які переваги має збереження документа на хмарному диску?</div>
+                        <div class="flip-card-back bg-purple-200 p-6 rounded-xl shadow-md break-words">Доступність з будь-якого пристрою та місця, легкість спільного доступу та співпраці, автоматичне збереження змін, захист від втрати даних у разі поломки пристрою.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-purple-100 p-6 rounded-xl shadow-md break-words">4. Чому важливо використовувати різні шрифти та кольори для оголошення?</div>
+                        <div class="flip-card-back bg-purple-200 p-6 rounded-xl shadow-md break-words">Різні шрифти та кольори допомагають привернути увагу до важливої інформації, виділити її серед основного тексту та зробити оголошення більш візуально привабливим.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-purple-100 p-6 rounded-xl shadow-md break-words">5. Як можна зробити таблицю більш читабельною та привабливою?</div>
+                            <div class="flip-card-back bg-purple-200 p-6 rounded-xl shadow-md break-words">Налаштування кольору меж, вирівнювання та стилю тексту, зміна розміру клітинок, використання чергування кольорів рядків або стовпців.</div>
+                        </div>
+                    </li>
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-purple-100 p-6 rounded-xl shadow-md break-words">6. Що таке колонтитул і для чого він використовується?</div>
+                            <div class="flip-card-back bg-purple-200 p-6 rounded-xl shadow-md break-words">Колонтитул – це область у верхньому або нижньому полі сторінки, яка містить повторювані дані (номери сторінок, назви розділів, автор, дата). Він використовується для навігації та ідентифікації документа.</div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 251-252)</a></i></p>
+                </div>
+            </div>
+         
+
+            <!-- Домашнє завдання -->
+            <div id="homework-content" class="tab-content   bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-purple-600 break-words">Домашнє завдання</h3>                    
+                <!--  -->
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <div>
+                            <p><b>1. Практична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Виконати практичну роботу № 14 (стор. 251-252).</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p><b>2. Завдання за бажанням (для закріплення):</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Інтерактивна платформа IZZI (8 клас) до практичної роботи № 14: <a href="https://ua.izzi.digital/DOS/1183864/1346670.html" target="_blank" class="text-blue-600 hover:underline break-words break-all block">https://ua.izzi.digital/DOS/1183864/1346670.html</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="./images/img08.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!--  -->
+            </div>
+        </section>
+
+
+        <!-- Додаткові матеріали -->
+        <!-- Additional Materials Section -->
+        <section class="bg-white p-6 rounded-xl shadow-md mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-purple-600 break-words">Додаткові матеріали</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li class="break-words"><a href="https://sites.google.com/view/lga84-9/tehnika_bezpeky" target="_blank" class="text-blue-600 hover:underline">Техніка безпеки</a></li>
+
+                <li class="break-words"><a href="https://drive.google.com/file/d/1C9_KEF981LvokY0GWNOhUXb7rJKJUUbM/view" target="_blank" class="text-blue-600 hover:underline">Оцінювання учнів та учениць на уроках інформатики</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу</a> (ПР14, стор. 251-252)</li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">Інтерактивна платформа IZZI (8 клас)</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до практичної роботи № 14: <a href="https://ua.izzi.digital/DOS/1183864/1346670.html" target="_blank" class="text-blue-600 hover:underline break-words2">https://ua.izzi.digital/DOS/1183864/1346670.html</a></li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm   bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>           
+        </ul>
+    </footer>    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Початок:
+            // Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання".
+            const tabs = document.getElementById('tabs');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            tabs.addEventListener('click', (e) => {
+                // Ensure the click target is a BUTTON (tab button)
+                if (e.target.tagName === 'BUTTON') {
+                    const tab = e.target.dataset.tab;
+
+                    // Remove 'active' class from all buttons and add to the clicked one
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Hide all tab contents and show the corresponding one
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Use === for strict comparison
+                        if (content.id === `${tab}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                }
+            });
+            // Кінець.
+
+
+            // Початок:
+            // ГРУПИ РЕЗУЛЬТАТІВ.
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            // 1. Створення об'єкту-мапи для відповідності значень і кольорів
+            // Тут вручну можна поміняти значення background й border
+            const colorMap = {
+                1: {
+                    background: '#f3e8ff', // text-purple-100
+                    border: '#e9d5ff'      // text-purple-200
+                },
+                2: {
+                    background: '#e9d5ff', // text-purple-200
+                    border: '#d8b4fe'       // text-purple-300
+                },
+                3: {
+                    background: '#d8b4fe',  // text-purple-300
+                    border: '#c084fc'        // text-purple-400
+                },
+                4: {
+                    background: '#c084fc',   // text-purple-400
+                    border: '#a855f7'      // text-purple-500
+                }
+            };
+
+            // Дані, які можна змінювати вручну
+            const chartData = [2, 4, 4, 4];
+
+            // 2. Генерація масивів кольорів на основі даних
+            const backgroundColors = chartData.map(value => colorMap[value].background);
+            const borderColors = chartData.map(value => colorMap[value].border);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ГР1', 'ГР2', 'ГР3', 'ГР4'],
+                    datasets: [{
+                        label: 'Важливість',
+                        data: chartData, // Використовуємо змінну
+                        backgroundColor: backgroundColors, // Використовуємо згенерований масив
+                        borderColor: borderColors, // Використовуємо згенерований масив
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const labels = ['', 'Важлива', 'Дуже важлива', 'Найважливіша'];
+                                    return labels[value] || '';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.parsed.y;
+                                    const importanceLabels = {4: 'Найважливіша', 3: 'Дуже важлива', 2: 'Важлива', 1: 'Найменш важлива'};
+                                    label += importanceLabels[value] || '';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // Кінець. ГРУПИ РЕЗУЛЬТАТІВ.
+
+
+            // Початок.
+            // ПОВОРОТ КАРТОК "Перевірка знань"
+            const flipCards = document.querySelectorAll('.flip-card');
+            flipCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+            // Кінець. ПОВОРОТ КАРТОК.
+
+        });
+    </script>
+
+    <!-- Скрипт для практичного блоку уроку -->
+    <script>
+        // Practical Block - Quiz functions for PR14
+            function checkRadioQuestionPr14(questionNumber) {
+                const radios = document.querySelectorAll(`#radio-question-${questionNumber} input[name="q${questionNumber}_pr14"]`);
+                let selectedValue = null;
+                radios.forEach(radio => {
+                    if (radio.checked) {
+                        selectedValue = radio.value;
+                    }
+                });
+
+                const feedbackElement = document.getElementById(`feedback-radio-${questionNumber}`);
+                if (questionNumber === 1) {
+                    if (selectedValue === 'styles') {
+                        feedbackElement.textContent = 'Правильно! 👍';
+                        feedbackElement.classList.remove('incorrect');
+                        feedbackElement.classList.add('correct');
+                    } else {
+                        feedbackElement.textContent = 'Неправильно. Спробуйте ще раз. 😔';
+                        feedbackElement.classList.remove('correct');
+                        feedbackElement.classList.add('incorrect');
+                    }
+                }
+            }
+
+            function checkCheckboxQuestionPr14(questionNumber) {
+                const checkboxes = document.querySelectorAll(`#checkbox-question-${questionNumber} input[name="q${questionNumber}_pr14"]`);
+                const selectedValues = [];
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        selectedValues.push(checkbox.value);
+                    }
+                });
+
+                const feedbackElement = document.getElementById(`feedback-checkbox-${questionNumber}`);
+                if (questionNumber === 2) {
+                    const correctAnswers = ['image', 'table', 'list'];
+                    const isCorrect = selectedValues.length === correctAnswers.length &&
+                                      correctAnswers.every(answer => selectedValues.includes(answer));
+
+                    if (isCorrect) {
+                        feedbackElement.textContent = 'Правильно! 👍';
+                        feedbackElement.classList.remove('incorrect');
+                        feedbackElement.classList.add('correct');
+                    } else {
+                        feedbackElement.textContent = 'Неправильно. Перевірте всі правильні варіанти. 😔';
+                        feedbackElement.classList.remove('correct');
+                        feedbackElement.classList.add('incorrect');
+                    }
+                }
+            }
+
+            function checkFillInBlanksPr14(questionNumber) {
+                const blank1 = document.getElementById('blank3_pr14_1').value.trim().toLowerCase();
+                const blank2 = document.getElementById('blank3_pr14_2').value.trim().toLowerCase();
+
+                const feedbackElement = document.getElementById(`feedback-fill-in-blanks-${questionNumber}`);
+                
+                const expected1 = 'дату';
+                const expected2 = 'нижньому'; 
+
+                let isCorrect = true;
+                if (blank1 !== expected1) { 
+                    isCorrect = false;
+                }
+                if (blank2 !== expected2) { 
+                    isCorrect = false;
+                }
+
+                if (isCorrect) {
+                    feedbackElement.textContent = 'Правильно! 👍';
+                    feedbackElement.classList.remove('incorrect');
+                    feedbackElement.classList.add('correct');
+                } else {
+                    feedbackElement.textContent = 'Неправильно. Перевірте ваші відповіді. 😔';
+                    feedbackElement.classList.remove('correct');
+                    feedbackElement.classList.add('incorrect');
+                }
+            }
+
+            function checkMatchingPr14(questionNumber) {
+                const match1 = document.getElementById('match-q4_pr14-1').value;
+                const match2 = document.getElementById('match-q4_pr14-2').value;
+                const match3 = document.getElementById('match-q4_pr14-3').value;
+                const match4 = document.getElementById('match-q4_pr14-4').value;
+
+                const feedbackElement = document.getElementById(`feedback-matching-${questionNumber}`);
+                let isCorrect = true;
+
+                if (match1 !== 'attract_attention') isCorrect = false;
+                if (match2 !== 'personal_info') isCorrect = false;
+                if (match3 !== 'collaboration') isCorrect = false;
+                if (match4 !== 'structure_document') isCorrect = false;
+
+                if (isCorrect) {
+                    feedbackElement.textContent = 'Правильно! 👍';
+                    feedbackElement.classList.remove('incorrect');
+                    feedbackElement.classList.add('correct');
+                } else {
+                    feedbackElement.textContent = 'Неправильно. Спробуйте ще раз. 😔';
+                    feedbackElement.classList.remove('correct');
+                    feedbackElement.classList.add('incorrect');
+                }
+            }
+    </script>
+</body>
+</html>

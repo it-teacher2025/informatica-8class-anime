@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: 8 клас</title>
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Тіло документа */
+        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
+
+        /* Стилі для навігації в меню */
+        .logo-main { display: none; }
+        .main-title-text { width: 140px; text-align: center; }
+        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
+        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
+        @media screen and (min-width: 768px) {
+            .main-title-text { width: auto; }
+            .main-navigation { display: inline; width: auto; }
+        }
+
+        /* main стилі */
+        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
+        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
+        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
+        .source-text { padding: 8px; }
+        @media screen and (min-width: 300px) {
+            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
+            .text-2xlooo { font-size: 1.25rem; }
+        }
+        @media screen and (min-width: 480px) {
+            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
+            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
+            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
+        }
+
+        /* Стилі для "Про урок" */
+        /* Групи результатів */
+        .text-group-result { padding-top: 16px; }
+
+        /* Style to hide inactive tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Style to tab content */
+        .tab-btn.active { 
+            color: #4f46e5;                /* text-indigo-600 */
+            border-bottom-color: #4f46e5;  /* text-indigo-600 */
+            background-color: #e0e7ff;     /* text-indigo-100 */
+        }
+        .tab-btn { 
+            transition: color 0.3s, 
+            border-color 0.3s, 
+            background-color 0.3s; 
+            border-bottom: 2px solid transparent;
+        }
+
+        /* Styles for flip cards */
+        .flip-card {
+            background-color: transparent;
+            width: 100%; /* Make cards responsive to grid column width */
+            height: 200px; /* Fixed height for consistency, adjust as needed */
+            perspective: 1000px; /* 3D effect */
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left; /* Adjust text alignment as needed */
+            overflow-wrap: break-word; /* break-words */
+            /*word-break: break-all;*/ /* break-all */
+        }
+
+        .flip-card-front {
+            color: #4b5563; /* text-gray-700 */
+        }
+
+        .flip-card-back {
+            color: #4b5563; /* text-gray-700 */
+            transform: rotateY(180deg);
+        }
+
+        /* Responsive adjustments for min-height */
+        @media (min-width: 768px) { /* md breakpoint */
+            .flip-card.min-h-md {
+                min-height: 250px; /* Example, adjust as needed for medium screens */
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .flip-card.min-h-lg {
+                min-height: 200px; /* Example, adjust as needed for large screens */
+            }
+        }
+
+    </style>
+
+    <!-- Стилі для практичного блоку -->
+    <style>
+        /* Styles for Practical Block */
+        .quiz-container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 1.5rem;
+        }
+        .question-title {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 700; /* font-bold */
+            margin-bottom: 1.5rem;
+            color: #4f46e5; /* text-indigo-600 */
+        }
+        .question-text {
+            font-size: 1.125rem; /* text-lg */
+            margin-bottom: 1rem;
+            color: #374151; /* text-gray-700 */
+        }
+        .option-label {
+            display: block;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #4b5563; /* text-gray-700 */
+        }
+        .option-label input[type="radio"],
+        .option-label input[type="checkbox"] {
+            margin-right: 0.75rem;
+            transform: scale(1.2); /* Make radio/checkbox larger */
+        }
+        .check-button, .reset-button {
+            background-color: #4f46e5; /* bg-indigo-600 */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: 600;
+            margin-top: 1.5rem;
+        }
+        .check-button:hover, .reset-button:hover {
+            background-color: #4338ca; /* bg-indigo-700 */
+        }
+        .feedback {
+            margin-top: 1rem;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .feedback.correct {
+            color: #10b981; /* text-green-500 */
+        }
+        .feedback.incorrect {
+            color: #ef4444; /* text-red-500 */
+        }
+
+        /* Fill-in-the-blanks specific styles */
+        .fill-in-the-blanks-container input[type="text"] {
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            border-radius: 0.375rem; /* rounded-md */
+            padding: 0.5rem 0.75rem;
+            font-size: 1rem;
+            width: 120px;
+            margin: 0 0.25rem;
+        }
+        .fill-in-the-blanks-container input[type="text"]:focus {
+            outline: none;
+            border-color: #4f46e5; /* border-indigo-600 */
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.25);
+        }
+
+        /* Matching exercise specific styles */
+        .matching-pair {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            background-color: #f9fafb; /* bg-gray-50 */
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb; /* border-gray-200 */
+        }
+        .matching-pair .term {
+            font-weight: 500;
+            color: #374151; /* text-gray-700 */
+            flex: 1;
+            padding-right: 1rem;
+        }
+        .matching-pair select {
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            border-radius: 0.375rem; /* rounded-md */
+            padding: 0.5rem;
+            font-size: 1rem;
+            color: #4b5563; /* text-gray-700 */
+            background-color: white;
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="container mx-auto flex justify-between items-center   bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10  logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
+            </ul>
+            <!-- <a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a>
+            <a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a> -->
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <!-- Секція теми уроку -->
+        <section class="text-center mb-8">
+            <h1 class="text-lg text-slate-600 mt-2 break-words">Тема 5: «Алгоритми та програми». Урок № 59. (До § 37)</h1>
+            <h1 class="text-3xlooo md:text-4xl font-bold text-slate-900 break-words  theme-text">Розв’язання завдань з анімаціями</h1>
+            <h2 class="text-lg text-slate-600 mt-2 break-words">Інтерактивний план-конспект уроку для 8 класу НУШ</h2>
+        </section>
+
+
+        <!-- Секція "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання" -->
+        <section>
+            <!-- Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання". -->
+            <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+                <nav id="tabs" class="flex flex-wrap justify-center gap-2 sm:gap-4">
+                    <button data-tab="about" class="tab-btn active text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Про урок</button>
+                    <button data-tab="theory" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Теоретичний блок</button>
+                    <button data-tab="practice" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Практичний блок</button>
+                    <button data-tab="check" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Перевірка знань</button>
+                    <button data-tab="homework" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Домашнє завдання</button>
+                </nav>
+            </div>
+
+            <!-- Про урок -->
+            <div id="about-content" class="tab-content active">
+                <div class="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Lesson Goal -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-indigo-600 break-words break-all">🎯 Мета уроку</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Освітня:</b> закріпити знання та вміння учнів зі створення анімацій у `tkinter` шляхом розв'язання різноманітних практичних завдань; навчити аналізувати та модифікувати готовий код.</li>
+                            <li class="break-words"><b>Розвивальна:</b> розвивати навички програмування, критичне мислення, вміння працювати з помилками та шукати ефективні рішення для створення анімаційних ефектів.</li>
+                            <li class="break-words"><b>Виховна:</b> виховувати відповідальність, самостійність у роботі, сприяти розвитку творчих здібностей та інтересу до вивчення інформатики.</li>
+                        </ul>
+                    </div>
+                    <!-- Expected Outcomes -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-indigo-600 break-words break-all">✅ Очікувані результати</h3>
+                        <p class="mb-2 text-gray-600">Після уроку учні зможуть:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Створювати анімації з рухом об'єктів та послідовною зміною зображень.</li>
+                            <li class="break-words">Реалізовувати реакцію об'єктів на події введення (клавіатура).</li>
+                            <li class="break-words">Використовувати функцію `midpoint` для обчислення координат центру об'єкта.</li>
+                            <li class="break-words">Модифікувати код для зміни властивостей анімації (колір, швидкість, напрямок).</li>
+                            <li class="break-words">Вирішувати типові завдання зі створення анімаційних програм у Python.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-bold mb-3 text-indigo-600 break-words">📊 Групи результатів (НУШ)</h3>
+                        <p class="text-gray-600 mb-4 break-words">Візуалізація важливості груп результатів для цього уроку.</p>
+                        <div class="chart-container relative h-64 w-full max-w-md mx-auto">
+                            <canvas id="resultsChart"></canvas>
+                        </div>
+                        <p class="text-gray-600 mb-4 break-words text-group-result"><i>Учень / учениця:</i></p>
+                        <ul>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР1 – працює з інформацією, даними, моделями;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР2 – створює інформаційні продукти;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР3 – працює в цифровому середовищі;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР4 – безпечно та відповідально працює з інформаційними технологіями.</p></li>
+                        </ul>
+                    </div>
+                    <!-- Lesson Type & Equipment -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-indigo-600 break-words">📚 Тип уроку</h3>
+                        <p class="text-gray-700 break-words">Урок узагальнення та систематизації знань, застосування вмінь і навичок.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-indigo-600 break-words">💻 Обладнання та ПЗ</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Персональні комп'ютери з встановленим Python та `tkinter`.</li>
+                            <li class="break-words">Середовище розробки (IDLE, VS Code).</li>
+                            <li class="break-words">Проєктор або інтерактивна дошка.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-indigo-600 break-words">🔗 Міжпредметні зв'язки</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Математика (координатна площина, геометрія).</li>
+                            <li class="break-words">Фізика (рух, відбиття, траєкторії).</li>
+                            <li class="break-words">Мистецтво (дизайн анімації, візуальні ефекти).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Теоретичний блок -->
+            <div id="theory-content" class="tab-content   mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">
+                <!-- ВАРІАНТ № 2, початок -->
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-indigo-500 mb-4 heading-underline break-words  title-review">ПОВТОРЮЄМО</h2>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">Актуалізація опорних знань</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2">
+                        <li class="break-words">Які функції призначено для переміщення об'єкта по полотну?</li>
+                        <li class="break-words">Як запрограмувати реакцію об'єкта на подію?</li>
+                        <li class="break-words">Поясніть призначення аргументів методу `canvas.bind('&lt;KeyPress-Up&gt;', step)` .</li>
+                        <li class="break-words">Як створити анімацію шляхом послідовної зміни зображень?</li>
+                        <li class="break-words">Який метод використовується для оновлення вікна `tkinter`?</li>
+                    </ol>
+                    <img src="./images/img-tema5-09.webp" alt="Знак питання" class="rounded-lg shadow-md" width="200">
+                </div>
+                
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 246)</a></i></p>
+                </div>
+                <!-- ВАРІАНТ № 2, кінець -->
+
+                <!-- <hr class="my-8 border-gray-300">
+
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-indigo-500 mb-4 heading-underline break-words title-review">ПРИКЛАД РЕАЛІЗАЦІЇ</h2>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-2xlooo font-bold text-gray-800 mb-4 break-words">Вправа 37: Рух круга по полотну</h3>
+                    <p class="text-gray-700 mb-4 break-words">Створіть програму, в якій буде реалізовано рух круга по полотну. Об'єкт має змінювати положення у відповідь на натискання клавіш керування курсором, залишаючи слід на полотні.</p>
+                    
+                    <h4 class="text-xl font-semibold text-gray-800 mb-3 break-words">Кроки реалізації:</h4>
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2 mb-4">
+                        <li class="break-words">Підключіть модуль `tkinter`. Створіть вікно програми та додайте полотно розміром $400 \times 400$:
+                            <div class="code-snippet bg-gray-100 p-4 rounded-md overflow-x-auto text-sm my-2">
+<pre><code>
+<span style="color: #afc4db;">from</span> <span style="color: #8cd6a5;">tkinter</span> <span style="color: #afc4db;">import</span> <span style="color: #8cd6a5;">*</span>
+
+<span style="color: #6a9fb5;">tk</span> = <span style="color: #cc99cc;">Tk</span>()
+<span style="color: #6a9fb5;">canvas</span> = <span style="color: #cc99cc;">Canvas</span>(<span style="color: #6a9fb5;">tk</span>, <span style="color: #569cd6;">width</span> = 400, <span style="color: #569cd6;">height</span> = 400)
+<span style="color: #6a9fb5;">canvas</span>.<span style="color: #d7ba7d;">pack</span>()
+</code></pre>
+                            </div>
+                        </li>
+                        <li class="break-words">Намалюйте в лівому верхньому куті червоний круг. Ідентифікатор створеного круга зберігатиметься в змінній `ball`:
+                            <div class="code-snippet bg-gray-100 p-4 rounded-md overflow-x-auto text-sm my-2">
+<pre><code>
+<span style="color: #6a9fb5;">ball</span> = <span style="color: #6a9fb5;">canvas</span>.<span style="color: #d7ba7d;">create_oval</span>(10, 10, 30, 30, <span style="color: #569cd6;">fill</span> = <span style="color: #a3bf81;">'red'</span>)
+</code></pre>
+                            </div>
+                        </li>
+                        <li class="break-words">Слід круга утворюватимуть відрізки, що сполучають центри послідовних його положень.</li>
+                        <li class="break-words">Для обчислення координат центра круга (див. Рис. 37.4) опишіть функцію `midpoint`:
+                            <div class="code-snippet bg-gray-100 p-4 rounded-md overflow-x-auto text-sm my-2">
+<pre><code>
+<span style="color: #afc4db;">def</span> <span style="color: #d7ba7d;">midpoint</span>(<span style="color: #afc4db;">pos</span>):
+    <span style="color: #008000;"># pos - список координат x1, y1, x2, y2</span>
+    <span style="color: #afc4db;">return</span>[(<span style="color: #6a9fb5;">pos</span>[0]+<span style="color: #6a9fb5;">pos</span>[2])/2, (<span style="color: #6a9fb5;">pos</span>[1]+<span style="color: #6a9fb5;">pos</span>[3])/2]
+</code></pre>
+                            </div>
+                        </li>
+                        <li class="break-words">Опишіть функцію `move_oval()`. У ній буде змінюватися координати круга залежно від того, яку клавішу натиснуто (параметр `event`), а також малюватиметься відрізок між центрами круга в початковому і кінцевому положеннях:
+                            <div class="code-snippet bg-gray-100 p-4 rounded-md overflow-x-auto text-sm my-2">
+<pre><code>
+<span style="color: #afc4db;">def</span> <span style="color: #d7ba7d;">move_oval</span>(<span style="color: #afc4db;">event</span>):
+    <span style="color: #6a9fb5;">step</span> = 3 <span style="color: #008000;"># Величина зміщення</span>
+    <span style="color: #6a9fb5;">P1</span> = <span style="color: #d7ba7d;">midpoint</span>(<span style="color: #6a9fb5;">canvas</span>.<span style="color: #d7ba7d;">coords</span>(<span style="color: #6a9fb5;">ball</span>)) <span style="color: #008000;"># Зберігаємо початкові</span>
+                                <span style="color: #008000;"># координати</span>
+    <span style="color: #afc4db;">if</span> <span style="color: #6a9fb5;">event</span>.<span style="color: #6a9fb5;">keysym</span> == <span style="color: #a3bf81;">'Up'</span>:
+        <span style="color: #6a9fb5;">canvas</span>.<span style="color: #d7ba7d;">move</span>(<span style="color: #6a9fb5;">ball</span>, 0, -<span style="color: #6a9fb5;">step</span>)
+    <span style="color: #afc4db;">elif</span> <span style="color: #6a9fb5;">event</span>.<span style="color: #6a9fb5;">keysym</span> == <span style="color: #a3bf81;">'Down'</span>:
+        <span style="color: #6a9fb5;">canvas</span>.<span style="color: #d7ba7d;">move</span>(<span style="color: #6a9fb5;">ball</span>, 0, <span style="color: #6a9fb5;">step</span>)
+    <span style="color: #afc4db;">elif</span> <span style="color: #6a9fb5;">event</span>.<span style="color: #6a9fb5;">keysym</span> == <span style="color: #a3bf81;">'Left'</span>:
+        <span style="color: #6a9fb5;">canvas</span>.<span style="color: #d7ba7d;">move</span>(<span style="color: #6a9fb5;">ball</span>, -<span style="color: #6a9fb5;">step</span>, 0)
+    <span style="color: #afc4db;">elif</span> <span style="color: #6a9fb5;">event</span>.<span style="color: #6a9fb5;">keysym</span> == <span style="color: #a3bf81;">'Right'</span>:
+        <span style="color: #6a9fb5;">canvas</span>.<span style="color: #d7ba7d;">move</span>(<span style="color: #6a9fb5;">ball</span>, <span style="color: #6a9fb5;">step</span>, 0)
+    <span style="color: #6a9fb5;">canvas</span>.<span style="color: #d7ba7d;">create_line</span>(<span style="color: #6a9fb5;">P1</span>, <span style="color: #d7ba7d;">midpoint</span>(<span style="color: #6a9fb5;">canvas</span>.<span style="color: #d7ba7d;">coords</span>(<span style="color: #6a9fb5;">ball</span>)))
+</code></pre>
+                            </div>
+                        </li>
+                        <li class="break-words">Виконайте виклик методу `tk.bind` для встановлення зв'язку між подією (натискання клавіші) та функцією `move_oval`:
+                            <div class="code-snippet bg-gray-100 p-4 rounded-md overflow-x-auto text-sm my-2">
+<pre><code>
+<span style="color: #6a9fb5;">tk</span>.<span style="color: #d7ba7d;">bind</span>(<span style="color: #a3bf81;">'&lt;Key&gt;'</span>, <span style="color: #d7ba7d;">move_oval</span>)
+</code></pre>
+                            </div>
+                        </li>
+                        <li class="break-words">Збережіть файл із назвою `Vprava37` і випробуйте програму.</li>
+                        <li class="break-words">Змініть товщину й колір сліду, залишаючи круг; додайте діагональні переміщення за допомогою клавіш A, S, Z, X.</li>
+                    </ol>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 245-246)</a></i></p> -->
+
+            </div>
+            
+
+            <!-- Практичний блок -->
+            <div id="practice-content" class="tab-content">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-6 text-center text-indigo-600 break-words">Практичний блок уроку</h3>
+
+                    <!-- Множинний вибір (радіокнопки) -->
+                    <div class="quiz-container">
+                        <h4 class="question-title">Питання 1: Множинний вибір (радіокнопки)</h4>
+                        <p class="question-text">Який параметр функції `canvas.move(item, x, y)` відповідає за зміщення по вертикалі?</p>
+                        <div id="radio-question-1">
+                            <label class="option-label"><input type="radio" name="q1" value="item"> item </label>
+                            <label class="option-label"><input type="radio" name="q1" value="x"> x </label>
+                            <label class="option-label"><input type="radio" name="q1" value="y"> y </label>
+                            <label class="option-label"><input type="radio" name="q1" value="none"> Жоден з перелічених</label>
+                        </div>
+                        <button class="check-button" onclick="checkRadioQuestion(1)">Перевірити</button>
+                        <p id="feedback-radio-1" class="feedback"></p>
+                    </div>
+
+                    <!-- Множинний вибір (чекбокси) -->
+                    <div class="quiz-container">
+                        <h4 class="question-title">Питання 2: Множинний вибір (чекбокси)</h4>
+                        <p class="question-text">Які методи можна використовувати для створення анімації в `tkinter`?</p>
+                        <div id="checkbox-question-2">
+                            <label class="option-label"><input type="checkbox" name="q2" value="canvas_move"> canvas.move() </label>
+                            <label class="option-label"><input type="checkbox" name="q2" value="tk_update"> tk.update() </label>
+                            <label class="option-label"><input type="checkbox" name="q2" value="root_after"> root.after() </label>
+                            <label class="option-label"><input type="checkbox" name="q2" value="canvas_bind"> canvas.bind() </label>
+                        </div>
+                        <button class="check-button" onclick="checkCheckboxQuestion(2)">Перевірити</button>
+                        <p id="feedback-checkbox-2" class="feedback"></p>
+                    </div>
+
+                    <!-- Зіставлення -->
+                    <div class="quiz-container">
+                        <h4 class="question-title">Питання 3: Зіставлення</h4>
+                        <p class="question-text">Зіставте метод `tkinter` з його описом:</p>
+                        <div id="matching-question-4">
+                            <div class="matching-pair">
+                                <span class="term">Tk()</span>
+                                <select id="match-q4-1">
+                                    <option value="">Виберіть...</option>
+                                    <option value="create_window">Створює головне вікно програми</option>
+                                    <option value="define_canvas">Визначає полотно для малювання</option>
+                                    <option value="bind_event">Прив'язує подію</option>
+                                    <option value="start_loop">Запускає головний цикл подій</option>
+                                </select>
+                            </div>
+                            <div class="matching-pair">
+                                <span class="term">Canvas()</span>
+                                <select id="match-q4-2">
+                                    <option value="">Виберіть...</option>
+                                    <option value="create_window">Створює головне вікно програми</option>
+                                    <option value="define_canvas">Визначає полотно для малювання</option>
+                                    <option value="bind_event">Прив'язує подію</option>
+                                    <option value="start_loop">Запускає головний цикл подій</option>
+                                </select>
+                            </div>
+                            <div class="matching-pair">
+                                <span class="term">.mainloop()</span>
+                                <select id="match-q4-3">
+                                    <option value="">Виберіть...</option>
+                                    <option value="create_window">Створює головне вікно програми</option>
+                                    <option value="define_canvas">Визначає полотно для малювання</option>
+                                    <option value="bind_event">Прив'язує подію</option>
+                                    <option value="start_loop">Запускає головний цикл подій</option>
+                                </select>
+                            </div>
+                            <div class="matching-pair">
+                                <span class="term">.create_oval()</span>
+                                <select id="match-q4-4">
+                                    <option value="">Виберіть...</option>
+                                    <option value="create_window">Створює головне вікно програми</option>
+                                    <option value="define_canvas">Визначає полотно для малювання</option>
+                                    <option value="bind_event">Прив'язує подію</option>
+                                    <option value="draw_oval">Малює овал на полотні</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="check-button" onclick="checkMatching(4)">Перевірити</button>
+                        <p id="feedback-matching-4" class="feedback"></p>
+                    </div>
+
+                    <h4 class="text-xl font-semibold mt-8 mb-3 text-gray-800 break-words">Завдання для самостійного виконання</h4>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 mb-4">
+                        <li class="break-words">Розширте програму "Vprava37", додавши можливість змінювати колір сліду круга при натисканні інших клавіш (наприклад, "C" для синього, "G" для зеленого).</li>
+                        <li class="break-words">Створіть програму, де два об'єкти рухаються одночасно, і керувати ними можна незалежно за допомогою різних наборів клавіш.</li>
+                        <li class="break-words">Реалізуйте анімацію "пінг-понгу", де м'ячик відбивається від чотирьох стінок і змінює напрямок руху.</li>
+                        <li class="break-words">Модифікуйте приклад з анімацією метелика, щоб він рухався не тільки по колу, а й реагував на клавіші управління курсором.</li>
+                    </ul>
+
+                </div>                
+            </div>
+
+            <!-- Перевірка знань -->
+            <!-- Вручну треба змінювати лише ті значення minimum-height (min-h-[300px]), які потрібно, і треба використовувати медіа-адаптацію (стилі тут на сторінці в тезі <style>)-->
+                <!-- Тут grid -->
+            <div id="check-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-6 text-center text-indigo-600 break-words">Перевірка знань</h3>
+                <p class="text-center text-gray-600 mb-8 break-words">Натисніть на картку, щоб побачити відповідь.</p>
+                <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-indigo-100 p-6 rounded-xl shadow-md break-words">1. Який модуль Python використовується для створення графічних інтерфейсів та анімацій?</div>
+                        <div class="flip-card-back bg-indigo-200 p-6 rounded-xl shadow-md break-words">Модуль `tkinter`.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-indigo-100 p-6 rounded-xl shadow-md break-words">2. Що таке `event.keysym` і для чого він використовується?</div>
+                        <div class="flip-card-back bg-indigo-200 p-6 rounded-xl shadow-md break-words">`event.keysym` – це властивість об'єкта `event`, яка містить символ натиснутої клавіші. <br>Використовується для визначення, яка клавіша була натиснута, щоб програмувати відповідну реакцію.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-indigo-100 p-6 rounded-xl shadow-md break-words">3. Як обчислити центр об'єкта, якщо відомі його координати `x1, y1, x2, y2`?</div>
+                        <div class="flip-card-back bg-indigo-200 p-6 rounded-xl shadow-md break-words">Центр обчислюється як `[(x1+x2)/2, (y1+y2)/2]`.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-indigo-100 p-6 rounded-xl shadow-md break-words">4. Яке призначення методу `.after(час, функція)`?<br>Наприклад, `root.after(час, функція)` .</div>
+                        <div class="flip-card-back bg-indigo-200 p-6 rounded-xl shadow-md break-words">Метод `.after()` викликає задану `функцію` через вказаний `час` (у мілісекундах). Це дозволяє створювати затримки та циклічно викликати функції для анімації.<br><br>Наприклад, `root.after()` .</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-indigo-100 p-6 rounded-xl shadow-md break-words">5. Який метод `Canvas` дозволяє залишати "слід" за рухомим об'єктом?</div>
+                            <div class="flip-card-back bg-indigo-200 p-6 rounded-xl shadow-md break-words">Для залишення сліду можна використовувати метод `.create_line()`, малюючи відрізки між послідовними центрами рухомого об'єкта.<br><br>Наприклад, `canvas.create_line()` .</div>
+                        </div>
+                    </li>
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-indigo-100 p-6 rounded-xl shadow-md break-words">6. Чому важливо використовувати `tk.update()` або `root.after()` в анімаціях?</div>
+                            <div class="flip-card-back bg-indigo-200 p-6 rounded-xl shadow-md break-words">Методи .update() та .after() необхідні для оновлення відображення вікна та полотна.<br>Без них зміни в координатах об'єктів не будуть відображатися на екрані, і анімація не відбуватиметься.</div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 246)</a></i></p>
+                </div>
+            </div>
+         
+
+            <!-- Домашнє завдання -->
+            <div id="homework-content" class="tab-content   bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-indigo-600 break-words">Домашнє завдання</h3>                    
+                <!--  -->
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <div>
+                            <p class="break-words break-all"><b>1. Теоретична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li class="break-words break-all">Повторити § 37 (стор. 241-246).</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><b>2. Практична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Виконати вправу № 37 (стор. 245-246).</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p><b>3. Завдання за бажанням (для закріплення):</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Інтерактивна платформа IZZI (8 клас) до § 37: <a href="https://ua.izzi.digital/DOS/1183864/1337134.html" target="_blank" class="text-blue-600 hover:underline break-words break-all block">https://ua.izzi.digital/DOS/1183864/1337134.html</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="./images/img08.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!--  -->
+            </div>
+        </section>
+
+
+        <!-- Додаткові матеріали -->
+        <!-- Additional Materials Section -->
+        <section class="bg-white p-6 rounded-xl shadow-md mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-indigo-600 break-words">Додаткові матеріали</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li class="break-words"><a href="https://sites.google.com/view/lga84-9/tehnika_bezpeky" target="_blank" class="text-blue-600 hover:underline">Техніка безпеки</a></li>
+
+                <li class="break-words"><a href="https://drive.google.com/file/d/1C9_KEF981LvokY0GWNOhUXb7rJKJUUbM/view" target="_blank" class="text-blue-600 hover:underline">Оцінювання учнів та учениць на уроках інформатики</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу</a> (§ 37, стор. 241-246)</li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">Інтерактивна платформа IZZI (8 клас)</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до § 37: <a href="https://ua.izzi.digital/DOS/1183864/1337134.html" target="_blank" class="text-blue-600 hover:underline">https://ua.izzi.digital/DOS/1183864/1337134.html</a></li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm   bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>           
+        </ul>
+    </footer>    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Початок:
+            // Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання".
+            const tabs = document.getElementById('tabs');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            tabs.addEventListener('click', (e) => {
+                // Ensure the click target is a BUTTON (tab button)
+                if (e.target.tagName === 'BUTTON') {
+                    const tab = e.target.dataset.tab;
+
+                    // Remove 'active' class from all buttons and add to the clicked one
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Hide all tab contents and show the corresponding one
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Use === for strict comparison
+                        if (content.id === `${tab}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                }
+            });
+            // Кінець.
+
+
+            // Початок:
+            // ГРУПИ РЕЗУЛЬТАТІВ.
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            // 1. Створення об'єкту-мапи для відповідності значень і кольорів
+            // Тут вручну можна поміняти значення background й border
+            const colorMap = {
+                1: {
+                    background: '#e0e7ff', // text-indigo-100
+                    border: '#c7d2fe'      // text-indigo-200
+                },
+                2: {
+                    background: '#c7d2fe', // text-indigo-200
+                    border: '#a5b4fc'       // text-indigo-300
+                },
+                3: {
+                    background: '#a5b4fc',  // text-indigo-300
+                    border: '#818cf8'        // text-indigo-400
+                },
+                4: {
+                    background: '#818cf8',   // text-indigo-400
+                    border: '#6366f1'      // text-indigo-500
+                }
+            };
+
+            // Дані, які можна змінювати вручну
+            const chartData = [4, 4, 3, 2];
+
+            // 2. Генерація масивів кольорів на основі даних
+            const backgroundColors = chartData.map(value => colorMap[value].background);
+            const borderColors = chartData.map(value => colorMap[value].border);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ГР1', 'ГР2', 'ГР3', 'ГР4'],
+                    datasets: [{
+                        label: 'Важливість',
+                        data: chartData, // Використовуємо змінну
+                        backgroundColor: backgroundColors, // Використовуємо згенерований масив
+                        borderColor: borderColors, // Використовуємо згенерований масив
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const labels = ['', 'Важлива', 'Дуже важлива', 'Найважливіша'];
+                                    return labels[value] || '';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.parsed.y;
+                                    const importanceLabels = {4: 'Найважливіша', 3: 'Дуже важлива', 2: 'Важлива', 1: 'Найменш важлива'};
+                                    label += importanceLabels[value] || '';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // Кінець. ГРУПИ РЕЗУЛЬТАТІВ.
+
+
+            // Початок.
+            // ПОВОРОТ КАРТОК "Перевірка знань"
+            const flipCards = document.querySelectorAll('.flip-card');
+            flipCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+            // Кінець. ПОВОРОТ КАРТОК.
+
+        });
+    </script>
+
+    <!-- Скрипт для практичного блоку -->
+    <script>
+        // Practical Block - Quiz functions
+
+            // Множинний вибір, Радіокнопка
+            function checkRadioQuestion(questionNumber) {
+                const radios = document.querySelectorAll(`#radio-question-${questionNumber} input[name="q${questionNumber}"]`);
+                let selectedValue = null;
+                radios.forEach(radio => {
+                    if (radio.checked) {
+                        selectedValue = radio.value;
+                    }
+                });
+
+                const feedbackElement = document.getElementById(`feedback-radio-${questionNumber}`);
+                if (questionNumber === 1) {
+                    if (selectedValue === 'y') {
+                        feedbackElement.textContent = 'Правильно! 👍';
+                        feedbackElement.classList.remove('incorrect');
+                        feedbackElement.classList.add('correct');
+                    } else {
+                        feedbackElement.textContent = 'Неправильно. Спробуйте ще раз. 😔';
+                        feedbackElement.classList.remove('correct');
+                        feedbackElement.classList.add('incorrect');
+                    }
+                }
+            }
+
+            // Множинний вибір, Чекбокс
+            function checkCheckboxQuestion(questionNumber) {
+                const checkboxes = document.querySelectorAll(`#checkbox-question-${questionNumber} input[name="q${questionNumber}"]`);
+                const selectedValues = [];
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        selectedValues.push(checkbox.value);
+                    }
+                });
+
+                const feedbackElement = document.getElementById(`feedback-checkbox-${questionNumber}`);
+                if (questionNumber === 2) {
+                    const correctAnswers = ['canvas_move', 'tk_update', 'root_after', 'canvas_bind'];
+                    const isCorrect = selectedValues.length === correctAnswers.length &&
+                                      correctAnswers.every(answer => selectedValues.includes(answer));
+
+                    if (isCorrect) {
+                        feedbackElement.textContent = 'Правильно! 👍';
+                        feedbackElement.classList.remove('incorrect');
+                        feedbackElement.classList.add('correct');
+                    } else {
+                        feedbackElement.textContent = 'Неправильно. Перевірте всі правильні варіанти. 😔';
+                        feedbackElement.classList.remove('correct');
+                        feedbackElement.classList.add('incorrect');
+                    }
+                }
+            }
+
+            // Співставлення
+            function checkMatching(questionNumber) {
+                const match1 = document.getElementById('match-q4-1').value;
+                const match2 = document.getElementById('match-q4-2').value;
+                const match3 = document.getElementById('match-q4-3').value;
+                const match4 = document.getElementById('match-q4-4').value;
+
+                const feedbackElement = document.getElementById(`feedback-matching-${questionNumber}`);
+                let isCorrect = true;
+
+                if (match1 !== 'create_window') isCorrect = false;
+                if (match2 !== 'define_canvas') isCorrect = false;
+                if (match3 !== 'start_loop') isCorrect = false;
+                if (match4 !== 'draw_oval') isCorrect = false;
+
+                if (isCorrect) {
+                    feedbackElement.textContent = 'Правильно! 👍';
+                    feedbackElement.classList.remove('incorrect');
+                    feedbackElement.classList.add('correct');
+                } else {
+                    feedbackElement.textContent = 'Неправильно. Спробуйте ще раз. 😔';
+                    feedbackElement.classList.remove('correct');
+                    feedbackElement.classList.add('incorrect');
+                }
+            }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: 8 клас</title>
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Тіло документа */
+        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
+
+        /* Стилі для навігації в меню */
+        .logo-main { display: none; }
+        .main-title-text { width: 140px; text-align: center; }
+        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
+        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
+        @media screen and (min-width: 768px) {
+            .main-title-text { width: auto; }
+            .main-navigation { display: inline; width: auto; }
+        }
+
+        /* main стилі */
+        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
+        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
+        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
+        .source-text { padding: 8px; }
+        @media screen and (min-width: 300px) {
+            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
+            .text-2xlooo { font-size: 1.25rem; }
+        }
+        @media screen and (min-width: 480px) {
+            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
+            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
+            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
+        }
+
+        /* Стилі для "Про урок" */
+        /* Групи результатів */
+        .text-group-result { padding-top: 16px; }
+
+        /* Style to hide inactive tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Style to tab content */
+        .tab-btn.active { 
+            color: #7c3aed;                /* text-violet-600 */
+            border-bottom-color: #7c3aed;  /* text-violet-600 */
+            background-color: #ede9fe;     /* text-violet-100 */
+        }
+        .tab-btn { 
+            transition: color 0.3s, 
+            border-color 0.3s, 
+            background-color 0.3s; 
+            border-bottom: 2px solid transparent;
+        }
+
+        /* Styles for flip cards */
+        .flip-card {
+            background-color: transparent;
+            width: 100%; /* Make cards responsive to grid column width */
+            height: 200px; /* Fixed height for consistency, adjust as needed */
+            perspective: 1000px; /* 3D effect */
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left; /* Adjust text alignment as needed */
+            overflow-wrap: break-word; /* break-words */
+            /*word-break: break-all;*/ /* break-all */
+        }
+
+        .flip-card-front {
+            color: #4b5563; /* text-gray-700 */
+        }
+
+        .flip-card-back {
+            color: #4b5563; /* text-gray-700 */
+            transform: rotateY(180deg);
+        }
+
+        /* Responsive adjustments for min-height */
+        @media (min-width: 768px) { /* md breakpoint */
+            .flip-card.min-h-md {
+                min-height: 250px; /* Example, adjust as needed for medium screens */
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .flip-card.min-h-lg {
+                min-height: 200px; /* Example, adjust as needed for large screens */
+            }
+        }
+
+
+        /* Стилі для практичного блоку */
+        .exercise-section {
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background-color: #f9fafb;
+            border-radius: 0.75rem;
+            border: 1px solid #e5e7eb;
+        }
+        .question-text {
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            color: #4b5563;
+            cursor: pointer;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s, border-color 0.2s;
+            border: 1px solid transparent; /* Додано для візуального ефекту підсвічування */
+        }
+        .option-label:hover {
+            background-color: #eff6ff;
+        }
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin-right: 0.75rem;
+            transform: scale(1.2);
+            accent-color: #3b82f6;
+        }
+        .fill-in-the-blanks p {
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            color: #1f2937;
+        }
+        .fill-in-the-blanks input[type="text"] {
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 1rem;
+            color: #1f2937;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            width: auto; /* Allow input to size naturally */
+            min-width: 100px; /* Minimum width for visibility */
+            vertical-align: middle;
+            margin: 0 0.25rem;
+        }
+        .fill-in-the-blanks input[type="text"]:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+        .match-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            background-color: #e0f2fe;
+            border-radius: 0.75rem;
+            border: 1px solid #93c5fd;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .match-item-left {
+            font-weight: 500;
+            color: #1e40af;
+            font-size: 1.05rem;
+            flex: 1;
+        }
+        .match-item-right select {
+            border: 1px solid #93c5fd;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 1rem;
+            color: #1e40af;
+            background-color: #ffffff;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .match-item-right select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .submit-button, .reset-button {
+            padding: 0.75rem 2rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #ffffff;
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .submit-button {
+            background-color: #2563eb;
+        }
+        .submit-button:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+        .submit-button:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .reset-button {
+            background-color: #6b7280;
+        }
+        .reset-button:hover {
+            background-color: #4b5563;
+            transform: translateY(-2px);
+        }
+        .reset-button:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .result-message {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .result-message.correct {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .result-message.incorrect {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        .result-message.partial {
+            background-color: #fffbeb;
+            color: #92400e;
+        }
+        .error-message {
+            color: #ef4444;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        /* Styles for highlighting correct/incorrect answers */
+        #blank1 {
+            width: 400px;
+        }
+        .is-correct {
+            background-color: #d1fae5 !important;
+            border-color: #34d399 !important;
+        }
+        .is-incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+        }
+        .fill-in-the-blanks input.is-correct {
+            border-color: #34d399 !important;
+            box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.25) !important;
+        }
+        .fill-in-the-blanks input.is-incorrect {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25) !important;
+        }
+        .match-item.is-correct {
+            background-color: #d1fae5 !important;
+            border-color: #34d399 !important;
+        }
+        .match-item.is-incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+        }
+        .match-item-right select.is-correct {
+            border-color: #34d399 !important;
+        }
+        .match-item-right select.is-incorrect {
+            border-color: #ef4444 !important;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <header class="container mx-auto flex justify-between items-center   bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10  logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
+            </ul>
+            <!-- <a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a>
+            <a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a> -->
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <!-- Секція теми уроку -->
+        <section class="text-center mb-8">
+            <h1 class="text-lg text-slate-600 mt-2 break-words">Тема 5: «Алгоритми та програми». Урок № 44. (До § 30)</h1>
+            <h1 class="text-3xlooo md:text-4xl font-bold text-slate-900 break-words  theme-text">Математичні функції</h1>
+            <h2 class="text-lg text-slate-600 mt-2 break-words">Інтерактивний план-конспект уроку для 8 класу НУШ</h2>
+        </section>
+
+
+        <!-- Секція "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання" -->
+        <section>
+            <!-- Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання". -->
+            <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+                <nav id="tabs" class="flex flex-wrap justify-center gap-2 sm:gap-4">
+                    <button data-tab="about" class="tab-btn active text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Про урок</button>
+                    <button data-tab="theory" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Теоретичний блок</button>
+                    <button data-tab="practice" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Практичний блок</button>
+                    <button data-tab="check" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Перевірка знань</button>
+                    <button data-tab="homework" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Домашнє завдання</button>
+                </nav>
+            </div>
+
+            <!-- Про урок -->
+            <div id="about-content" class="tab-content active">
+                <div class="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Lesson Goal -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-violet-600 break-words break-all">🎯 Мета уроку</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Освітня:</b> ознайомити учнів з математичними функціями в Python, навчити використовувати модуль `math` для складних обчислень, а також функції для роботи з випадковими числами з модуля `random`.</li>
+                            <li class="break-words"><b>Розвивальна:</b> розвивати навички застосування вбудованих та модульних математичних функцій для розв'язання задач, вміння аналізувати та інтерпретувати результати обчислень.</li>
+                            <li class="break-words"><b>Виховна:</b> виховувати точність та уважність під час роботи з математичними виразами, заохочувати до дослідження додаткових можливостей Python у галузі математичних обчислень.</li>
+                        </ul>
+                    </div>
+                    <!-- Expected Outcomes -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-violet-600 break-words break-all">✅ Очікувані результати</h3>
+                        <p class="mb-2 text-gray-600">Після уроку учні зможуть:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Використовувати вбудовані математичні функції (наприклад, `abs()`, `round()`).</li>
+                            <li class="break-words">Імпортувати та застосовувати функції з модуля `math` (наприклад, `sqrt()`, `sin()`, `cos()`, `pi`).</li>
+                            <li class="break-words">Використовувати функції для генерації випадкових чисел з модуля `random` (наприклад, `randint()`, `random()`, `choice()`).</li>
+                            <li class="break-words">Розв'язувати задачі, що вимагають застосування математичних функцій та генерування випадкових чисел.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-bold mb-3 text-violet-600 break-words">📊 Групи результатів (НУШ)</h3>
+                        <p class="text-gray-600 mb-4 break-words">Візуалізація важливості груп результатів для цього уроку.</p>
+                        <div class="chart-container relative h-64 w-full max-w-md mx-auto">
+                            <canvas id="resultsChart"></canvas>
+                        </div>
+                        <p class="text-gray-600 mb-4 break-words text-group-result"><i>Учень / учениця:</i></p>
+                        <ul>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР1 – працює з інформацією, даними, моделями;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР2 – створює інформаційні продукти;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР3 – працює в цифровому середовищі;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР4 – безпечно та відповідально працює з інформаційними технологіями.</p></li>
+                        </ul>
+                    </div>
+                    <!-- Lesson Type & Equipment -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-violet-600 break-words">📚 Тип уроку</h3>
+                        <p class="text-gray-700 break-words">Урок вивчення нового матеріалу з елементами практичного застосування.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-violet-600 break-words">💻 Обладнання та ПЗ</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Персональні комп'ютери з встановленим Python.</li>
+                            <li class="break-words">Середовище розробки (IDLE, VS Code).</li>
+                            <li class="break-words">Проєктор або інтерактивна дошка.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-violet-600 break-words">🔗 Міжпредметні зв'язки</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Математика (геометрія, тригонометрія, алгебра).</li>
+                            <li class="break-words">Фізика (формули з використанням функцій).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Теоретичний блок -->
+            <div id="theory-content" class="tab-content   mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">
+                <!-- ВАРІАНТ № 2, початок -->
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-violet-500 mb-4 heading-underline break-words  title-review">ПОВТОРЮЄМО</h2>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">Актуалізація опорних знань</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2">
+                        <li class="break-words">Обчисліть значення виразу:<br>123 / 100<br><br></li>
+                        <li class="break-words">Обчисліть значення виразу:<br>123 % 10<br><br></li>
+                        <li class="break-words">Обчисліть значення виразу:<br>123 // 10<br><br></li>
+                        <li class="break-words">Який тип даних має змінна `a` після виконання?<br>a = "Hello"<br><br></li>
+                        <li class="break-words">Запишіть команду присвоювання, яка присвоїть змінній `c` суму значень змінних `a` і `b`.<br><br></li>
+                        <li class="break-words">Виведіть число <br>123456.123456789<br>у форматі з двома знаками після коми.</li>
+                    </ol>
+                    <img src="./images/img-tema5-02.webp" alt="Знак питання" class="rounded-lg shadow-md" width="200">
+                </div>
+                
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 191)</a></i></p>
+                </div>
+                <!-- ВАРІАНТ № 2, кінець -->
+
+                <!-- <hr class="my-8 border-gray-200">
+
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-violet-500 mb-4 heading-underline break-words title-review">ВИВЧАЄМО НОВЕ</h2>
+                </div>
+                
+                <h4 class="text-2xlooo font-bold text-gray-800 mb-6 break-words">Математичні функції</h4>
+                <p class="text-gray-700 mb-4">У мові Python для розв'язування математичних задач існують вбудовані стандартні функції. Їх можна використовувати без підключення модулів. Ознайомтеся з таблицею:</p>
+                
+                <div class="overflow-x-auto mb-8">
+                    <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow-md">
+                        <thead class="bg-violet-100">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Функція</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Призначення</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Приклад</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Результат</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">`abs(x)`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Повертає $|x|$</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`y = abs(-2.5)`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`y = 2.5`</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">`divmod(a, b)`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Повертає неповному частку й остачу від ділення $a$ на $b$</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`c, d = divmod(7, 3)`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`c = 2`<br>`d = 1`</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">`round(num[, n])`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Округлює число `num` до `n` знаків після коми. Якщо аргумент `n` відсутній, повертає найближче ціле число</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`y = round(x)`<br>`z = round(x, 2)`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`y = 2`<br>`z = 1.53`</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p class="text-gray-700 mb-4">Для використання інших математичних функцій потрібно завантажити модуль `math`:</p>
+                <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto mb-4"><code>from math import *</code></pre>
+                <p class="text-gray-700 mb-4">Розгляньмо деякі функції модуля `math`. З іншими функціями ви ознайомитеся в міру вивчення математики.</p>
+
+                <div class="overflow-x-auto mb-8">
+                    <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow-md">
+                        <thead class="bg-violet-100">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Функція</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Призначення</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Приклад</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Результат</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">`sqrt(x)`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Повертає квадратний корінь `(square root)` з $x$</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`a = sqrt(81)`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`a = 9.0`</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">`ceil(x)`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Повертає найнижче ціле число, яке дорівнює або перевищує $x$</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`a = ceil(3.1)`<br>`b = ceil(7)`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`a = 4`<br>`b = 7`</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">`factorial(n)`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Повертає добуток цілих чисел від 1 до `n`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`a = factorial(5)`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`a = 120`</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">`degrees(rad)`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Конвертує значення кута `rad` із радіанів у градуси</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`a = degrees(3.14159)`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`a = 180`</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">`radians(grad)`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Конвертує значення кута `grad` із градусів у радіани</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`a = radians(180)`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`a = 3.1415926`</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">`cos(rad)`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Повертає косинус $x$, де $x$ виражений у радіанах</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`x = cos(radians(60))`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`x = 0.5`</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">`sin(rad)`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Повертає синус $x$, де $x$ виражений у радіанах</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`x = sin(radians(90))`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`x = 1.0`</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">`pi`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Константа $\pi \approx 3.1415...$</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`c = 2*pi`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`c = 6.283185...`</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="source-text break-words mb-4"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 193-194)</a></i></p>
+
+                <h4 class="text-2xlooo font-bold text-gray-800 mb-6 break-words">Випадкові числа</h4>
+                <p class="text-gray-700 mb-4">Ви вже маєте досвід використання випадкових чисел для створення ігрових або тестових програм. Згадаймо: щоб працювати з випадковими числами, слід завантажити модуль `random`:</p>
+                <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto mb-4"><code>from random import *</code></pre>
+
+                <div class="overflow-x-auto mb-8">
+                    <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow-md">
+                        <thead class="bg-violet-100">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Функція</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Призначення</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Приклад</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Результат</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">`randint(x1, x2)`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Повертає ціле випадкове число в діапазоні від `x1` до `x2` включно</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`>>> number = randint(1, 10)`<br>`>>> number`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`2`</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">`random()`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Повертає випадкове дійсне число між 0.0 і 1.0</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`>>> number = random()`<br>`>>> number`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`0.065499297098104`</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">`uniform(x1, x2)`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Повертає випадкове дробове число в діапазоні від `x1` до `x2`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`>>> number = uniform(3,9)`<br>`>>> number`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`4.265493497098104`</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">`choice( <послідовність> )`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Повертає випадковий елемент із послідовності (рядка, списку)</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`>>> letter = choice('Python')`<br>`>>> letter`</td>
+                                <td class="px-6 py-4 whitespace-nowrap">`'o'`</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 195)</a></i></p>
+
+                <h4 class="text-2xlooo font-bold text-gray-800 mb-6 break-words">Приклад розв'язання задачі: Обчислення гіпотенузи</h4>
+                <p class="text-gray-700 mb-4">Обчислимо довжину гіпотенузи прямокутного трикутника за катетами `a` і `b`.</p>
+                <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto mb-4"><code>from math import sqrt
+a = int(input("Введіть катет a: "))
+b = int(input("Введіть катет b: "))
+c = sqrt(a**2 + b**2)
+print("Гіпотенуза c =", c)</code></pre>
+                <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 194)</a></i></p>
+
+                <h4 class="text-2xlooo font-bold text-gray-800 mb-6 break-words">Приклад розв'язання задачі: Обчислення відстані між точками</h4>
+                <p class="text-gray-700 mb-4">Обчислимо відстань між точками $A(x_a, y_a)$ і $B(x_b, y_b)$ на координатній площині (рис. 30.2).</p>
+                <img src="./images/image_702482.jpg" alt="Малюнок 30.2. Координатна площина" class="rounded-lg shadow-md mx-auto mb-4" width="300">
+                <p class="text-gray-700 mb-4">Довжина відрізка $AB$ обчислюється за формулою:</p>
+                <p class="text-gray-700 mb-4">$$AB=\sqrt{(x_b-x_a)^2+(y_b-y_a)^2}$$</p>
+                <p class="text-gray-700 mb-4">Запис у Python:</p>
+                <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto mb-4"><code>d = sqrt((xb-xa)**2 + (yb-ya)**2)</code></pre>
+                <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 194-195)</a></i></p>
+                
+                <h4 class="text-2xlooo font-bold text-gray-800 mb-6 break-words">Завдання з випадковими числами</h4>
+                <p class="text-gray-700 mb-4">Нам потрібно випадковим чином вибрати зі списку gamers персонажа для гри.</p>
+                <pre class="bg-gray-100 p-4 rounded-md text-sm overflow-x-auto mb-4"><code>gamers = ["Птах", "Заєць", "Бобер", "Кажан"]
+gamer = choice(gamers)
+print(gamer)</code></pre>
+                <img src="./images/image_702482.jpg" alt="Малюнок 30.3. Випадковий вибір персонажа" class="rounded-lg shadow-md mx-auto mb-4" width="300">
+                <p class="text-gray-700 mb-4">Модуль `random` генерує псевдовипадкові числа, які насправді є результатом математичних алгоритмів. Це означає, що результати можуть виглядати випадковими, але залежати від певного початкового значення.</p>
+                <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 195)</a></i></p> -->
+
+            </div>
+            
+
+            <!-- Практичний блок -->
+            <div id="practice-content" class="tab-content">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-6 text-center text-violet-600 break-words">Практичний блок уроку</h3>
+
+                    <!-- 1. Multiple Choice (Radio Buttons) -->
+                    <div class="exercise-section">
+                        <h2>1. Множинний вибір (Радіокнопки)</h2>
+                        <div class="question-text">
+                            Який результат поверне функція `abs(-7.5)`?
+                        </div>
+                        <form id="radioForm">
+                            <label class="option-label">
+                                <input type="radio" name="videoProgram" value="-7.5"> -7.5
+                            </label>
+                            <label class="option-label">
+                                <input type="radio" name="videoProgram" value="7.5"> 7.5
+                            </label>
+                            <label class="option-label">
+                                <input type="radio" name="videoProgram" value="Помилка"> Помилка
+                            </label>
+                            <div class="button-group">
+                                <button type="button" class="submit-button" onclick="checkRadio()">Перевірити</button>
+                                <button type="button" class="reset-button" onclick="resetRadio()">Скинути</button>
+                            </div>
+                            <div id="radioResult" class="result-message hidden"></div>
+                        </form>
+                    </div>
+
+                    <!-- 2. Fill in the Blanks -->
+                    <div class="exercise-section fill-in-the-blanks">
+                        <h2>2. Заповнення пропусків</h2>
+                        <p>
+                            <span class="question-text">Заповніть пропуски:</span><br>
+                            <br>
+                            <span class="segment">Яку функцію з модуля `math` потрібно використати, щоб обчислити квадратний корінь числа $144$? Запишіть команду імпорту та виклику функції. </span>
+                            <input type="text" id="blank1" placeholder="Наприклад: from math import sqrt; sqrt(144)">.
+                        </p>
+                        <div class="button-group">
+                            <button type="button" class="submit-button" onclick="checkBlanks()">Перевірити</button>
+                            <button type="button" class="reset-button" onclick="resetBlanks()">Скинути</button>
+                        </div>
+                        <div id="blanksResult" class="result-message hidden"></div>
+                    </div>
+
+                    <!-- 3. Matching -->
+                    <div class="exercise-section">
+                        <h2>3. Зіставлення</h2>
+                        <div class="question-text">Зіставте математичну функцію з її призначенням.</div>
+                        <form id="matchingForm">
+                            <div class="match-item">
+                                <div class="match-item-left"> Повертає абсолютне значення </div>
+                                <div class="match-item-right">
+                                    <select id="match1">
+                                        <option value="">Оберіть...</option>
+                                        <option value="pi">pi</option>
+                                        <option value="abs">abs()</option>
+                                        <option value="factorial">factorial()</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="match-item">
+                                <div class="match-item-left"> Повертає факторіал числа </div>
+                                <div class="match-item-right">
+                                    <select id="match2">
+                                        <option value="">Оберіть...</option>
+                                        <option value="pi">pi</option>
+                                        <option value="abs">abs()</option>
+                                        <option value="factorial">factorial()</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="match-item">
+                                <div class="match-item-left"> Повертає значення π </div>
+                                <div class="match-item-right">
+                                    <select id="match3">
+                                        <option value="">Оберіть...</option>
+                                        <option value="pi">pi</option>
+                                        <option value="abs">abs()</option>
+                                        <option value="factorial">factorial()</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="button-group">
+                                <button type="button" class="submit-button" onclick="checkMatching()">Перевірити</button>
+                                <button type="button" class="reset-button" onclick="resetMatching()">Скинути</button>
+                            </div>
+                            <div id="matchingResult" class="result-message hidden"></div>
+                        </form>
+                    </div>
+
+                    <!-- 4. Multiple Choice (Checkboxes) -->
+                    <div class="exercise-section">
+                        <h2>4. Множинний вибір (Чекбокси)</h2>
+                        <div class="question-text">
+                            Які функції використовуються для генерації випадкових чисел? (Оберіть кілька варіантів)
+                        </div>
+                        <form id="checkboxForm">
+                            <label class="option-label">
+                                <input type="checkbox" name="videoSources" value="sqrt"> sqrt()
+                            </label>
+                            <label class="option-label">
+                                <input type="checkbox" name="videoSources" value="randint"> randint()
+                            </label>
+                            <label class="option-label">
+                                <input type="checkbox" name="videoSources" value="random"> random()
+                            </label>
+                            <label class="option-label">
+                                <input type="checkbox" name="videoSources" value="choice"> choice()
+                            </label>
+                            <div class="button-group">
+                                <button type="button" class="submit-button" onclick="checkCheckboxes()">Перевірити</button>
+                                <button type="button" class="reset-button" onclick="resetCheckboxes()">Скинути</button>
+                            </div>
+                            <div id="checkboxResult" class="result-message hidden"></div>
+                        </form>
+                    </div>
+
+                </div>                
+            </div>
+
+            <!-- Перевірка знань -->
+            <!-- Вручну треба змінювати лише ті значення minimum-height (min-h-[300px]), які потрібно, і треба використовувати медіа-адаптацію (стилі тут на сторінці в тезі <style>)-->
+                <!-- Тут grid -->
+            <div id="check-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-6 text-center text-violet-600 break-words">Перевірка знань</h3>
+                <p class="text-center text-gray-600 mb-8 break-words">Натисніть на картку, щоб побачити відповідь.</p>
+                <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-violet-100 p-6 rounded-xl shadow-md break-words">1. Яку функцію потрібно використовувати для обчислення абсолютного значення числа?</div>
+                        <div class="flip-card-back bg-violet-200 p-6 rounded-xl shadow-md break-words">Функцію `abs()`.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-violet-100 p-6 rounded-xl shadow-md break-words">2. Який модуль необхідно імпортувати для використання функції `sqrt()`?</div>
+                        <div class="flip-card-back bg-violet-200 p-6 rounded-xl shadow-md break-words">Модуль `math` <br>(`from math import sqrt` або `import math`).</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-violet-100 p-6 rounded-xl shadow-md break-words">3. Який результат поверне `round(3.7)`?</div>
+                        <div class="flip-card-back bg-violet-200 p-6 rounded-xl shadow-md break-words">`4` (округлення до найближчого цілого).</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-violet-100 p-6 rounded-xl shadow-md break-words">4. Яка константа з модуля `math` відповідає числу Пі?</div>
+                        <div class="flip-card-back bg-violet-200 p-6 rounded-xl shadow-md break-words">Константа `math.pi`.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-violet-100 p-6 rounded-xl shadow-md break-words">5. Яка функція з модуля `random` повертає випадкове ціле число в заданому діапазоні?</div>
+                            <div class="flip-card-back bg-violet-200 p-6 rounded-xl shadow-md break-words">Функція `randint(x1, x2)`.</div>
+                        </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-violet-100 p-6 rounded-xl shadow-md break-words">6. Для чого використовується функція `factorial(n)`?</div>
+                            <div class="flip-card-back bg-violet-200 p-6 rounded-xl shadow-md break-words">Для обчислення факторіалу числа `n`<br>(добуток цілих чисел від 1 до `n`).</div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div>
+                    <p class="source-text break-words"><i>Джерело: <a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу (стор. 193-196)</a></i></p>
+                </div>
+            </div>
+         
+
+            <!-- Домашнє завдання -->
+            <div id="homework-content" class="tab-content   bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-violet-600 break-words">Домашнє завдання</h3>                    
+                <!--  -->
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <div>
+                            <p class="break-words break-all"><b>1. Теоретична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li class="break-words break-all">Опрацювати § 30 (стор. 193-198).</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><b>2. Практична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Виконати із "Питання для самоперевірки" завдання № 2 (стор. 196).</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p><b>3. Завдання за бажанням (для закріплення):</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Інтерактивна платформа IZZI (8 клас) до § 30: <a href="https://ua.izzi.digital/DOS/1183864/1337120.html" target="_blank" class="text-blue-600 hover:underline break-words break-all block">https://ua.izzi.digital/DOS/1183864/1337120.html</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="./images/img08.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!--  -->
+            </div>
+        </section>
+
+
+        <!-- Додаткові матеріали -->
+        <!-- Additional Materials Section -->
+        <section class="bg-white p-6 rounded-xl shadow-md mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-violet-600 break-words">Додаткові матеріали</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li class="break-words"><a href="https://sites.google.com/view/lga84-9/tehnika_bezpeky" target="_blank" class="text-blue-600 hover:underline">Техніка безпеки</a></li>
+
+                <li class="break-words"><a href="https://drive.google.com/file/d/1C9_KEF981LvokY0GWNOhUXb7rJKJUUbM/view" target="_blank" class="text-blue-600 hover:underline">Оцінювання учнів та учениць на уроках інформатики</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу</a> (§ 30, стор. 193-198)</li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">Інтерактивна платформа IZZI (8 клас)</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до § 30: <a href="https://ua.izzi.digital/DOS/1183864/1337120.html" target="_blank" class="text-blue-600 hover:underline">https://ua.izzi.digital/DOS/1183864/1337120.html</a></li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm   bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>           
+        </ul>
+    </footer>    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Початок:
+            // Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання".
+            const tabs = document.getElementById('tabs');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            tabs.addEventListener('click', (e) => {
+                // Ensure the click target is a BUTTON (tab button)
+                if (e.target.tagName === 'BUTTON') {
+                    const tab = e.target.dataset.tab;
+
+                    // Remove 'active' class from all buttons and add to the clicked one
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Hide all tab contents and show the corresponding one
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Use === for strict comparison
+                        if (content.id === `${tab}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                }
+            });
+            // Кінець.
+
+
+            // Початок:
+            // ГРУПИ РЕЗУЛЬТАТІВ.
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            // 1. Створення об'єкту-мапи для відповідності значень і кольорів
+            // Тут вручну можна поміняти значення background й border
+            const colorMap = {
+                1: {
+                    background: '#ede9fe', // text-violet-100
+                    border: '#ddd6fe'      // text-violet-200
+                },
+                2: {
+                    background: '#ddd6fe', // text-violet-200
+                    border: '#c4b5fd'       // text-violet-300
+                },
+                3: {
+                    background: '#c4b5fd',  // text-violet-300
+                    border: '#a78bfa'        // text-violet-400
+                },
+                4: {
+                    background: '#a78bfa',   // text-violet-400
+                    border: '#8b5cf6'      // text-violet-500
+                }
+            };
+
+            // Дані, які можна змінювати вручну
+            const chartData = [4, 3, 2, 2];
+
+            // 2. Генерація масивів кольорів на основі даних
+            const backgroundColors = chartData.map(value => colorMap[value].background);
+            const borderColors = chartData.map(value => colorMap[value].border);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ГР1', 'ГР2', 'ГР3', 'ГР4'],
+                    datasets: [{
+                        label: 'Важливість',
+                        data: chartData, // Використовуємо змінну
+                        backgroundColor: backgroundColors, // Використовуємо згенерований масив
+                        borderColor: borderColors, // Використовуємо згенерований масив
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const labels = ['', 'Важлива', 'Дуже важлива', 'Найважливіша'];
+                                    return labels[value] || '';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.parsed.y;
+                                    const importanceLabels = {4: 'Найважливіша', 3: 'Дуже важлива', 2: 'Важлива', 1: 'Найменш важлива'};
+                                    label += importanceLabels[value] || '';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // Кінець. ГРУПИ РЕЗУЛЬТАТІВ.
+
+
+            // Початок.
+            // ПОВОРОТ КАРТОК "Перевірка знань"
+            const flipCards = document.querySelectorAll('.flip-card');
+            flipCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+            // Кінець. ПОВОРОТ КАРТОК.
+
+        });
+    </script>
+
+    <!-- Скрипт для Практичного блоку -->
+    <script>
+        // Функція для відображення повідомлень
+        function displayResult(elementId, isCorrect, message) {
+            const resultElement = document.getElementById(elementId);
+            resultElement.classList.remove('hidden', 'correct', 'incorrect', 'partial');
+            if (isCorrect === true) {
+                resultElement.classList.add('correct');
+            } else if (isCorrect === false) {
+                resultElement.classList.add('incorrect');
+            } else { // Partial
+                resultElement.classList.add('partial');
+            }
+            resultElement.textContent = message;
+        }
+
+        // Функція для очищення підсвічування для радіокнопок/чекбоксів
+        function clearOptionHighlight(formId) {
+            document.querySelectorAll(`#${formId} .option-label`).forEach(label => {
+                label.classList.remove('is-correct', 'is-incorrect');
+            });
+        }
+
+        // Функція для очищення підсвічування для полів введення
+        function clearInputHighlight(inputIds) {
+            inputIds.forEach(id => {
+                document.getElementById(id).classList.remove('is-correct', 'is-incorrect');
+            });
+        }
+
+        // Функція для очищення підсвічування для зіставлення
+        function clearMatchingHighlight() {
+            document.querySelectorAll('#matchingForm .match-item').forEach(item => {
+                item.classList.remove('is-correct', 'is-incorrect');
+            });
+            document.querySelectorAll('#matchingForm select').forEach(select => {
+                select.classList.remove('is-correct', 'is-incorrect');
+            });
+        }
+
+        
+        // Вправа №1 +
+        function checkRadio() {
+            clearOptionHighlight('radioForm'); // очищає підсвітку в межах форми №1
+            const selectedOption = document.querySelector('#radioForm input[name="videoProgram"]:checked');
+
+            if (!selectedOption) {
+                displayResult('radioResult', false, 'Будь ласка, оберіть відповідь.');
+                return;
+            }
+
+            const label = selectedOption.closest('.option-label');
+            if (selectedOption.value === '7.5') {
+                displayResult('radioResult', true, 'Правильно! Функція abs() (від англ. absolute) повертає абсолютне значення числа, тобто його значення без знака. Абсолютне значення -7.5 є 7.5.');
+                label.classList.add('is-correct');
+            } else {
+                displayResult('radioResult', false, 'Неправильно. Спробуйте ще раз.');
+                label.classList.add('is-incorrect');
+                // підсвітити правильний варіант
+                document
+                .querySelector('#radioForm input[name="videoProgram"][value="101"]')
+                .closest('.option-label')
+                .classList.add('is-correct');
+            }
+        }
+
+        function resetRadio() {
+            document.querySelectorAll('#radioForm input[name="videoProgram"]').forEach(r => r.checked = false);
+            clearOptionHighlight('radioForm');
+            const res = document.getElementById('radioResult');
+            res.classList.add('hidden');
+            res.textContent = '';
+        }
+
+        
+        // Вправа № 2 +
+        // Функція для перевірки відповідей на заповнення пропусків
+        function checkBlanks() {
+            // Очистити попереднє підсвічування
+            const blank1Input = document.getElementById('blank1');
+            blank1Input.classList.remove('is-correct', 'is-incorrect');
+
+            // const blank1 = blank1Input.value.trim().toLowerCase();
+            const blank1 = blank1Input.value.trim();
+            const correctBlank1 = ['from math import sqrt; sqrt(144)'];
+
+            let isCorrect = false;
+
+            if (correctBlank1.includes(blank1)) {
+                isCorrect = true;
+                blank1Input.classList.add('is-correct');
+            } else {
+                blank1Input.classList.add('is-incorrect');
+            }
+
+            const resultMessageElement = document.getElementById('blanksResult');
+            resultMessageElement.classList.remove('hidden');
+
+            if (isCorrect) {
+                resultMessageElement.textContent = 'Правильно! Функція sqrt() (від англ. square root) з модуля math призначена для обчислення квадратного кореня числа.';
+                resultMessageElement.style.color = 'green';
+            } else {
+                resultMessageElement.textContent = 'Неправильно. Спробуйте ще раз.';
+                resultMessageElement.style.color = 'red';
+            }
+        }
+    
+        // Функція для скидання заповнення пропусків
+        function resetBlanks() {
+            const blank1Input = document.getElementById('blank1');
+            blank1Input.value = '';
+            blank1Input.classList.remove('is-correct', 'is-incorrect');
+
+            const resultMessageElement = document.getElementById('blanksResult');
+            resultMessageElement.classList.add('hidden');
+            resultMessageElement.textContent = '';
+        }
+
+        // Допоміжна функція, яка використовується
+        function clearInputHighlight(ids) {
+            ids.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.classList.remove('is-correct', 'is-incorrect');
+                }
+            });
+        }
+
+
+        // Вправа № 3 +
+        // Функція для перевірки відповідей на зіставлення
+        function checkMatching() {
+            clearMatchingHighlight(); // Очистити попереднє підсвічування
+            const answers = {
+                match1: 'abs', // 1. abs() — Повертає абсолютне значення.
+                match2: 'factorial', // 2. factorial() — Повертає факторіал числа.
+                match3: 'pi' // 3. pi — Повертає значення π.
+            };
+
+            let correctCount = 0;
+            let totalMatches = Object.keys(answers).length;
+
+            let allAnswered = true;
+            for (let i = 1; i <= totalMatches; i++) {
+                const selectElement = document.getElementById(`match${i}`);
+                const matchItem = selectElement.closest('.match-item');
+
+                if (selectElement.value === '') {
+                    allAnswered = false;
+                    // Don't highlight if not answered, but indicate missing answers overall
+                } else if (selectElement.value === answers[`match${i}`]) {
+                    correctCount++;
+                    matchItem.classList.add('is-correct');
+                    selectElement.classList.add('is-correct');
+                } else {
+                    matchItem.classList.add('is-incorrect');
+                    selectElement.classList.add('is-incorrect');
+                }
+            }
+
+            if (!allAnswered) {
+                displayResult('matchingResult', false, 'Будь ласка, оберіть відповіді для всіх зіставлень.');
+                return;
+            }
+
+
+            if (correctCount === totalMatches) {
+                displayResult('matchingResult', true, 'Правильно! Кожна з цих функцій або констант виконує специфічне математичне завдання: factorial() обчислює факторіал, abs() — абсолютне значення, а pi надає доступ до математичної константи π.');
+            } else if (correctCount > 0) {
+                displayResult('matchingResult', null, `Частково правильно. Ви правильно зіставили ${correctCount} з ${totalMatches} пунктів. Спробуйте ще раз.`);
+            } else {
+                displayResult('matchingResult', false, 'Неправильно. Спробуйте ще раз.');
+            }
+        }
+
+        // Функція для скидання зіставлення
+        function resetMatching() {
+            for (let i = 1; i <= 3; i++) { // Changed to 3 to match the number of matching items
+                document.getElementById(`match${i}`).value = '';
+            }
+            clearMatchingHighlight();
+            document.getElementById('matchingResult').classList.add('hidden');
+            document.getElementById('matchingResult').textContent = '';
+        }
+
+
+        // Вправа № 4 +
+        // Функція для перевірки відповідей на множинний вибір (чекбокси)
+        function checkCheckboxes() {
+            clearOptionHighlight('checkboxForm'); // Очистити попереднє підсвічування
+            const checkboxes = document.querySelectorAll('input[name="videoSources"]');
+            const selectedCheckboxes = document.querySelectorAll('input[name="videoSources"]:checked');
+            const correctAnswers = ['randint', 'random', 'choice'];
+            let correctCount = 0;
+            let totalSelected = selectedCheckboxes.length;
+
+            if (totalSelected === 0) {
+                displayResult('checkboxResult', false, 'Будь ласка, оберіть відповіді.');
+                return;
+            }
+
+            checkboxes.forEach(checkbox => {
+                const label = checkbox.closest('.option-label');
+                if (correctAnswers.includes(checkbox.value)) {
+                    if (checkbox.checked) {
+                        correctCount++;
+                        label.classList.add('is-correct');
+                    } else {
+                        label.classList.add('is-correct'); // Highlight correct but unselected
+                    }
+                } else {
+                    if (checkbox.checked) {
+                        label.classList.add('is-incorrect'); // Highlight incorrect and selected
+                    }
+                }
+            });
+
+            if (correctCount === correctAnswers.length && totalSelected === correctAnswers.length) {
+                displayResult('checkboxResult', true, 'Правильно! Усі ці функції належать до модуля random і використовуються для генерації випадковості: randint() генерує випадкове ціле число в заданому діапазоні, random() — випадкове число з плаваючою комою від 0.0 до 1.0, а choice() — випадковий елемент із послідовності (списку, кортежу).');
+            } else if (correctCount > 0 || totalSelected > correctAnswers.length) {
+                 displayResult('checkboxResult', null, `Частково правильно. Ви обрали правильних відповідей: ${correctCount}. Спробуйте ще раз.`);
+            }
+            else {
+                displayResult('checkboxResult', false, 'Неправильно. Спробуйте ще раз.');
+            }
+        }
+
+        // Функція для скидання чекбоксів
+        function resetCheckboxes() {
+            document.querySelectorAll('input[name="videoSources"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            clearOptionHighlight('checkboxForm');
+            document.getElementById('checkboxResult').classList.add('hidden');
+            document.getElementById('checkboxResult').textContent = '';
+        }
+
+    </script>
+</body>
+</html>

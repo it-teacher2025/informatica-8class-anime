@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: 8 клас</title>
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Тіло документа */
+        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
+
+        /* Стилі для навігації в меню */
+        .logo-main { display: none; }
+        .main-title-text { width: 140px; text-align: center; }
+        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
+        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
+        @media screen and (min-width: 768px) {
+            .main-title-text { width: auto; }
+            .main-navigation { display: inline; width: auto; }
+        }
+
+        /* main стилі */
+        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
+        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
+        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
+        .source-text { padding: 8px; }
+        @media screen and (min-width: 300px) {
+            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
+            .text-2xlooo { font-size: 1.25rem; }
+        }
+        @media screen and (min-width: 480px) {
+            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
+            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
+            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
+        }
+
+        /* Стилі для "Про урок" */
+        /* Групи результатів */
+        .text-group-result { padding-top: 16px; }
+
+        /* Style to hide inactive tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Style to tab content */
+        .tab-btn.active { 
+            color: #65a30d;                /* text-lime-600 */
+            border-bottom-color: #65a30d;  /* text-lime-600 */
+            background-color: #f7fee7;     /* text-lime-100 */
+        }
+        .tab-btn { 
+            transition: color 0.3s, 
+            border-color 0.3s, 
+            background-color 0.3s; 
+            border-bottom: 2px solid transparent;
+        }
+
+        /* Styles for flip cards */
+        .flip-card {
+            background-color: transparent;
+            width: 100%; /* Make cards responsive to grid column width */
+            height: 200px; /* Fixed height for consistency, adjust as needed */
+            perspective: 1000px; /* 3D effect */
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left; /* Adjust text alignment as needed */
+            overflow-wrap: break-word; /* break-words */
+            /*word-break: break-all;*/ /* break-all */
+        }
+
+        .flip-card-front {
+            color: #4b5563; /* text-gray-700 */
+        }
+
+        .flip-card-back {
+            color: #4b5563; /* text-gray-700 */
+            transform: rotateY(180deg);
+        }
+
+        /* Responsive adjustments for min-height */
+        @media (min-width: 768px) { /* md breakpoint */
+            .flip-card.min-h-md {
+                min-height: 250px; /* Example, adjust as needed for medium screens */
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .flip-card.min-h-lg {
+                min-height: 200px; /* Example, adjust as needed for large screens */
+            }
+        }
+
+    </style>
+
+    <!-- Стилі для практичного блоку -->
+    <style>
+        /* Стилі для вправ */
+        .exercise {
+            background-color: #f0fdf4; /* bg-green-50 */
+            border-left: 4px solid #4ade80; /* border-green-400 */
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            /* margin-bottom: 1.5rem; */
+            margin-bottom: 3rem;
+        }
+        .exercise:last-child {
+            margin-bottom: 0;
+        }
+        .exercise h4 {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 700; /* font-bold */
+            color: #166534; /* text-green-800 */
+            margin-bottom: 0.5rem;
+        }
+        .exercise p {
+            color: #1f2937; /* text-gray-800 */
+        }
+        .exercise button {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            font-weight: 600; /* font-semibold */
+            border-radius: 9999px; /* rounded-full */
+            transition: background-color 0.3s ease;
+        }
+        .exercise button:hover {
+            opacity: 0.9;
+        }
+        .exercise .bg-blue-500 {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .exercise .bg-lime-500 {
+            background-color: #84cc16;
+            color: white;
+        }
+        .feedback {
+            margin-top: 1rem;
+            font-weight: 600; /* font-semibold */
+        }
+        .correct {
+            color: #16a34a; /* text-green-600 */
+        }
+        .incorrect {
+            color: #dc2626; /* text-red-600 */
+        }
+    </style>
+</head>
+<body>
+
+    <header class="container mx-auto flex justify-between items-center   bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10  logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <!-- Секція теми уроку -->
+        <section class="text-center mb-8">
+            <h1 class="text-lg text-slate-600 mt-2 break-words">Узагальнення навчального матеріалу з інформатики за навчальний рік. Уроки № 68-70.</h1>
+            <h1 class="text-3xlooo md:text-4xl font-bold text-slate-900 break-words  theme-text">Узагальнення навчального матеріалу з інформатики за навчальний рік</h1>
+            <h2 class="text-lg text-slate-600 mt-2 break-words">Інтерактивний план-конспект уроку для 8 класу НУШ</h2>
+        </section>
+
+
+        <!-- Секція "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання" -->
+        <section>
+            <!-- Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання". -->
+            <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+                <nav id="tabs" class="flex flex-wrap justify-center gap-2 sm:gap-4">
+                    <button data-tab="about" class="tab-btn active text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Про урок</button>
+                    <button data-tab="theory" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Теоретичний блок</button>
+                    <button data-tab="practice" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Практичний блок</button>
+                    <button data-tab="check" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Перевірка знань</button>
+                    <button data-tab="homework" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Домашнє завдання</button>
+                </nav>
+            </div>
+
+            <!-- Про урок -->
+            <div id="about-content" class="tab-content active">
+                <div class="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Lesson Goal -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words break-all">🎯 Мета уроку</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Освітня:</b> Систематизувати та узагальнити основні поняття та практичні навички, набуті протягом навчального року (інформаційні процеси, моделі, апаратне та програмне забезпечення, кібербезпека, алгоритми та програмування, робота з графікою, електронними таблицями, базами даних)..</li>
+                            <li class="break-words"><b>Розвивальна:</b> Розвивати вміння аналізувати, порівнювати, узагальнювати та застосовувати знання у нових ситуаціях; формувати навички самооцінки та рефлексії; розвивати логічне та обчислювальне мислення..</li>
+                            <li class="break-words"><b>Виховна:</b> Виховувати відповідальність, самостійність та повагу до праці; формувати свідоме ставлення до інформаційної безпеки та етики; мотивувати до подальшого вивчення інформатики..</li>
+                        </ul>
+                    </div>
+                    <!-- Expected Outcomes -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words break-all">✅ Очікувані результати</h3>
+                        <p class="mb-2 text-gray-600">Після уроку учні зможуть:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Охарактеризувати основні етапи інформаційних процесів.</li>
+                            <li class="break-words">Назвати та пояснити призначення основних складових комп'ютера та програмного забезпечення.</li>
+                            <li class="break-words">Продемонструвати знання основ кібергігієни.</li>
+                            <li class="break-words">Написати невеликий програмний код, використовуючи базові конструкції та графічні методи tkinter.</li>
+                            <li class="break-words">Розв'язати практичну задачу з використанням формул в електронних таблицях.</li>
+                            <li class="break-words">Самостійно оцінити свої досягнення за рік.</li>
+                        </ul>
+                    </div>
+                    <!-- Lesson Type & Equipment -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words">📚 Тип уроку</h3>
+                        <p class="text-gray-700 break-words">Урок узагальнення та систематизації знань (урок-гра, урок-подорож).</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words">💻 Обладнання та ПЗ</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Комп'ютери (для кожного учня).</li>
+                            <li class="break-words">Проєктор або інтерактивна дошка.</li>
+                            <li class="break-words">Онлайн-сервіси для вікторин (Kahoot!, Quizizz) або презентація.</li>
+                            <li class="break-words">Встановлене середовище розробки Python.</li>
+                            <li class="break-words">Microsoft Office/Google Suite (Word, Excel, PowerPoint).</li>
+                            <li class="break-words">Заздалегідь підготовлені інтерактивні завдання.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-lime-600 break-words">🔗 Міжпредметні зв'язки</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Математика.</li>
+                            <li class="break-words">Українська мова.</li>
+                            <li class="break-words">Англійська мова.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Теоретичний блок -->
+            <div id="theory-content" class="tab-content   mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">
+                <!-- ВАРІАНТ № 2, початок -->
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-lime-500 mb-4 heading-underline break-words  title-review">ПОВТОРЮЄМО</h2>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">Актуалізація опорних знань</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2">
+                        <li class="break-words">Що таке інформація, дані, повідомлення?</li>
+                        <li class="break-words">Які одиниці вимірювання інформації ви знаєте?</li>
+                        <li class="break-words">Назвіть основні складові апаратного забезпечення комп'ютера.</li>
+                        <li class="break-words">Назвіть види програмного забезпечення.</li>
+                        <li class="break-words">Що таке комп'ютерна мережа?</li>
+                        <li class="break-words">Що таке обчислювальне мислення?</li>
+                    </ol>
+                    <img src="./images/img-tema1-6.webp" alt="Знак питання" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!-- ВАРІАНТ № 2, кінець -->
+            </div>
+            
+
+            <!-- Практичний блок -->
+            <div id="practice-content" class="tab-content">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-6 text-center text-lime-600 break-words">Практичний блок уроку</h3>
+                    
+                    <!-- Вправа № 1 -->
+                    <div class="exercise" data-id="ex1">
+                        <h4>Вправа № 1: "КОДУВАННЯ ДАНИХ ТА АПАРАТНЕ ЗАБЕЗПЕЧЕННЯ"</h4>
+                        <p>Який пристрій відповідає за обробку інформації в комп'ютері?</p>
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors" data-answer="CPU">Процесор (CPU)</button>
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors" data-answer="RAM">Оперативна пам'ять (RAM)</button>
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors" data-answer="SSD">Твердотільний накопичувач (SSD)</button>
+                        </div>
+                        <div class="feedback" id="feedback-ex1"></div>
+                    </div>
+
+                    <!-- Вправа № 2 -->
+                    <div class="exercise" data-id="ex2">
+                        <h4>Вправа № 2: "СТВОРЕННЯ ТА ПУБЛІКАЦІЯ ВЕБРЕСУРСІВ"</h4>
+                        <p>Який тег використовується для створення гіперпосилання в HTML?</p>
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors" data-answer="link">&lt;link&gt;</button>
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors" data-answer="a">&lt;a&gt;</button>
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors" data-answer="p">&lt;p&gt;</button>
+                        </div>
+                        <div class="feedback" id="feedback-ex2"></div>
+                    </div>
+                    
+                    <!-- Вправа № 3 -->
+                    <div class="exercise" data-id="ex3">
+                        <h4>Вправа № 3: "ОПРАЦЮВАННЯ ТЕКСТОВИХ ДАНИХ"</h4>
+                        <p>Вставте пропущене слово: "Комп'ютерні програми для роботи з текстом називають _________".</p>
+                        <div class="flex flex-col gap-2 mt-4">
+                            <input type="text" id="answer-ex3" placeholder="Ваша відповідь" class="border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-lime-500">
+                        </div>
+                        <button class="bg-lime-500 hover:bg-lime-600 text-white font-semibold py-2 px-4 rounded-full transition-colors mt-4" onclick="checkAnswer('ex3', document.getElementById('answer-ex3').value)">Перевірити</button>
+                        <div class="feedback" id="feedback-ex3"></div>
+                    </div>
+
+                    <!-- Вправа № 4 -->
+                    <div class="exercise" data-id="ex4">
+                        <h4>Вправа № 4: "ОПРАЦЮВАННЯ МУЛЬТИМЕДІЙНИХ ОБ’ЄКТІВ"</h4>
+                        <p>Перетягніть та з'єднайте термін із його описом:</p>
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <div class="p-4 bg-gray-100 rounded-lg text-center term" data-term="аудіо">Аудіо</div>
+                            <div class="p-4 bg-green-100 rounded-lg text-center description" data-description="Звук">Звук</div>
+
+                            <div class="p-4 bg-gray-100 rounded-lg text-center term" data-term="відео">Відео</div>
+                            <div class="p-4 bg-green-100 rounded-lg text-center description" data-description="Рухомі зображення зі звуком">Рухомі зображення зі звуком</div>
+
+                            <div class="p-4 bg-gray-100 rounded-lg text-center term" data-term="графіка">Графіка</div>
+                            <div class="p-4 bg-green-100 rounded-lg text-center description" data-description="Зображення">Зображення</div>
+                        </div>
+                        <div class="feedback" id="feedback-ex4"></div>
+                    </div>
+                    <!-- <div class="exercise" data-id="ex4">
+                        <h4>Вправа № 4: "ОПРАЦЮВАННЯ МУЛЬТИМЕДІЙНИХ ОБ’ЄКТІВ"</h4>
+                        <p>Перетягніть та з'єднайте термін із його описом:</p>
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <div class="p-4 bg-gray-100 rounded-lg text-center term" data-term="аудіо">Аудіо</div>
+                            <div class="p-4 bg-gray-100 rounded-lg text-center term" data-term="відео">Відео</div>
+                            <div class="p-4 bg-gray-100 rounded-lg text-center term" data-term="графіка">Графіка</div>
+                            
+                            <div class="p-4 bg-green-100 rounded-lg text-center description" data-description="Зображення">Зображення</div>
+                            <div class="p-4 bg-green-100 rounded-lg text-center description" data-description="Звук">Звук</div>
+                            <div class="p-4 bg-green-100 rounded-lg text-center description" data-description="Рухомі зображення зі звуком">Рухомі зображення зі звуком</div>
+                        </div>
+                        <div class="feedback" id="feedback-ex4"></div>
+                    </div> -->
+
+                    <!-- Вправа № 5 -->
+                    <div class="exercise" data-id="ex5">
+                        <h4>Вправа № 5: "АЛГОРИТМИ ТА ПРОГРАМИ"</h4>
+                        <p>Вкажіть, чи є послідовність дій "Встати -> Почистити зуби -> Поснідати" алгоритмом?</p>
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors" data-answer="yes">Так</button>
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors" data-answer="no">Ні</button>
+                        </div>
+                        <div class="feedback" id="feedback-ex5"></div>
+                    </div>
+
+                </div>                
+            </div>
+
+            <!-- Перевірка знань -->
+            <!-- Вручну треба змінювати лише ті значення minimum-height (min-h-[300px]), які потрібно, і треба використовувати медіа-адаптацію (стилі тут на сторінці в тезі <style>)-->
+                <!-- Тут grid -->
+            <div id="check-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-6 text-center text-lime-600 break-words">Перевірка знань</h3>
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <ol class="list-disc list-inside text-gray-700 text-lg space-y-2">
+                        <li class="break-words">Яке завдання було для вас найлегшим? А найскладнішим?</li>
+                        <li class="break-words">Яка тема в інформатиці вам сподобалася найбільше? Чому?</li>
+                        <li class="break-words">Як ви вважаєте, чи будуть корисними набуті вами навички у майбутньому? Де саме?</li>
+                    </ol>
+                    <img src="./images/img01.webp" alt="Знак питання" class="rounded-lg shadow-md" width="200">
+                </div>
+            </div>
+         
+
+            <!-- Домашнє завдання -->
+            <div id="homework-content" class="tab-content   bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-lime-600 break-words">Домашнє завдання</h3>  
+                <!--  -->
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <div>
+                            <p class="break-words break-all"><b>1. Теоретична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Подивитись відеоурок з кібербезпеки: <a href="https://www.youtube.com/live/eVYrBbDpTz0" target="_blank" class="text-blue-600 hover:underline">https://www.youtube.com/live/eVYrBbDpTz0</a></li>
+                                <li>Подивитись відеоуроки з кібергігієни "Час захистити свої дані": <a href="https://youtube.com/playlist?list=PLkuYF7Wu1pwIcIEs9MHpFas96-Hp3u0JI&si=zU_IxnC0LYX0ejGQ" target="_blank" class="text-blue-600 hover:underline">https://youtube.com/playlist?list=PLkuYF7Wu1pwIcIEs9MHpFas96-Hp3u0JI&si=zU_IxnC0LYX0ejGQ</a></li>
+                                <li>Подивитись пам'ятку "Як убезпечити себе від шахраїв": <a href="https://drive.google.com/file/d/1PAXzqbO9zAq_zcXCt3tRRCXr838rrgh4/view" target="_blank" class="text-blue-600 hover:underline">https://drive.google.com/file/d/1PAXzqbO9zAq_zcXCt3tRRCXr838rrgh4/view</a></li>
+                                <li>Медіатека з інформатики ("Ранок"): <a href="https://mediaranok.com.ua/category/informatyka/" target="_blank" class="text-blue-600 hover:underline">https://mediaranok.com.ua/category/informatyka/</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><b>2. Завдання за бажанням (для закріплення):</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Весела гра про Інтернет: <a href="https://spoofy.ee/uk" target="_blank" class="text-blue-600 hover:underline">https://spoofy.ee/uk</a></li>
+                                <li>Гра "Інтерленд": <a href="https://beinternetawesome.withgoogle.com/uk_ua/interland" target="_blank" class="text-blue-600 hover:underline">https://beinternetawesome.withgoogle.com/uk_ua/interland</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="./images/img08.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!--  -->
+            </div>
+        </section>
+
+
+        <!-- Додаткові матеріали -->
+        <!-- Additional Materials Section -->
+        <section class="bg-white p-6 rounded-xl shadow-md mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-lime-600 break-words">Додаткові матеріали</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li class="break-words"><a href="https://sites.google.com/view/lga84-9/tehnika_bezpeky" target="_blank" class="text-blue-600 hover:underline">Техніка безпеки</a></li>
+
+                <li class="break-words"><a href="https://drive.google.com/file/d/1C9_KEF981LvokY0GWNOhUXb7rJKJUUbM/view" target="_blank" class="text-blue-600 hover:underline">Оцінювання учнів та учениць на уроках інформатики</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">Інтерактивна платформа IZZI (8 клас)</a></li>
+
+                <li class="break-words"><a href="https://mediaranok.com.ua/" target="_blank" class="text-blue-600 hover:underline">Медіатека ("Ранок")</a></li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm   bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>           
+        </ul>
+    </footer>    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Початок:
+            // Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання".
+            const tabs = document.getElementById('tabs');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            tabs.addEventListener('click', (e) => {
+                // Ensure the click target is a BUTTON (tab button)
+                if (e.target.tagName === 'BUTTON') {
+                    const tab = e.target.dataset.tab;
+
+                    // Remove 'active' class from all buttons and add to the clicked one
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Hide all tab contents and show the corresponding one
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Use === for strict comparison
+                        if (content.id === `${tab}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                }
+            });
+            // Кінець.
+
+
+            
+            // Початок.
+            // ПОВОРОТ КАРТОК "Перевірка знань"
+            const flipCards = document.querySelectorAll('.flip-card');
+            flipCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+            // Кінець. ПОВОРОТ КАРТОК.
+
+        });
+    </script>
+
+    <!-- Скрипт для практичного блоку -->
+    <script>
+        // Початок. Логіка для практичних вправ.
+            // Функція для перевірки відповідей на вправи з вибором варіантів.
+            function setupMultipleChoiceExercise(exerciseId, correctAnswer) {
+                const exercise = document.querySelector(`[data-id="${exerciseId}"]`);
+                const feedbackDiv = document.getElementById(`feedback-${exerciseId}`);
+                const buttons = exercise.querySelectorAll('button');
+
+                buttons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const selectedAnswer = button.dataset.answer;
+                        if (selectedAnswer === correctAnswer) {
+                            feedbackDiv.textContent = 'Правильно!';
+                            feedbackDiv.classList.remove('incorrect');
+                            feedbackDiv.classList.add('correct');
+                        } else {
+                            feedbackDiv.textContent = 'Неправильно. Спробуйте ще раз.';
+                            feedbackDiv.classList.remove('correct');
+                            feedbackDiv.classList.add('incorrect');
+                        }
+                    });
+                });
+            }
+
+            // Функція для перевірки відповідей на вправи з текстовим полем.
+            function checkAnswer(exerciseId, userAnswer) {
+                const feedbackDiv = document.getElementById(`feedback-${exerciseId}`);
+                const correctAnswer = 'текстові процесори'; // Правильна відповідь для вправи №3
+                if (userAnswer.trim().toLowerCase() === correctAnswer) {
+                    feedbackDiv.textContent = 'Правильно!';
+                    feedbackDiv.classList.remove('incorrect');
+                    feedbackDiv.classList.add('correct');
+                } else {
+                    feedbackDiv.textContent = 'Неправильно. Правильна відповідь: текстові процесори.';
+                    feedbackDiv.classList.remove('correct');
+                    feedbackDiv.classList.add('incorrect');
+                }
+            }
+
+            // Функція для перевірки відповідей на вправи з перетягуванням.
+            function setupDragAndDropExercise(exerciseId) {
+                const exercise = document.querySelector(`[data-id="${exerciseId}"]`);
+                const feedbackDiv = document.getElementById(`feedback-${exerciseId}`);
+                const terms = exercise.querySelectorAll('.term');
+                const descriptions = exercise.querySelectorAll('.description');
+                let draggedTerm = null;
+
+                terms.forEach(term => {
+                    term.draggable = true;
+                    term.addEventListener('dragstart', (e) => {
+                        draggedTerm = term;
+                        e.dataTransfer.setData('text/plain', term.dataset.term);
+                        setTimeout(() => term.classList.add('opacity-50'), 0);
+                    });
+                    term.addEventListener('dragend', () => {
+                        draggedTerm.classList.remove('opacity-50');
+                        draggedTerm = null;
+                    });
+                });
+
+                descriptions.forEach(description => {
+                    description.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                    });
+                    description.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        const droppedTerm = e.dataTransfer.getData('text/plain');
+                        
+                        // Перевірка відповідності
+                        const correctMatch = (droppedTerm === 'графіка' && description.dataset.description === 'Зображення') ||
+                                             (droppedTerm === 'аудіо' && description.dataset.description === 'Звук') ||
+                                             (droppedTerm === 'відео' && description.dataset.description === 'Рухомі зображення зі звуком');
+
+                        if (correctMatch) {
+                            // Переміщення терміну
+                            description.appendChild(draggedTerm);
+                            draggedTerm.draggable = false;
+                            
+                            // Перевірка, чи всі пари зіставлено
+                            const allMatched = Array.from(terms).every(t => t.parentNode.classList.contains('description'));
+                            if (allMatched) {
+                                feedbackDiv.textContent = 'Чудово! Всі пари зіставлено правильно!';
+                                feedbackDiv.classList.remove('incorrect');
+                                feedbackDiv.classList.add('correct');
+                            }
+                        } else {
+                            feedbackDiv.textContent = 'Неправильне з\'єднання. Спробуйте ще раз.';
+                            feedbackDiv.classList.remove('correct');
+                            feedbackDiv.classList.add('incorrect');
+                        }
+                    });
+                });
+            }
+
+            // Запуск функцій для кожної вправи
+            setupMultipleChoiceExercise('ex1', 'CPU');
+            setupMultipleChoiceExercise('ex2', 'a');
+            window.checkAnswer = checkAnswer; // Зробити функцію глобальною для виклику з HTML
+            setupDragAndDropExercise('ex4');
+            setupMultipleChoiceExercise('ex5', 'yes');
+            // Кінець. Логіка для практичних вправ.
+    </script>
+</body>
+</html>

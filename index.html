@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Уроки інформатики: 8 клас НУШ</title>
+
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="./css/style.css">
+
+    <style>
+        .text-5xl2 {
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+        /* Базові стилі для всіх пристроїв (зазвичай мобільних) */
+        .chapter-title {
+            background-color: #1a202c; /* Dark background for titles */
+            color: #e2e8f0; /* Light text for titles */
+            padding: 1.5rem 2rem;
+            text-align: center;
+            font-size: 1.0rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            border-radius: 0.75rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            font-family: 'Montserrat', sans-serif;
+        }
+        @media screen and (min-width: 350px) {
+            .chapter-title {
+                font-size: 1.5rem;
+            }
+        }
+        /* Стилі для екранів шириною від 640px і більше */
+        @media screen and (min-width: 640px) {
+            .chapter-title {
+                font-size: 2.0rem;
+            }
+            .text-5xl2 {
+                font-size: 2.0rem;
+            }            
+        }
+        /* Стилі для екранів шириною від 1024px і більше */
+        @media screen and (min-width: 1024px) {
+            .chapter-title {
+                font-size: 2.5rem;
+            }
+            .text-5xl2 {
+                font-size: 3rem;
+            }
+        }
+        
+        .section-card {
+            background-color: #2d3748; /* Slightly lighter dark background for sections */
+            color: #cbd5e0; /* Light text for section content */
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .lesson-link {
+            display: block;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            background-color: #4a5568; /* Even lighter dark for links */
+            border-radius: 0.5rem;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            text-decoration: none;
+            color: #e2e8f0; /* Light text for links */
+            font-weight: 500;
+        }
+        .lesson-link:hover {
+            background-color: #6366f1; /* Indigo for hover */
+            transform: translateX(5px);
+        }
+        .lesson-link.practical {
+            font-style: italic;
+            color: #9ae6b4; /* Light green for practical works */
+        }
+        .lesson-link.practical:hover {
+             background-color: #6366f1; /* Indigo for hover */
+             color: #e2e8f0;
+        }
+
+        /* Стилі для змісту */
+        .toc-link {
+            transition: color 0.2s ease;
+        }
+        .toc-link:hover {
+            color: #6366f1;
+        }
+        .toc-chapter-link {
+            font-weight: 600;
+            color: #888;
+        }
+        .toc-lesson-link {
+            margin-left: 1rem;
+            font-size: 0.9rem;
+            color: #cbd5e0;
+        }
+        .toc-lesson-link.practical-toc {
+            color: #9ae6b4;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+    <!-- Global Header: Contains site title and main navigation -->
+    <header class="container mx-auto flex justify-between items-center   bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10  logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <!-- <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li> -->
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content Area: Contains page-specific content -->
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+
+        <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-4xl">
+
+            <div class="text-center mb-10">
+                <h1 class="text-5xl2 md:text-6xl font-bold text-white break-words" style="font-family: 'Montserrat', sans-serif;">Уроки Інформатики</h1>
+                <p class="mt-4 text-xl text-gray-300">8 клас НУШ</p>
+            </div>
+          
+            <!-- Table of Contents -->
+            <section id="table-of-contents-section" class="mb-12 bg-white p-6 rounded-xl shadow-md text-slate-800">
+                <h2 class="text-3xl font-bold mb-6 text-center text-indigo-600 break-words">Зміст курсу</h2>
+                <div id="table-of-contents" class="space-y-2">
+                    <!-- TOC will be dynamically generated here by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Розділ 1: Кодування даних та апаратне забезпечення -->
+            <section id="chapter-1-data-encoding" class="mb-12">
+                <h2 class="chapter-title break-words">РОЗДІЛ 1: <br>КОДУВАННЯ ДАНИХ ТА АПАРАТНЕ ЗАБЕЗПЕЧЕННЯ</h2>
+                <div class="section-card">
+                    <ul>
+                        <li><a href="./class8-lesson01.html" class="lesson-link break-words">Урок № 1. Правила поведінки та безпеки життєдіяльності при роботі в комп’ютерному класі.</a></li>
+                        <li><a href="./class8-lesson02-ch1-paragraph1.html" class="lesson-link break-words">Урок № 2. (§ 1) Кодування та декодування повідомлень.</a></li>
+                        <li><a href="./class8-lesson03-ch1-paragraph2.html" class="lesson-link break-words">Урок № 3. (§ 2) Двійкове кодування.</a></li>
+                        <li><a href="./class8-lesson04-ch1-paragraph3.html" class="lesson-link break-words">Урок № 4. (§ 3) Кодування графічних даних.</a></li>
+                        <li><a href="./class8-lesson05-ch1-practical1.html" class="lesson-link practical break-words">Урок № 5. (ПР1) Практична робота 1. «Визначення довжини двійкового коду текстових даних».</a></li>
+                        <li><a href="./class8-lesson06-ch1-paragraph4.html" class="lesson-link break-words">Урок № 6. (§ 4) Архітектура комп’ютера. Технічні характеристики складових комп’ютера.</a></li>
+                        <li><a href="./class8-lesson07-ch1-paragraph5.html" class="lesson-link break-words">Урок № 7. (§ 5) Історія опрацювання інформаційних об’єктів.</a></li>
+                        <li><a href="./class8-lesson08-ch1-practical2.html" class="lesson-link practical break-words">Урок № 8. (ПР2) Практична робота 2. «Визначення конфігурації комп’ютера під потребу».<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Узагальнення навчального матеріалу з теми.</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Розділ 2: Створення та публікація вебресурсів -->
+            <section id="chapter-2-web-resources" class="mb-12">
+                <h2 class="chapter-title break-words">РОЗДІЛ 2: <br>СТВОРЕННЯ ТА ПУБЛІКАЦІЯ ВЕБРЕСУРСІВ</h2>
+                <div class="section-card">
+                    <ul>
+                        <li><a href="./class8-lesson09-ch2-paragraph6.html" class="lesson-link break-words">Урок № 9. (§ 6) Адресація в інтернеті.</a></li>
+                        <li><a href="./class8-lesson10-ch2-paragraph7.html" class="lesson-link break-words">Урок № 10. (§ 7) Обмін даними в інтернеті.</a></li>
+                        <li><a href="./class8-lesson11-ch2-paragraph8.html" class="lesson-link break-words">Урок № 11. (§ 8) Створення сайтів.</a></li>
+                        <li><a href="./class8-lesson12-ch2-paragraph9.html" class="lesson-link break-words">Урок № 12. (§ 9) Розмічання тексту засобами HTML.</a></li>
+                        <li><a href="./class8-lesson13-ch2-paragraph10.html" class="lesson-link break-words">Урок № 13. (§ 10) Графічні зображення та гіперпосилання на вебсторінці.</a></li>
+                        <li><a href="./class8-lesson14-ch2-paragraph11.html" class="lesson-link break-words">Урок № 14. (§ 11) Розмічання таблиць засобами HTML.</a></li>
+                        <li><a href="./class8-lesson15-ch2-practical3.html" class="lesson-link practical break-words">Урок № 15. (ПР3) Практична робота 3. «Створення головної сторінки сайту засобами HTML».<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Узагальнення навчального матеріалу з теми.</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Розділ 3: Опрацювання текстових даних -->
+            <section id="chapter-3-text-data" class="mb-12">
+                <h2 class="chapter-title break-words">РОЗДІЛ 3: <br>ОПРАЦЮВАННЯ ТЕКСТОВИХ ДАНИХ</h2>
+                <div class="section-card">
+                    <ul>
+                        <li><a href="./class8-lesson16-ch3-paragraph12.html" class="lesson-link break-words">Урок № 16. (§ 12) Основні етапи створення текстового документа.</a></li>
+                        <li><a href="./class8-lesson17-ch3-paragraph13.html" class="lesson-link break-words">Урок № 17. (§ 13) Робота з фрагментами тексту.</a></li>
+                        <li><a href="./class8-lesson18-ch3-paragraph14.html" class="lesson-link break-words">Урок № 18. (§ 14) Форматування об’єктів текстового документа.</a></li>
+                        <li><a href="./class8-lesson19-ch3-practical4.html" class="lesson-link practical break-words">Урок № 19. (ПР4) Практична робота 4. «Створення текстового документа, що містить об’єкти різних типів».</a></li>
+                        <li><a href="./class8-lesson20-ch3-paragraph15.html" class="lesson-link break-words">Урок № 20. (§ 15) Структура документа. Колонтитули. Гіперпосилання.</a></li>
+                        <li><a href="./class8-lesson21-ch3-paragraph16.html" class="lesson-link break-words">Урок № 21. (§ 16) Автоматизоване створення змісту документа.</a></li>
+                        <li><a href="./class8-lesson22-ch3-practical5.html" class="lesson-link practical break-words">Урок № 22. (ПР5) Практична робота 5. «Автоматизоване створення змісту документа».</a></li>
+                        <li><a href="./class8-lesson23-ch3-paragraph17-practical6.html" class="lesson-link practical break-words">Урок № 23. (§ 17, ПР6) Користування хмарним диском. Спільна робота з документом.<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Практична робота 6. «Створення документа на хмарному диску для спільного опрацювання».</a></li>
+                        <li><a href="./class8-lesson24-ch3-practical7.html" class="lesson-link practical break-words">Урок № 24. (ПР7) Практична робота 7. «Створення мінігазети на хмарному диску».<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Узагальнення навчального матеріалу з теми.</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Розділ 4: Опрацювання мультимедійних об’єктів -->
+            <section id="chapter-4-multimedia" class="mb-12">
+                <h2 class="chapter-title break-words">РОЗДІЛ 4: <br>ОПРАЦЮВАННЯ МУЛЬТИМЕДІЙНИХ ОБ’ЄКТІВ</h2>
+                <div class="section-card">
+                    <ul>
+                        <li><a href="./class8-lesson25-ch4-paragraph18.html" class="lesson-link break-words">Урок № 25. (§ 18) Поняття мультимедіа. Кодування аудіоданих. Формати аудіофайлів.</a></li>
+                        <li><a href="./class8-lesson26-ch4-paragraph19-practical8.html" class="lesson-link practical break-words">Урок № 26. (§ 19, ПР8) Кодування відеоданих. Формати відеофайлів.<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Практична робота 8. «Використання аудіоданих у програмах мовою Python».</a></li>
+                        <li><a href="./class8-lesson27-ch4-paragraph20.html" class="lesson-link break-words">Урок № 27. (§ 20) Програмне забезпечення для опрацювання звуку.</a></li>
+                        <li><a href="./class8-lesson28-ch4-paragraph21.html" class="lesson-link break-words">Урок № 28. (§ 21) Програмне забезпечення для опрацювання відео.</a></li>
+                        <li><a href="./class8-lesson29-ch4-paragraph22-practical9.html" class="lesson-link practical break-words">Урок № 29. (§ 22, ПР9) Побудова аудіо- й відеоряду.<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Практична робота 9. «Створення відеофільму».</a></li>
+                        <li><a href="./class8-lesson30-ch4-paragraph23-practical10.html" class="lesson-link practical break-words">Урок № 30. (§ 23, ПР10) Опрацювання, зберігання та розміщення відеофільму в інтернеті.<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Практична робота 10. «Розміщення відеоматеріалів в інтернеті».</a></li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- Підсумкова робота за 1 семестр -->
+            <section id="semester-1-summary" class="mb-12">
+                <h2 class="chapter-title break-words">ПІДСУМКОВА РОБОТА <br>(За І семестр)</h2>
+                <div class="section-card">
+                    <ul>
+                        <li><a href="./class8-lesson31-control-work.html" class="lesson-link practical break-words">Урок № 31. Підсумкова робота «Кодування даних та апаратне забезпечення. Створення та публікація вебресурсів. Опрацювання текстових даних. Опрацювання мультимедійних об’єктів».</a></li>
+                        <li><a href="./class8-lesson32-review.html" class="lesson-link break-words">Урок № 32. Узагальнення навчального матеріалу з теми.</a></li>
+                    </ul>
+                </div>
+            </section>
+           
+
+            <!-- Розділ 5: Алгоритми та програми -->
+            <section id="chapter-5-algorithms-programs" class="mb-12">
+                <h2 class="chapter-title break-words">РОЗДІЛ 5: <br>АЛГОРИТМИ ТА ПРОГРАМИ</h2>
+                <div class="section-card">
+                    <ul>
+                        <li><a href="./class8-lesson33-ch5-paragraph24.html" class="lesson-link break-words">Урок № 33. (§ 24) Сучасні мови програмування.</a></li>
+                        <li><a href="./class8-lesson34-ch5-paragraph25.html" class="lesson-link break-words">Урок № 34. (§ 25) Налагодження програмного коду.</a></li>
+                        <li><a href="./class8-lesson35-ch5-paragraph26.html" class="lesson-link break-words">Урок № 35. (§ 26) Графічний інтерфейс користувача.</a></li>
+                        <li><a href="./class8-lesson36-ch5-paragraph26.html" class="lesson-link break-words">Урок № 36. (§ 26) Розв’язання завдань з графічним інтерфейсом користувача.</a></li>
+                        <li><a href="./class8-lesson37-ch5-paragraph27.html" class="lesson-link break-words">Урок № 37. (§ 27) Опрацювання подій.</a></li>
+                        <li><a href="./class8-lesson38-ch5-paragraph27.html" class="lesson-link break-words">Урок № 38. (§ 27) Розв’язання завдань з опрацюванням подій.</a></li>
+                        <li><a href="./class8-lesson39-ch5-paragraph28.html" class="lesson-link break-words">Урок № 39. (§ 28) Організація діалогу з користувачем.</a></li>
+                        <li><a href="./class8-lesson40-ch5-paragraph28.html" class="lesson-link break-words">Урок № 40. (§ 28) Розв’язання завдань з вікнами повідомлень.</a></li>
+                        <li><a href="./class8-lesson41-ch5-practical11.html" class="lesson-link practical break-words">Урок № 41. (ПР11) Практична робота 11. «Введення і виведення даних».</a></li>
+                        <li><a href="./class8-lesson42-ch5-paragraph29.html" class="lesson-link break-words">Урок № 42. (§ 29) Величини. Числові типи даних.</a></li>
+                        <li><a href="./class8-lesson43-ch5-paragraph29.html" class="lesson-link break-words">Урок № 43. (§ 29) Розв’язання завдань з числовими типами даних.</a></li>
+                        <li><a href="./class8-lesson44-ch5-paragraph30.html" class="lesson-link break-words">Урок № 44. (§ 30) Математичні функції.</a></li>
+                        <li><a href="./class8-lesson45-ch5-paragraph30.html" class="lesson-link break-words">Урок № 45. (§ 30) Розв’язання завдань з математичними функціями.</a></li>
+                        <li><a href="./class8-lesson46-ch5-paragraph31.html" class="lesson-link break-words">Урок № 46. (§ 31) Рядковий тип даних.</a></li>
+                        <li><a href="./class8-lesson47-ch5-paragraph31.html" class="lesson-link break-words">Урок № 47. (§ 31) Розв’язання завдань з рядковим типом даних.</a></li>
+                        <li><a href="./class8-lesson48-ch5-paragraph32.html" class="lesson-link break-words">Урок № 48. (§ 32) Робота з текстовими файлами.</a></li>
+                        <li><a href="./class8-lesson49-ch5-paragraph33.html" class="lesson-link break-words">Урок № 49. (§ 33) Логічний тип даних.</a></li>
+                        <li><a href="./class8-lesson50-ch5-paragraph33.html" class="lesson-link break-words">Урок № 50. (§ 33) Розв’язання завдань з логічним типом даних.</a></li>
+                        <li><a href="./class8-lesson51-ch5-paragraph34.html" class="lesson-link break-words">Урок № 51. (§ 34) Елементи вибору.</a></li>
+                        <li><a href="./class8-lesson52-ch5-paragraph34.html" class="lesson-link break-words">Урок № 52. (§ 34) Розв’язання завдань з елементами вибору.</a></li>
+                        <li><a href="./class8-lesson53-ch5-paragraph35.html" class="lesson-link break-words">Урок № 53. (§ 35) Алгоритми з повтореннями. Цикли.</a></li>
+                        <li><a href="./class8-lesson54-ch5-paragraph35.html" class="lesson-link break-words">Урок № 54. (§ 35) Розв’язання завдань з циклами.</a></li>
+                        <li><a href="./class8-lesson55-ch5-practical12.html" class="lesson-link practical break-words">Урок № 55. (ПР12) Практична робота 12. «Створення програми з графічним інтерфейсом».</a></li>
+                        <li><a href="./class8-lesson56-ch5-paragraph36.html" class="lesson-link break-words">Урок № 56. (§ 36) Графічні методи модуля tkinter.</a></li>
+                        <li><a href="./class8-lesson57-ch5-paragraph36.html" class="lesson-link break-words">Урок № 57. (§ 36) Створення зображень за допомогою графічних методів модуля tkinter.</a></li>
+                        <li><a href="./class8-lesson58-ch5-paragraph37.html" class="lesson-link break-words">Урок № 58. (§ 37) Створення анімації.</a></li>
+                        <li><a href="./class8-lesson59-ch5-paragraph37.html" class="lesson-link break-words">Урок № 59. (§ 37) Розв’язання завдань з анімаціями.</a></li>
+                        <li><a href="./class8-lesson60-ch5-practical13.html" class="lesson-link practical break-words">Урок № 60. (ПР13) Практична робота 13. «Створення ігрової програми».<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Узагальнення навчального матеріалу з теми.</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Практикум з використання інформаційних технологій -->
+            <section id="chapter-6-it-practice" class="mb-12">
+                <h2 class="chapter-title break-words">ПРАКТИКУМ З ВИКОРИСТАННЯ ІНФОРМАЦІЙНИХ ТЕХНОЛОГІЙ</h2>
+                <div class="section-card">
+                    <ul>
+                        <li><a href="./class8-lesson61-practical14.html" class="lesson-link practical break-words">Урок № 61. (ПР14) Практична робота № 14. «Створення текстового документа, що містить об’єкти різних типів».</a></li>
+                        <li><a href="./class8-lesson62-practical15.html" class="lesson-link practical break-words">Урок № 62. (ПР15) Практична робота № 15. «Створення багатосторінкового електронного документа».</a></li>
+                        <li><a href="./class8-lesson63-practical16.html" class="lesson-link practical break-words">Урок № 63. (ПР16) Практична робота № 16. «Розробка застосунку «Піаніно»».</a></li>
+                        <li><a href="./class8-lesson64-practical17.html" class="lesson-link practical break-words">Урок № 64. (ПР17) Практична робота № 17. «Створення програми з графічним інтерфейсом».</a></li>
+                        <li><a href="./class8-lesson65-practical18.html" class="lesson-link practical break-words">Урок № 65. (ПР18) Практична робота № 18. «Створення програми «Калькулятор»».</a></li>
+                        <li><a href="./class8-lesson66-practical19.html" class="lesson-link practical break-words">Урок № 66. (ПР19) Практична робота № 19. «Моделювання руху об’єкта».</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Підсумкова робота за 2 семестр -->
+            <section id="semester-2-summary" class="mb-12">
+                <h2 class="chapter-title break-words">ПІДСУМКОВА РОБОТА <br>(За ІІ семестр)</h2>
+                <div class="section-card">
+                    <ul>
+                        <li><a href="./class8-lesson67-control-work.html" class="lesson-link practical break-words">Урок № 67. Підсумкова робота «Алгоритми та програми»</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Повторення матеріалу та підсумкові уроки -->
+            <section id="year-summary-lessons" class="mb-12">
+                <h2 class="chapter-title break-words">Повторення матеріалу за рік та підсумкові уроки</h2>
+                <div class="section-card">
+                    <ul>
+                        <li><a href="./class8-lesson68-70-review.html" class="lesson-link break-words">Урок № 68. Провторення матеріалу, пройденого за алгоритмами та програмами.</a></li>
+                        <li><a href="./class8-lesson68-70-review.html" class="lesson-link break-words">Урок № 69. Узагальнення навчального матеріалу з інформатики за навчальний рік.</a></li>
+                        <li><a href="./class8-lesson68-70-review.html" class="lesson-link break-words">Урок № 67. Підсумковий урок.</a></li>
+                    </ul>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm   bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>           
+        </ul>
+    </footer> 
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tocContainer = document.getElementById('table-of-contents');
+            const sections = document.querySelectorAll('section[id^="chapter-"], section[id^="semester-"], section[id^="year-summary-"]');
+
+            sections.forEach(section => {
+                const chapterTitleEl = section.querySelector('.chapter-title');
+                if (chapterTitleEl) {
+                    const chapterText = chapterTitleEl.textContent.replace(/\s+/g, ' ').trim();
+                    const chapterId = section.id;
+
+                    const chapterLi = document.createElement('li');
+                    chapterLi.className = 'mb-2';
+                    const chapterLink = document.createElement('a');
+                    chapterLink.href = `#${chapterId}`;
+                    chapterLink.className = 'toc-link toc-chapter-link';
+                    chapterLink.textContent = chapterText;
+                    chapterLi.appendChild(chapterLink);
+
+                    // Removed the generation of individual lesson links within the TOC
+                    // The lessonUl and its population are removed here.
+
+                    tocContainer.appendChild(chapterLi);
+                }
+            });
+
+            // Smooth scroll for TOC links
+            tocContainer.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A' && event.target.classList.contains('toc-link')) {
+                    event.preventDefault();
+                    const targetId = event.target.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

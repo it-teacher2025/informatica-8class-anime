@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: 8 клас</title>
+
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Тіло документа */
+        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
+
+        /* Стилі для навігації в меню */
+        .logo-main { display: none; }
+        .main-title-text { width: 140px; text-align: center; }
+        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
+        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
+        @media screen and (min-width: 768px) {
+            .main-title-text { width: auto; }
+            .main-navigation { display: inline; width: auto; }
+        }
+
+        /* main стилі */
+        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
+        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
+        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
+        .source-text { padding: 8px; }
+        @media screen and (min-width: 300px) {
+            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
+            .text-2xlooo { font-size: 1.25rem; }
+        }
+        @media screen and (min-width: 480px) {
+            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
+            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
+            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
+        }
+
+        /* Стилі для "Про урок" */
+        /* Групи результатів */
+        .text-group-result { padding-top: 16px; }
+
+        /* Style to hide inactive tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Style to tab content */
+        .tab-btn.active { 
+            color: rgb(245, 73, 0);                /* text-orange-600 */
+            border-bottom-color: rgb(245, 73, 0);  /* text-orange-600 */
+            background-color: rgb(255, 237, 212);     /* text-orange-100 */
+        }
+        .tab-btn { 
+            transition: color 0.3s, 
+            border-color 0.3s, 
+            background-color 0.3s; 
+            border-bottom: 2px solid transparent;
+        }
+
+        /* Styles for flip cards */
+        .flip-card {
+            background-color: transparent;
+            width: 100%; /* Make cards responsive to grid column width */
+            height: 200px; /* Fixed height for consistency, adjust as needed */
+            perspective: 1000px; /* 3D effect */
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: left; /* Adjust text alignment as needed */
+            overflow-wrap: break-word; /* break-words */
+            /*word-break: break-all;*/ /* break-all */
+        }
+
+        .flip-card-front {
+            color: #4b5563; /* text-gray-700 */
+        }
+
+        .flip-card-back {
+            color: #4b5563; /* text-gray-700 */
+            transform: rotateY(180deg);
+        }
+
+        /* Responsive adjustments for min-height */
+        @media (min-width: 768px) { /* md breakpoint */
+            .flip-card.min-h-md {
+                min-height: 250px; /* Example, adjust as needed for medium screens */
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .flip-card.min-h-lg {
+                min-height: 200px; /* Example, adjust as needed for large screens */
+            }
+        }
+
+    </style>
+
+    <!-- Стилі для практичного блоку -->
+    <style>
+        /* Styles for Practical Block */
+        .quiz-container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 1.5rem;
+        }
+        .question-title {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 700; /* font-bold */
+            margin-bottom: 1.5rem;
+            color: rgb(245, 73, 0); /* text-orange-600 */
+        }
+        .question-text {
+            font-size: 1.125rem; /* text-lg */
+            margin-bottom: 1rem;
+            color: #374151; /* text-gray-700 */
+        }
+        .option-label {
+            display: block;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #4b5563; /* text-gray-700 */
+        }
+        .option-label input[type="radio"],
+        .option-label input[type="checkbox"] {
+            margin-right: 0.75rem;
+            transform: scale(1.2); /* Make radio/checkbox larger */
+        }
+        .check-button, .reset-button {
+            background-color: rgb(245, 73, 0); /* bg-orange-600 */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: 600;
+            margin-top: 1.5rem;
+        }
+        .check-button:hover, .reset-button:hover {
+            background-color: rgb(215, 64, 0); /* bg-orange-700 */
+        }
+        .feedback {
+            margin-top: 1rem;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .feedback.correct {
+            color: #10b981; /* text-green-500 */
+        }
+        .feedback.incorrect {
+            color: #ef4444; /* text-red-500 */
+        }
+
+        /* Fill-in-the-blanks specific styles */
+        .fill-in-the-blanks-container input[type="text"] {
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            border-radius: 0.375rem; /* rounded-md */
+            padding: 0.5rem 0.75rem;
+            font-size: 1rem;
+            width: 120px;
+            margin: 0 0.25rem;
+        }
+        .fill-in-the-blanks-container input[type="text"]:focus {
+            outline: none;
+            border-color: rgb(245, 73, 0); /* border-orange-600 */
+            box-shadow: 0 0 0 3px rgba(245, 73, 0, 0.25);
+        }
+
+        /* Matching exercise specific styles */
+        .matching-pair {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            background-color: #f9fafb; /* bg-gray-50 */
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb; /* border-gray-200 */
+        }
+        .matching-pair .term {
+            font-weight: 500;
+            color: #374151; /* text-gray-700 */
+            flex: 1;
+            padding-right: 1rem;
+        }
+        .matching-pair select {
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            border-radius: 0.375rem; /* rounded-md */
+            padding: 0.5rem;
+            font-size: 1rem;
+            color: #4b5563; /* text-gray-700 */
+            background-color: white;
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="container mx-auto flex justify-between items-center   bg-slate-800 p-4 text-white shadow-lg">
+        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10  logo-main"></a>
+        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
+        <nav class="space-x-4">
+            <ul class="main-navigation2">
+                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
+                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
+            </ul>
+            <!-- <a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a>
+            <a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a> -->
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
+        <!-- Секція теми уроку -->
+        <section class="text-center mb-8">
+            <h1 class="text-lg text-slate-600 mt-2 break-words">Практикум з використання інформаційних технологій. Урок № 65. (До ПР18)</h1>
+            <h1 class="text-3xlooo md:text-4xl font-bold text-slate-900 break-words  theme-text">Практична робота № 18. «Створення програми «Калькулятор»»</h1>
+            <h2 class="text-lg text-slate-600 mt-2 break-words">Інтерактивний план-конспект уроку для 8 класу НУШ</h2>
+        </section>
+
+
+        <!-- Секція "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання" -->
+        <section>
+            <!-- Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання". -->
+            <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+                <nav id="tabs" class="flex flex-wrap justify-center gap-2 sm:gap-4">
+                    <button data-tab="about" class="tab-btn active text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Про урок</button>
+                    <button data-tab="theory" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Теоретичний блок</button>
+                    <button data-tab="practice" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Практичний блок</button>
+                    <button data-tab="check" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Перевірка знань</button>
+                    <button data-tab="homework" class="tab-btn text-sm sm:text-base font-medium py-2 px-4 rounded-lg border-2 border-transparent transition-colors duration-300  break-words break-all">Домашнє завдання</button>
+                </nav>
+            </div>
+
+            <!-- Про урок -->
+            <div id="about-content" class="tab-content active">
+                <div class="grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Lesson Goal -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-orange-600 break-words break-all">🎯 Мета уроку</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words"><b>Освітня:</b> узагальнити та систематизувати знання учнів щодо створення програм з графічним інтерфейсом; закріпити навички розробки програм для конвертування чисел між десятковою та двійковою системами числення.</li>
+                            <li class="break-words"><b>Розвивальна:</b> розвивати алгоритмічне та логічне мислення, вміння розробляти інтерфейс калькулятора, реалізовувати алгоритми конвертування чисел та використовувати різні системи числення.</li>
+                            <li class="break-words"><b>Виховна:</b> виховувати уважність, акуратність у кодуванні, відповідальність за результат та зацікавленість у застосуванні знань з інформатики для вирішення практичних завдань.</li>
+                        </ul>
+                    </div>
+                    <!-- Expected Outcomes -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-orange-600 break-words break-all">✅ Очікувані результати</h3>
+                        <p class="mb-2 text-gray-600">Після уроку учні зможуть:</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Створювати базовий графічний інтерфейс калькулятора за допомогою `tkinter`.</li>
+                            <li class="break-words">Розміщувати на вікні віджети `Label`, `Entry`, `Button` та налаштовувати їх властивості.</li>
+                            <li class="break-words">Реалізовувати функції для конвертування десяткових чисел у двійкові та навпаки.</li>
+                            <li class="break-words">Обробляти події натискання кнопок для запуску функцій конвертації.</li>
+                            <li class="break-words">Використовувати вікно повідомлень `messagebox` для виведення результатів.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-bold mb-3 text-orange-600 break-words">📊 Групи результатів (НУШ)</h3>
+                        <p class="text-gray-600 mb-4 break-words">Візуалізація важливості груп результатів для цього уроку.</p>
+                        <div class="chart-container relative h-64 w-full max-w-md mx-auto">
+                            <canvas id="resultsChart"></canvas>
+                        </div>
+                        <p class="text-gray-600 mb-4 break-words text-group-result"><i>Учень / учениця:</i></p>
+                        <ul>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР1 – працює з інформацією, даними, моделями;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР2 – створює інформаційні продукти;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР3 – працює в цифровому середовищі;</p></li>
+                            <li class="break-words"><p class="text-gray-600 mb-4">ГР4 – безпечно та відповідально працює з інформаційними технологіями.</p></li>
+                        </ul>
+                    </div>
+                    <!-- Lesson Type & Equipment -->
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-orange-600 break-words">📚 Тип уроку</h3>
+                        <p class="text-gray-700 break-words">Урок застосування знань та формування практичних умінь та навичок.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-orange-600 break-words">💻 Обладнання та ПЗ</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Комп'ютери із середовищем програмування Python та встановленою бібліотекою `tkinter`.</li>
+                            <li class="break-words">Проєктор або інтерактивна дошка для демонстрації коду та інтерфейсу.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold mb-3 text-orange-600 break-words">🔗 Міжпредметні зв'язки</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li class="break-words">Математика (системи числення, алгоритми ділення та множення).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Теоретичний блок -->
+            <div id="theory-content" class="tab-content   mx-auto bg-white shadow-lg rounded-lg p-6 md:p-10">
+                <!-- ВАРІАНТ № 2, початок -->
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-orange-500 mb-4 heading-underline break-words  title-review">ПОВТОРЮЄМО</h2>
+                </div>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-2xlooo font-bold text-gray-800 break-words break-all">Актуалізація опорних знань</h2>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2">
+                        <li class="break-words">Що таке **графічний інтерфейс користувача (GUI)**?</li>
+                        <li class="break-words">Які віджети `tkinter` ви знаєте?</li>
+                        <li class="break-words">Як створити вікно програми та розмістити на ньому віджети?</li>
+                        <li class="break-words">Що таке **система числення**?</li>
+                        <li class="break-words">Які основні системи числення ви знаєте? (Десяткова, двійкова).</li>
+                        <li class="break-words">Яким чином можна перетворити десяткове число у двійкове?</li>
+                        <li class="break-words">Яким чином можна перетворити двійкове число у десяткове?</li>
+                    </ol>
+                    <img src="./images/img-tema5-05.webp" alt="Знак питання" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!-- ВАРІАНТ № 2, кінець -->
+
+                <!-- <hr class="my-8 border-gray-300">
+
+                <div class="text-center mb-10">
+                    <h2 class="text-4xlooo font-extrabold text-orange-500 mb-4 heading-underline break-words title-review">ПРАКТИЧНА РОБОТА № 18</h2>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-2xlooo font-bold text-gray-800 mb-4 break-words">«Створення програми «Калькулятор»»</h3>
+                    <p class="text-gray-700 mb-4 break-words">Завдання: скласти програму Калькулятор для конвертування десяткового числа у двійкове і навпаки.</p>
+                    <p class="text-gray-700 mb-4 break-words">Обладнання: комп'ютер із середовищем програмування мовою **Python**.</p>
+                    
+                    <h4 class="text-xl font-semibold text-gray-800 mb-3 break-words">Хід роботи:</h4>
+                    <p class="text-gray-700 mb-4 break-words">Під час роботи за комп'ютером дотримуйтеся правил безпеки.</p>
+                    <ol class="list-decimal list-inside text-gray-700 text-lg space-y-2 mb-4">
+                        <li class="break-words">В IDLE виберіть команду **File → New File**.</li>
+                        <li class="break-words">Завантажте модуль `tkinter`.</li>
+                        <li class="break-words">Створіть вікно програми із написом **Калькулятор** (рис. 1).</li>
+                            <img src="./images/image_6f4a13.png" alt="Інтерфейс калькулятора" class="rounded-lg shadow-md mt-4 max-w-full h-auto">
+                            <p class="text-center text-sm text-gray-600 mt-2">Рис. 1</p>
+                        <li class="break-words">Завершіть програму командою `root.mainloop()`. Поміркуйте, який пакувальник буде найзручнішим.</li>
+                        <li class="break-words">Додайте до вікна програми `lab1`, `lab2` класу `Label`, `entry1`, `entry2` класу `Entry`, згідно з рис. 1.</li>
+                        <li class="break-words">Створіть `b1` класу `Button` із написом **Перевести у двійкове**.</li>
+                        <li class="break-words">Створіть обробник події для кнопки **Перевести в двійкове**. Для переведення десяткового числа у двійкову систему числення використовуйте алгоритм (див. рис. 2):
+                            <ol class="list-arabic list-inside ml-4 mt-2 space-y-1">
+                                <li>створити порожній рядок `dv`;</li>
+                                <li>зчитати десяткове число `dc` із поля віджета `entry1`;</li>
+                                <li>поки `dc` > 0, повторювати:
+                                    <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                        <li>знайти `r` — остачу від ділення `dc` на 2;</li>
+                                        <li>перетворити `r` на рядок і додати в початок рядка `dv`;</li>
+                                        <li>поділити `dc` цілочисельно на 2;</li>
+                                    </ul>
+                                </li>
+                                <li>вивести значення `dv` у поле віджета `entry2`.</li>
+                            </ol>
+                            <img src="./images/image_6f49ef.jpg" alt="Схема перетворення десяткового в двійкове" class="rounded-lg shadow-md mt-4 max-w-full h-auto">
+                            <p class="text-center text-sm text-gray-600 mt-2">Рис. 2</p>
+                        </li>
+                        <li class="break-words">Створіть `b2` класу `Button` із написом **Перевести в десяткове**.</li>
+                        <li class="break-words">Створіть обробник події для кнопки **Перевести в десяткове**. Для переведення двійкового числа в десяткову систему числення використовуйте алгоритм (див. рис. 3):
+                            <ol class="list-arabic list-inside ml-4 mt-2 space-y-1">
+                                <li>зчитати рядок `dv` із поля віджета `entry2`;</li>
+                                <li>створити змінну для накопичення суми `dc = 0`;</li>
+                                <li>обчислити суму всіх цифр рядка `dv`, помножених на число 2, піднесене до степеня, що дорівнює номеру розряду відповідної цифри (рис. 3, с. 262);</li>
+                                <li>вивести значення `dc` у поле віджета `entry1`.</li>
+                            </ol>
+                            <img src="http://googleusercontent.com/file_content/2" alt="Схема перетворення двійкового в десяткове" class="rounded-lg shadow-md mt-4 max-w-full h-auto">
+                            <p class="text-center text-sm text-gray-600 mt-2">Рис. 3</p>
+                        </li>
+                        <li class="break-words">Для переведення запишіть команду циклу: `dc = 0` `for i in range(len(dv)):` `dc = dc + int(dv[i])*2**(len(dv)-1-i)`.</li>
+                        <li class="break-words">Завантажте модуль `messagebox`.</li>
+                        <li class="break-words">Додайте до опису обробника події для кнопки `b1` виклик функції `messagebox.showinfo` для виведення повідомлень на зразок: **Десяткове 19 дорівнює двійковому 10011**. `vidp = 'Десяткове ' + str(dc) + ' дорівнює двійковому ' + dv` `messagebox.showinfo('Переведення у двійкове', vidp)`.</li>
+                        <li class="break-words">Додайте до опису обробника події для кнопки `b2` виклик функції `messagebox.showinfo` для виведення повідомлень на зразок: **Двійкове 10011 дорівнює десятковому 19**.</li>
+                        <li class="break-words">Перевірте роботу програми для 95, 25, 1024, 10.</li>
+                        <li class="break-words">Зробіть висновок: як створити обробники подій для елементів керування в програмі з графічним інтерфейсом.</li>
+                    </ol>
+                </div> -->
+
+            </div>
+            
+
+            <!-- Практичний блок -->
+            <div id="practice-content" class="tab-content">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-6 text-center text-orange-600 break-words">Практичний блок уроку</h3>
+
+                    <!-- Множинний вибір (радіокнопки) -->
+                    <div class="quiz-container">
+                        <h4 class="question-title">Питання 1: Множинний вибір (радіокнопки)</h4>
+                        <p class="question-text">Який віджет `tkinter` використовується для виведення текстової інформації на вікно?</p>
+                        <div id="radio-question-1-pr18">
+                            <label class="option-label"><input type="radio" name="q1_pr18" value="Button"> Button</label>
+                            <label class="option-label"><input type="radio" name="q1_pr18" value="Entry"> Entry</label>
+                            <label class="option-label"><input type="radio" name="q1_pr18" value="Label"> Label</label>
+                            <label class="option-label"><input type="radio" name="q1_pr18" value="Canvas"> Canvas</label>
+                        </div>
+                        <button class="check-button" onclick="checkRadioQuestionPr18(1)">Перевірити</button>
+                        <p id="feedback-radio-1-pr18" class="feedback"></p>
+                    </div>
+
+                    <!-- Множинний вибір (чекбокси) -->
+                    <div class="quiz-container">
+                        <h4 class="question-title">Питання 2: Множинний вибір (чекбокси)</h4>
+                        <p class="question-text">Які системи числення ви використовуєте в калькуляторі в практичні роботі № 18?</p>
+                        <div id="checkbox-question-2-pr18">
+                            <label class="option-label"><input type="checkbox" name="q2_pr18" value="decimal"> Десяткова</label>
+                            <label class="option-label"><input type="checkbox" name="q2_pr18" value="binary"> Двійкова</label>
+                            <label class="option-label"><input type="checkbox" name="q2_pr18" value="octal"> Вісімкова</label>
+                            <label class="option-label"><input type="checkbox" name="q2_pr18" value="hexadecimal"> Шістнадцяткова</label>
+                        </div>
+                        <button class="check-button" onclick="checkCheckboxQuestionPr18(2)">Перевірити</button>
+                        <p id="feedback-checkbox-2-pr18" class="feedback"></p>
+                    </div>
+
+                    <!-- Заповнення пропусків -->
+                    <div class="quiz-container">
+                        <h4 class="question-title">Питання 3: Заповнення пропусків</h4>
+                        <div class="fill-in-the-blanks-container text-gray-700">
+                            Для виведення повідомлень користувачу в `tkinter` використовується модуль <input type="text" id="blank3_pr18_1" placeholder="...">, а саме функція <input type="text" id="blank3_pr18_2" placeholder="...">.
+
+                            <br><br>
+                            <p><i>(Підказка: messagebox, showinfo.)</i></p>
+                        </div>
+                        <button class="check-button" onclick="checkFillInBlanksPr18(3)">Перевірити</button>
+                        <p id="feedback-fill-in-blanks-3-pr18" class="feedback"></p>
+                    </div>
+
+                    <!-- Зіставлення -->
+                    <div class="quiz-container">
+                        <h4 class="question-title">Питання 4: Зіставлення</h4>
+                        <p class="question-text">Зіставте напрямок конвертації з відповідним віджетом кнопки:</p>
+                        <div id="matching-question-4-pr18">
+                            <div class="matching-pair">
+                                <span class="term">Десяткове → Двійкове</span>
+                                <select id="match-q4_pr18-1">
+                                    <option value="">Виберіть...</option>
+                                    <option value="b1">Кнопка "Перевести у двійкове"</option>
+                                    <option value="b2">Кнопка "Перевести в десяткове"</option>
+                                </select>
+                            </div>
+                            <div class="matching-pair">
+                                <span class="term">Двійкове → Десяткове</span>
+                                <select id="match-q4_pr18-2">
+                                    <option value="">Виберіть...</option>
+                                    <option value="b1">Кнопка "Перевести у двійкове"</option>
+                                    <option value="b2">Кнопка "Перевести в десяткове"</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="check-button" onclick="checkMatchingPr18(4)">Перевірити</button>
+                        <p id="feedback-matching-4-pr18" class="feedback"></p>
+                    </div>
+
+                    <h4 class="text-xl font-semibold mt-8 mb-3 text-gray-800 break-words">Додаткові завдання (за бажанням)</h4>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 mb-4">
+                        <li class="break-words">Додайте до калькулятора можливість конвертувати числа між іншими системами числення (наприклад, вісімкова, шістнадцяткова).</li>
+                        <li class="break-words">Реалізуйте валідацію введених даних, щоб користувач не міг ввести некоректні символи (наприклад, літери в двійкове число).</li>
+                        <li class="break-words">Створіть кнопки для очищення полів введення/виведення.</li>
+                        <li class="break-words">Додайте можливість збереження історії конвертацій.</li>
+                    </ul>
+                    
+                </div>                
+            </div>
+
+            <!-- Перевірка знань -->
+            <!-- Вручну треба змінювати лише ті значення minimum-height (min-h-[300px]), які потрібно, і треба використовувати медіа-адаптацію (стилі тут на сторінці в тезі <style>)-->
+                <!-- Тут grid -->
+            <div id="check-content" class="tab-content bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-6 text-center text-orange-600 break-words">Перевірка знань</h3>
+                <p class="text-center text-gray-600 mb-8 break-words">Натисніть на картку, щоб побачити відповідь.</p>
+                <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-orange-100 p-6 rounded-xl shadow-md break-words">1. Які віджети `tkinter` використовуються для створення полів введення та виведення чисел у програмі «Калькулятор»?</div>
+                        <div class="flip-card-back bg-orange-200 p-6 rounded-xl shadow-md break-words">Для введення та виведення чисел використовуються віджети `Entry`.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-orange-100 p-6 rounded-xl shadow-md break-words">2. Опишіть алгоритм перетворення десяткового числа у двійкове.</div>
+                        <div class="flip-card-back bg-orange-200 p-6 rounded-xl shadow-md break-words">Алгоритм полягає в послідовному діленні десяткового числа на 2 та записуванні остач у зворотному порядку до тих пір, поки частка не стане рівною 0. Остачі формують двійкове число.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-orange-100 p-6 rounded-xl shadow-md break-words">3. Опишіть алгоритм перетворення двійкового числа у десяткове.</div>
+                        <div class="flip-card-back bg-orange-200 p-6 rounded-xl shadow-md break-words">Алгоритм полягає в сумуванні добутків цифр двійкового числа на 2, піднесене до степеня, що відповідає позиції цифри (розряду), починаючи з 0 справа наліво.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-orange-100 p-6 rounded-xl shadow-md break-words">4. Яке призначення модуля `messagebox`?</div>
+                        <div class="flip-card-back bg-orange-200 p-6 rounded-xl shadow-md break-words">Модуль `messagebox` використовується для виведення стандартних вікон повідомлень користувачеві, наприклад, для відображення результатів конвертації або помилок.</div>
+                    </div>
+                    </li>
+
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-orange-100 p-6 rounded-xl shadow-md break-words">5. Що означає команда `root.mainloop()`?</div>
+                            <div class="flip-card-back bg-orange-200 p-6 rounded-xl shadow-md break-words">Команда `root.mainloop()` запускає головний цикл подій `tkinter`, який очікує на дії користувача (натискання кнопок, введення тексту) та обробляє їх. Без цієї команди вікно програми не буде відображатися.</div>
+                        </div>
+                    </li>
+                    <li class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-orange-100 p-6 rounded-xl shadow-md break-words">6. Зробіть висновок: як створити обробники подій для елементів керування в програмі з графічним інтерфейсом.</div>
+                            <div class="flip-card-back bg-orange-200 p-6 rounded-xl shadow-md break-words">Обробники подій створюються як звичайні функції Python, які виконуються у відповідь на певну дію користувача (наприклад, натискання кнопки). Ці функції прив'язуються до віджетів за допомогою параметра `command`.</div>
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+         
+
+            <!-- Домашнє завдання -->
+            <div id="homework-content" class="tab-content   bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-orange-600 break-words">Домашнє завдання</h3>                    
+                <!--  -->
+                <div class="flex flex-col md:flex-row items-start md:space-x-8 mb-12">
+                    <div class="space-y-4 text-gray-700">
+                        <div>
+                            <p><b>1. Практична частина:</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Виконати практичну роботу № 18 (стор. 260-262).</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p><b>2. Завдання за бажанням (для закріплення):</b></p>
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                                <li>Інтерактивна платформа IZZI (8 клас) до практичної роботи № 18: <a href="https://ua.izzi.digital/DOS/1183864/1346658.html" target="_blank" class="text-blue-600 hover:underline break-words break-all block">https://ua.izzi.digital/DOS/1183864/1346658.html</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="./images/img08.webp" alt="Учні з книгами або комп'ютерами" class="rounded-lg shadow-md" width="200">
+                </div>
+                <!--  -->
+            </div>
+        </section>
+
+
+        <!-- Додаткові матеріали -->
+        <!-- Additional Materials Section -->
+        <section class="bg-white p-6 rounded-xl shadow-md mt-8">
+            <h3 class="text-2xl font-bold mb-4 text-orange-600 break-words">Додаткові матеріали</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li class="break-words"><a href="https://sites.google.com/view/lga84-9/tehnika_bezpeky" target="_blank" class="text-blue-600 hover:underline">Техніка безпеки</a></li>
+
+                <li class="break-words"><a href="https://drive.google.com/file/d/1C9_KEF981LvokY0GWNOhUXb7rJKJUUbM/view" target="_blank" class="text-blue-600 hover:underline">Оцінювання учнів та учениць на уроках інформатики</a></li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-600 hover:underline">Підручник з інформатики для 8 класу</a> (ПР18, стор. 260-262)</li>
+
+                <li class="break-words"><a href="https://ua.izzi.digital/DOS/1183864/1183866.html" target="_blank" class="text-blue-600 hover:underline">Інтерактивна платформа IZZI (8 клас)</a></li>
+
+                <li class="break-words">Інтерактивна платформа IZZI (8 клас) до практичної роботи № 18: <a href="https://ua.izzi.digital/DOS/1183864/1346658.html" target="_blank" class="text-blue-600 hover:underline break-words2">https://ua.izzi.digital/DOS/1183864/1346658.html</a></li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Global Footer: Contains copyright and legal links -->
+    <footer class="container mx-auto text-center text-sm   bg-gray-800 text-white p-4 mt-8 shadow-inner">
+        <ul>
+            <li class="break-words"><p class="source-text">Інформатика 8 клас (Нова Українська Школа). (2 години/тиждень, 70 годин/рік).</p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://mon.gov.ua/static-objects/mon/sites/1/zagalna%20serednya/Navchalni.prohramy/2023/Model.navch.prohr.5-9.klas/Inform.osv.haluz.2023/Informatyka.7-9.kl.Bondarenko.ta.in.25.09.2023.pdf" target="_blank" class="text-blue-300 hover:underline">Модельна навчальна програма «Інформатика. 7-9 класи» для закладів загальної середньої освіти (автори Бондаренко О. О., Ластовецький В. В., Пилипчук О. П., Шестопалов Є. А.). Рекомендовано Міністерством освіти і науки України (наказ Міністерства освіти і науки України від 06.09.2023 № 1090).</a></p></li>
+
+            <li class="break-words"><p class="source-text"><a href="https://ua.izzi.digital/DOS/1183864/1409692.html" target="_blank" class="text-blue-300 hover:underline">Навчальний посібник: Інформатика : підруч. для 8 кл. закл. загал. серед. освіти / [О. О. Бондаренко, В. В. Ластовецький, О. П. Пилипчук, Є. А. Шестопалов]. – Харків : Вид-во «Ранок», 2025. – 272 с. : іл.</a></p></li>
+
+            <li class="break-words"><p class="source-text">Автор сайту: Лисенко Галина Олександрівна, 2025 рік.</p></li>           
+        </ul>
+    </footer>    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Початок:
+            // Для перемикання меню в секції: "Про урок", "Теоретичний блок", "Практична робота", "Перевірка знань", "Домашнє завдання".
+            const tabs = document.getElementById('tabs');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            tabs.addEventListener('click', (e) => {
+                // Ensure the click target is a BUTTON (tab button)
+                if (e.target.tagName === 'BUTTON') {
+                    const tab = e.target.dataset.tab;
+
+                    // Remove 'active' class from all buttons and add to the clicked one
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Hide all tab contents and show the corresponding one
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Use === for strict comparison
+                        if (content.id === `${tab}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                }
+            });
+            // Кінець.
+
+
+            // Початок:
+            // ГРУПИ РЕЗУЛЬТАТІВ.
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            // 1. Створення об'єкту-мапи для відповідності значень і кольорів
+            // Тут вручну можна поміняти значення background й border
+            const colorMap = {
+                1: {
+                    background: '#ffedd4', // text-orange-100
+                    border: '#ffd6a8'      // text-orange-200
+                },
+                2: {
+                    background: '#ffd6a8', // text-orange-200
+                    border: '#ffb86a'       // text-orange-300
+                },
+                3: {
+                    background: '#ffb86a',  // text-orange-300
+                    border: '#ff8904'        // text-orange-400
+                },
+                4: {
+                    background: '#ff8904',   // text-orange-400
+                    border: '#ff6900'      // text-orange-500
+                }
+            };
+
+            // Дані, які можна змінювати вручну
+            const chartData = [4, 4, 3, 2];
+
+            // 2. Генерація масивів кольорів на основі даних
+            const backgroundColors = chartData.map(value => colorMap[value].background);
+            const borderColors = chartData.map(value => colorMap[value].border);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ГР1', 'ГР2', 'ГР3', 'ГР4'],
+                    datasets: [{
+                        label: 'Важливість',
+                        data: chartData, // Використовуємо змінну
+                        backgroundColor: backgroundColors, // Використовуємо згенерований масив
+                        borderColor: borderColors, // Використовуємо згенерований масив
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const labels = ['', 'Важлива', 'Дуже важлива', 'Найважливіша'];
+                                    return labels[value] || '';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.parsed.y;
+                                    const importanceLabels = {4: 'Найважливіша', 3: 'Дуже важлива', 2: 'Важлива', 1: 'Найменш важлива'};
+                                    label += importanceLabels[value] || '';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            // Кінець. ГРУПИ РЕЗУЛЬТАТІВ.
+
+
+            // Початок.
+            // ПОВОРОТ КАРТОК "Перевірка знань"
+            const flipCards = document.querySelectorAll('.flip-card');
+            flipCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+            // Кінець. ПОВОРОТ КАРТОК.
+
+        });
+    </script>
+
+    <!-- Скрити для практичного блоку -->
+    <script>
+        // Practical Block - Quiz functions for PR18
+            function checkRadioQuestionPr18(questionNumber) {
+                const radios = document.querySelectorAll(`#radio-question-${questionNumber}-pr18 input[name="q${questionNumber}_pr18"]`);
+                let selectedValue = null;
+                radios.forEach(radio => {
+                    if (radio.checked) {
+                        selectedValue = radio.value;
+                    }
+                });
+
+                const feedbackElement = document.getElementById(`feedback-radio-${questionNumber}-pr18`);
+                if (questionNumber === 1) {
+                    if (selectedValue === 'Label') {
+                        feedbackElement.textContent = 'Правильно! 👍';
+                        feedbackElement.classList.remove('incorrect');
+                        feedbackElement.classList.add('correct');
+                    } else {
+                        feedbackElement.textContent = 'Неправильно. Спробуйте ще раз. 😔';
+                        feedbackElement.classList.remove('correct');
+                        feedbackElement.classList.add('incorrect');
+                    }
+                }
+            }
+
+            function checkCheckboxQuestionPr18(questionNumber) {
+                const checkboxes = document.querySelectorAll(`#checkbox-question-${questionNumber}-pr18 input[name="q${questionNumber}_pr18"]`);
+                const selectedValues = [];
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        selectedValues.push(checkbox.value);
+                    }
+                });
+
+                const feedbackElement = document.getElementById(`feedback-checkbox-${questionNumber}-pr18`);
+                if (questionNumber === 2) {
+                    const correctAnswers = ['decimal', 'binary']; 
+                    const isCorrect = selectedValues.length === correctAnswers.length &&
+                                      correctAnswers.every(answer => selectedValues.includes(answer));
+
+                    if (isCorrect) {
+                        feedbackElement.textContent = 'Правильно! 👍';
+                        feedbackElement.classList.remove('incorrect');
+                        feedbackElement.classList.add('correct');
+                    } else {
+                        feedbackElement.textContent = 'Неправильно. Перевірте всі правильні варіанти. 😔';
+                        feedbackElement.classList.remove('correct');
+                        feedbackElement.classList.add('incorrect');
+                    }
+                }
+            }
+
+            function checkFillInBlanksPr18(questionNumber) {
+                const blank1 = document.getElementById('blank3_pr18_1').value.trim().toLowerCase();
+                const blank2 = document.getElementById('blank3_pr18_2').value.trim().toLowerCase();
+
+                const feedbackElement = document.getElementById(`feedback-fill-in-blanks-${questionNumber}-pr18`);
+                
+                const expected1 = 'messagebox';
+                const expected2 = 'showinfo'; 
+
+                let isCorrect = true;
+                if (blank1 !== expected1) { 
+                    isCorrect = false;
+                }
+                if (blank2 !== expected2) { 
+                    isCorrect = false;
+                }
+
+                if (isCorrect) {
+                    feedbackElement.textContent = 'Правильно! 👍';
+                    feedbackElement.classList.remove('incorrect');
+                    feedbackElement.classList.add('correct');
+                } else {
+                    feedbackElement.textContent = 'Неправильно. Перевірте ваші відповіді. 😔';
+                    feedbackElement.classList.remove('correct');
+                    feedbackElement.classList.add('incorrect');
+                }
+            }
+
+            function checkMatchingPr18(questionNumber) {
+                const match1 = document.getElementById('match-q4_pr18-1').value;
+                const match2 = document.getElementById('match-q4_pr18-2').value;
+
+                const feedbackElement = document.getElementById(`feedback-matching-${questionNumber}-pr18`);
+                let isCorrect = true;
+
+                if (match1 !== 'b1') isCorrect = false;
+                if (match2 !== 'b2') isCorrect = false;
+
+                if (isCorrect) {
+                    feedbackElement.textContent = 'Правильно! 👍';
+                    feedbackElement.classList.remove('incorrect');
+                    feedbackElement.classList.add('correct');
+                } else {
+                    feedbackElement.textContent = 'Неправильно. Спробуйте ще раз. 😔';
+                    feedbackElement.classList.remove('correct');
+                    feedbackElement.classList.add('incorrect');
+                }
+            }
+    </script>
+</body>
+</html>
