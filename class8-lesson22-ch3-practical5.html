@@ -18,101 +18,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/stiles.css">
 
     <style>
-        /* Тіло документа */
-        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
-
-        /* Стилі для навігації в меню */
-        .logo-main { display: none; }
-        .main-title-text { width: 140px; text-align: center; }
-        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
-        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
-        @media screen and (min-width: 768px) {
-            .main-title-text { width: auto; }
-            .main-navigation { display: inline; width: auto; }
-        }
-
-        /* main стилі */
-        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
-        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
-        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
-        .source-text { padding: 8px; }
-        @media screen and (min-width: 300px) {
-            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
-            .text-2xlooo { font-size: 1.25rem; }
-        }
-        @media screen and (min-width: 480px) {
-            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
-            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
-            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
-        }
-
-        /* Стилі для "Про урок" */
-        /* Групи результатів */
-        .text-group-result { padding-top: 16px; }
-
-        /* Style to hide inactive tab content */
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        
         /* Style to tab content */
         .tab-btn.active { 
             color: #047857;             /* text-emerald-600 */
             border-bottom-color: #047857;  /* text-emerald-600 */
             background-color: #d1fae5;     /* text-emerald-100 */
         }
-        .tab-btn { 
-            transition: color 0.3s, 
-            border-color 0.3s, 
-            background-color 0.3s; 
-            border-bottom: 2px solid transparent;
-        }
+
 
         /* Styles for flip cards */
-        .flip-card {
-            background-color: transparent;
-            width: 100%; /* Make cards responsive to grid column width */
-            height: 200px; /* Fixed height for consistency, adjust as needed */
-            perspective: 1000px; /* 3D effect */
-        }
-
-        .flip-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.8s;
-            transform-style: preserve-3d;
-        }
-
-        .flip-card.active .flip-card-inner {
-            transform: rotateY(180deg);
-        }
-
-        .flip-card-front, .flip-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden; /* Safari */
-            backface-visibility: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: left; /* Adjust text alignment as needed */
-            overflow-wrap: break-word; /* break-words */
-            /*word-break: break-all;*/ /* break-all */
-        }
-
-        .flip-card-front {
-            color: #4b5563; /* text-gray-700 */
-        }
-
-        .flip-card-back {
-            color: #4b5563; /* text-gray-700 */
-            transform: rotateY(180deg);
-        }
-
         /* Responsive adjustments for min-height */
         @media (min-width: 768px) { /* md breakpoint */
             .flip-card.min-h-md {
@@ -124,6 +41,7 @@
                 min-height: 200px; /* Example, adjust as needed for large screens */
             }
         }
+
 
         /* Styles for general buttons */
         .check-button, .reset-button {
@@ -271,17 +189,7 @@
     </style>
 </head>
 <body>
-
-    <header class="container mx-auto flex justify-between items-center bg-slate-800 p-4 text-white shadow-lg">
-        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10 logo-main"></a>
-        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
-        <nav class="space-x-4">
-            <ul class="main-navigation2">
-                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
-                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
-            </ul>
-        </nav>
-    </header>
+    <header id="header-container" class="container mx-auto flex justify-between items-center   bg-slate-800 p-4 text-white shadow-lg"></header>
 
     <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
         <!-- Секція теми уроку -->
@@ -663,7 +571,10 @@
 
 
     <!-- Global Footer: Contains copyright and legal links -->
-    <footer id="footer-container" class="container mx-auto text-center text-sm   bg-gray-800 text-white p-4 mt-8 shadow-inner"></footer>  
+    <footer id="footer-container" class="container mx-auto text-center text-sm   bg-gray-800 text-white p-4 mt-8 shadow-inner"></footer>
+    
+    <script src="./js/header.js" defer></script>
+    <script src="./js/footer.js" defer></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -1110,6 +1021,5 @@
             // // Кінець: Практичний блок - Самооцінка
         });
     </script>
-    <script src="./js/footer.js" defer></script>
 </body>
 </html>

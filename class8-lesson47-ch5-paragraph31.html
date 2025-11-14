@@ -18,101 +18,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/stiles.css">
 
     <style>
-        /* Тіло документа */
-        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
-
-        /* Стилі для навігації в меню */
-        .logo-main { display: none; }
-        .main-title-text { width: 140px; text-align: center; }
-        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
-        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
-        @media screen and (min-width: 768px) {
-            .main-title-text { width: auto; }
-            .main-navigation { display: inline; width: auto; }
-        }
-
-        /* main стилі */
-        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
-        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
-        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
-        .source-text { padding: 8px; }
-        @media screen and (min-width: 300px) {
-            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
-            .text-2xlooo { font-size: 1.25rem; }
-        }
-        @media screen and (min-width: 480px) {
-            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
-            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
-            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
-        }
-
-        /* Стилі для "Про урок" */
-        /* Групи результатів */
-        .text-group-result { padding-top: 16px; }
-
-        /* Style to hide inactive tab content */
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        
         /* Style to tab content */
         .tab-btn.active { 
             color: #db2777;                /* text-pink-600 */
             border-bottom-color: #db2777;  /* text-pink-600 */
             background-color: #fce7f3;     /* text-pink-100 */
         }
-        .tab-btn { 
-            transition: color 0.3s, 
-            border-color 0.3s, 
-            background-color 0.3s; 
-            border-bottom: 2px solid transparent;
-        }
+
 
         /* Styles for flip cards */
-        .flip-card {
-            background-color: transparent;
-            width: 100%; /* Make cards responsive to grid column width */
-            height: 200px; /* Fixed height for consistency, adjust as needed */
-            perspective: 1000px; /* 3D effect */
-        }
-
-        .flip-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.8s;
-            transform-style: preserve-3d;
-        }
-
-        .flip-card.active .flip-card-inner {
-            transform: rotateY(180deg);
-        }
-
-        .flip-card-front, .flip-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden; /* Safari */
-            backface-visibility: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: left; /* Adjust text alignment as needed */
-            overflow-wrap: break-word; /* break-words */
-            /*word-break: break-all;*/ /* break-all */
-        }
-
-        .flip-card-front {
-            color: #4b5563; /* text-gray-700 */
-        }
-
-        .flip-card-back {
-            color: #4b5563; /* text-gray-700 */
-            transform: rotateY(180deg);
-        }
-
         /* Responsive adjustments for min-height */
         @media (min-width: 768px) { /* md breakpoint */
             .flip-card.min-h-md {
@@ -313,134 +230,10 @@
         .match-item-right select.is-incorrect {
             border-color: #ef4444 !important;
         }
-
-
-    </style>
-
-    <!-- <style>
-        /* Styles for interactive exercises */
-        .mc-container .mc-option {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 8px;
-            background-color: #f9fafb; /* bg-gray-50 */
-            border: 1px solid #e5e7eb; /* border-gray-200 */
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-        .mc-container .mc-option:hover {
-            background-color: #f3f4f6; /* bg-gray-100 */
-        }
-        .mc-container .mc-option input[type="radio"],
-        .mc-container .mc-option input[type="checkbox"] {
-            margin-right: 10px;
-            transform: scale(1.2);
-        }
-        .mc-container .mc-option label {
-            flex-grow: 1;
-            cursor: pointer;
-        }
-        .mc-container .mc-option.correct {
-            background-color: #d1fae5; /* bg-green-100 */
-            border-color: #34d399; /* border-green-400 */
-        }
-        .mc-container .mc-option.incorrect {
-            background-color: #fee2e2; /* bg-red-100 */
-            border-color: #ef4444; /* border-red-500 */
-        }
-        .feedback {
-            margin-top: 15px;
-            font-weight: 600;
-            color: #343a40; /* text-gray-800 */
-        }
-        .feedback.correct {
-            color: #10b981; /* text-green-500 */
-        }
-        .feedback.incorrect {
-            color: #ef4444; /* text-red-500 */
-        }
-        .check-button, .reset-button {
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.1s ease;
-            margin: 0 5px;
-        }
-        .check-button {
-            background-color: #db2777; /* bg-pink-600 */
-            color: white;
-            border: none;
-        }
-        .check-button:hover {
-            background-color: #be185d; /* bg-pink-700 */
-            transform: translateY(-1px);
-        }
-        .check-button:active {
-            transform: translateY(0);
-        }
-        .reset-button {
-            background-color: #fce7f3; /* bg-pink-100 */
-            color: #db2777; /* text-pink-600 */
-            border: 1px solid #db2777;
-        }
-        .reset-button:hover {
-            background-color: #fbcfe8; /* bg-pink-200 */
-            transform: translateY(-1px);
-        }
-        .reset-button:active {
-            transform: translateY(0);
-        }
-
-        /* Code input/output area */
-        .code-editor {
-            background-color: #282c34;
-            color: #abb2bf;
-            font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-            white-space: pre-wrap;
-            word-break: break-all;
-            position: relative;
-        }
-        .code-editor textarea {
-            width: 100%;
-            height: 150px;
-            background: none;
-            border: none;
-            color: inherit;
-            font-family: inherit;
-            resize: vertical;
-            outline: none;
-        }
-        .code-output {
-            background-color: #e2e8f0; /* bg-slate-200 */
-            color: #2d3748; /* text-slate-800 */
-            padding: 15px;
-            border-radius: 8px;
-            min-height: 50px;
-            white-space: pre-wrap;
-            word-break: break-all;
-        }
-    </style> -->
+    </style>    
 </head>
 <body>
-
-    <header class="container mx-auto flex justify-between items-center   bg-slate-800 p-4 text-white shadow-lg">
-        <a href="/"><img src="./images/logo.png" alt="Логотип сайту" class="h-10  logo-main"></a>
-        <div class="text-xl font-bold main-title-text">Інформатика 8 клас</div>
-        <nav class="space-x-4">
-            <ul class="main-navigation2">
-                <li class="main-navigation"><a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a></li>
-                <li class="main-navigation"><a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a></li>
-            </ul>
-            <!-- <a href="#" class="hover:text-slate-300 transition-colors duration-200">Основна сторінка</a>
-            <a href="./index.html" class="hover:text-slate-300 transition-colors duration-200">8 клас</a> -->
-        </nav>
-    </header>
+    <header id="header-container" class="container mx-auto flex justify-between items-center   bg-slate-800 p-4 text-white shadow-lg"></header>
 
     <main class="container mx-auto p-4 sm:p-6 lg:p-8 flex-grow">
         <!-- Секція теми уроку -->
@@ -799,6 +592,9 @@ b_delete.grid(row = 1, column = 1)</code></pre>
 
     <!-- Global Footer: Contains copyright and legal links -->
     <footer id="footer-container" class="container mx-auto text-center text-sm   bg-gray-800 text-white p-4 mt-8 shadow-inner"></footer>
+    
+    <script src="./js/header.js" defer></script>
+    <script src="./js/footer.js" defer></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -1107,6 +903,5 @@ b_delete.grid(row = 1, column = 1)</code></pre>
         }
 
     </script>
-    <script src="./js/footer.js" defer></script>
 </body>
 </html>

@@ -18,67 +18,37 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/stiles.css">
 
     <style>
-        /* Тіло документа */
-        .body { font-family: 'Inter', sans-serif; background-color: #fdfaf6; color: #343a40; }
-
-        /* Стилі для навігації в меню */
-        .logo-main { display: none; }
-        .main-title-text { width: 140px; text-align: center; }
-        .main-navigation { display: block; padding: 16px; width: 80px; text-align: center; }
-        @media screen and (min-width: 480px) { .logo-main { display: inline; } }
-        @media screen and (min-width: 768px) {
-            .main-title-text { width: auto; }
-            .main-navigation { display: inline; width: auto; }
-        }
-
-        /* main стилі */
-        .theme-text { font-size: 1.125rem; line-height: 1.75rem; }
-        .title-review { width: 100%; font-size: 1.0rem; line-height: 1.5rem; }
-        .text-2xlooo { font-size: 1.0rem; line-height: 1.5rem; }
-        .source-text { padding: 8px; }
-        @media screen and (min-width: 300px) {
-            .title-review { font-size: 1.5rem; line-height: 2.0rem; }
-            .text-2xlooo { font-size: 1.25rem; }
-        }
-        @media screen and (min-width: 480px) {
-            .theme-text { font-size: 1.875rem; line-height: 2.25rem; }
-            .title-review { font-size: 2.25rem; line-height: 2.5rem; }
-            .text-2xlooo { font-size: 1.5rem; line-height: 2rem; }
-        }
-               
-    </style>
-
-     <style>
     /* Styles for Canvas interaction in Practical Block */
     #canvas-container {
-      border: 2px solid #0891b2; /* border-cyan-600 */
-      background-color: #f0f9ff; /* bg-blue-50 */
-      width: 500px; /* Fixed width as per screenshot */
-      height: 500px; /* Fixed height as per screenshot */
-      margin: 0 auto;
-      position: relative;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      border-radius: 0.5rem;
-      overflow: hidden; /* Ensure drawings stay within bounds */
+        border: 2px solid #0891b2; /* border-cyan-600 */
+        background-color: #f0f9ff; /* bg-blue-50 */
+        width: 500px; /* Fixed width as per screenshot */
+        height: 500px; /* Fixed height as per screenshot */
+        margin: 0 auto;
+        position: relative;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        border-radius: 0.5rem;
+        overflow: hidden; /* Ensure drawings stay within bounds */
     }
 
     @media (max-width: 600px) {
-      #canvas-container { width: 100%; height: 100vw; }
+        #canvas-container { width: 100%; height: 100vw; }
     }
 
     .canvas-controls {
-      display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1rem; justify-content: center;
+        display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1rem; justify-content: center;
     }
     .canvas-controls button, .canvas-controls select {
-      background-color: #0891b2; color: white; padding: 0.75rem 1.25rem; border-radius: 0.5rem;
-      border: none; cursor: pointer; transition: background-color 0.3s ease; font-weight: 500;
+        background-color: #0891b2; color: white; padding: 0.75rem 1.25rem; border-radius: 0.5rem;
+        border: none; cursor: pointer; transition: background-color 0.3s ease; font-weight: 500;
     }
     .canvas-controls button:hover, .canvas-controls select:hover { background-color: #0e7490; }
     .canvas-controls input[type="color"] {
-      appearance: none; width: 40px; height: 40px; background-color: transparent; border: none; cursor: pointer; padding: 0;
-      border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 2px #0891b2;
+        appearance: none; width: 40px; height: 40px; background-color: transparent; border: none; cursor: pointer; padding: 0;
+        border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 2px #0891b2;
     }
     .canvas-controls input[type="color"]::-webkit-color-swatch { border-radius: 50%; border: none; }
     .canvas-controls input[type="color"]::-moz-color-swatch { border-radius: 50%; border: none; }
@@ -194,6 +164,8 @@
 
     <!-- Global Footer: Contains copyright and legal links -->
     <footer id="footer-container" class="container mx-auto text-center text-sm   bg-gray-800 text-white p-4 mt-8 shadow-inner"></footer>
+    
+    <script src="./js/footer.js" defer></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -308,6 +280,5 @@
       canvasElement.addEventListener('mouseout', () => { isDrawing = false; });
     });
     </script>
-    <script src="./js/footer.js" defer></script>
 </body>
 </html>
